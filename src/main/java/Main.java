@@ -28,12 +28,11 @@ public class Main {
         Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "password"));
         Session session = driver.session();
 
-        String inputName, outputName;
+        String inputName, outputAddress;
         int inputNumber = 1;
-        int outputNumber = 1;
         for (Transaction transaction : block.getTransactions().subList(0,30)) {
             String transHash = transaction.getHashAsString();
-             session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
+            session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
 
             for (TransactionInput input : transaction.getInputs()) {
                 inputName = "input" + inputNumber;
@@ -43,10 +42,14 @@ public class Main {
             }
 
             for (TransactionOutput output : transaction.getOutputs()) {
-                outputName = "output" + outputNumber;
-                session.run("CREATE(o:Output {name:'" + outputName + "'})");
-                session.run("MATCH(t:Transaction {hash:'" + transHash + "'}),(o:Output {name:'" + outputName + "'}) CREATE(t)-[:OUTPUT]->(o)");
-                outputNumber++;
+                try {
+                    outputAddress = output.getAddressFromP2PKHScript(params).toString();
+                } catch (NullPointerException e) {
+                    System.out.println(e);
+                    continue;
+                }
+                session.run("MERGE(o:Output {name:'" + outputAddress + "'})");
+                session.run("MATCH(t:Transaction {hash:'" + transHash + "'}),(o:Output {name:'" + outputAddress + "'}) CREATE(t)-[:OUTPUT]->(o)");
             }
         }
         session.close();
