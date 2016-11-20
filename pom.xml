@@ -8,23 +8,23 @@
     <artifactId>bitcoin-analysis</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <!--<repositories>-->
-        <!--<repository>-->
-            <!--<id>api-v1-client-java-mvn-repo</id>-->
-            <!--<url>https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo/</url>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-                <!--<updatePolicy>always</updatePolicy>-->
-            <!--</snapshots>-->
-        <!--</repository>-->
-    <!--</repositories>-->
+    <repositories>
+        <repository>
+            <id>api-v1-client-java-mvn-repo</id>
+            <url>https://raw.githubusercontent.com/blockchain/api-v1-client-java/mvn-repo/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+        </repository>
+    </repositories>
 
     <dependencies>
-        <!--<dependency>-->
-            <!--<groupId>info.blockchain</groupId>-->
-            <!--<artifactId>api</artifactId>-->
-            <!--<version>LATEST</version> &lt;!&ndash; for a specific version see the list of tags &ndash;&gt;-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>info.blockchain</groupId>
+            <artifactId>api</artifactId>
+            <version>LATEST</version> <!-- for a specific version see the list of tags -->
+        </dependency>
 
         <dependency>
             <groupId>org.neo4j.driver</groupId>

@@ -25,31 +25,16 @@ public class Main {
         // Only use first block for now as it's easier to set up the program using a smaller number of transactions
         Block block = blockFileLoader.next();
 
-        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "password"));
+        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "blockchain"));
         Session session = driver.session();
 
-        String inputName, outputAddress;
-        int inputNumber = 1;
         for (Transaction transaction : block.getTransactions().subList(0,30)) {
             String transHash = transaction.getHashAsString();
-            session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
-
-            for (TransactionInput input : transaction.getInputs()) {
-                inputName = "input" + inputNumber;
-                session.run("CREATE(i:Input {name:'" + inputName + "'})");
-                session.run("MATCH(i:Input {name:'" + inputName + "'}),(t:Transaction {hash:'" + transHash + "'}) CREATE(i)-[:INPUT]->(t)");
-                inputNumber++;
-            }
-
-            for (TransactionOutput output : transaction.getOutputs()) {
-                try {
-                    outputAddress = output.getAddressFromP2PKHScript(params).toString();
-                } catch (NullPointerException e) {
-                    System.out.println(e);
-                    continue;
-                }
-                session.run("MERGE(o:Output {name:'" + outputAddress + "'})");
-                session.run("MATCH(t:Transaction {hash:'" + transHash + "'}),(o:Output {name:'" + outputAddress + "'}) CREATE(t)-[:OUTPUT]->(o)");
+            try {
+                TransactionGrapher tg = new TransactionGrapher(session);
+                tg.graphTransactionByHash(transHash);
+            } catch(NullPointerException e) {
+                System.out.println(e);
             }
         }
         session.close();
