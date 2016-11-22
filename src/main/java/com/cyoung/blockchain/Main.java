@@ -1,3 +1,6 @@
+package com.cyoung.blockchain;
+
+import com.cyoung.blockchain.util.TransactionGrapher;
 import org.bitcoinj.core.*;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.utils.BlockFileLoader;
