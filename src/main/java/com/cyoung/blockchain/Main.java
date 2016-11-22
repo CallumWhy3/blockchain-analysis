@@ -10,11 +10,16 @@ import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
+    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+
     public static void main(String args[]) throws Exception{
         NetworkParameters params = MainNetParams.get();
         Context context = new Context(params);
@@ -37,7 +42,7 @@ public class Main {
                 TransactionGrapher tg = new TransactionGrapher(session);
                 tg.graphTransactionByHash(transHash);
             } catch(NullPointerException e) {
-                System.out.println(e);
+                logger.debug(e.toString());
             }
         }
         session.close();

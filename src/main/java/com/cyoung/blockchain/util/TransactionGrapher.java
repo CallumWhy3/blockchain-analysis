@@ -3,7 +3,11 @@ package com.cyoung.blockchain.util;
 import info.blockchain.api.blockexplorer.*;
 import org.neo4j.driver.v1.Session;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class TransactionGrapher {
+    private static final Logger logger = LoggerFactory.getLogger(TransactionGrapher.class);
     private Transaction trans;
     private Session session;
 
