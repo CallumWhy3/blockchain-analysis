@@ -26,8 +26,8 @@ public class Main {
 
         // Use specific .dat file for now
         List<File> blockFiles = new ArrayList<File>();
-        File block590 = new File("C:\\Users\\Callum\\Desktop\\FinalYearProject\\Blockchain\\blk00277.dat");
-        blockFiles.add(block590);
+        File block277 = new File("/Users/callum/Documents/FinalYearProject/blk00277.dat");
+        blockFiles.add(block277);
 
         BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
         // Only use first block for now as it's easier to set up the program using a smaller number of transactions
@@ -36,15 +36,16 @@ public class Main {
         Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "blockchain"));
         Session session = driver.session();
 
+        TransactionGrapher transactionGrapher = new TransactionGrapher(session);
         for (Transaction transaction : block.getTransactions().subList(0,30)) {
             String transHash = transaction.getHashAsString();
             try {
-                TransactionGrapher tg = new TransactionGrapher(session);
-                tg.graphTransactionByHash(transHash);
+                transactionGrapher.graphTransactionByHash(transHash);
             } catch(NullPointerException e) {
                 logger.debug(e.toString());
             }
         }
+        transactionGrapher.closeSubdueGraphBuilderStream();
         session.close();
         driver.close();
     }
