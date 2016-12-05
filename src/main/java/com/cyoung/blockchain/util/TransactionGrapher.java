@@ -1,6 +1,7 @@
 package com.cyoung.blockchain.util;
 
 import info.blockchain.api.blockexplorer.*;
+import javafx.scene.control.TextArea;
 import org.neo4j.driver.v1.Session;
 
 import org.slf4j.Logger;

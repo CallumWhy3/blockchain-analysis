@@ -1,6 +1,13 @@
 package com.cyoung.blockchain;
 
+import com.cyoung.blockchain.controller.TransactionGrapherController;
 import com.cyoung.blockchain.util.TransactionGrapher;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 import org.bitcoinj.core.*;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.utils.BlockFileLoader;
@@ -17,36 +24,26 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Main {
+public class Main extends Application {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String args[]) throws Exception{
-        NetworkParameters params = MainNetParams.get();
-        Context context = new Context(params);
+        Application.launch(Main.class, (java.lang.String[])null);
+    }
 
-        // Use specific .dat file for now
-        List<File> blockFiles = new ArrayList<File>();
-        File block277 = new File("/Users/callum/Documents/FinalYearProject/blk00277.dat");
-        blockFiles.add(block277);
-
-        BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
-        // Only use first block for now as it's easier to set up the program using a smaller number of transactions
-        Block block = blockFileLoader.next();
-
-        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "blockchain"));
-        Session session = driver.session();
-
-        TransactionGrapher transactionGrapher = new TransactionGrapher(session);
-        for (Transaction transaction : block.getTransactions().subList(0,30)) {
-            String transHash = transaction.getHashAsString();
-            try {
-                transactionGrapher.graphTransactionByHash(transHash);
-            } catch(NullPointerException e) {
-                logger.debug(e.toString());
-            }
+    @Override
+    public void start(Stage primaryStage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/TransactionGrapher.fxml"));
+            loader.load();
+            TransactionGrapherController controller = loader.getController();
+            controller.setStage(primaryStage); // or what you want to do
+            Parent root = FXMLLoader.load(getClass().getResource("/view/TransactionGrapher.fxml"));
+            primaryStage.setScene(new Scene(root));
+            primaryStage.setTitle("Blockchain analysis");
+            primaryStage.show();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        transactionGrapher.closeSubdueGraphBuilderStream();
-        session.close();
-        driver.close();
     }
 }
