@@ -1,15 +1,13 @@
 package com.cyoung.blockchain.controller;
 
-import com.cyoung.blockchain.util.TransactionGrapher;
+import com.cyoung.blockchain.util.BlockVisualiser;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.bitcoinj.core.Block;
 import org.bitcoinj.core.Context;
 import org.bitcoinj.core.NetworkParameters;
-import org.bitcoinj.core.Transaction;
 import org.bitcoinj.params.MainNetParams;
 import org.bitcoinj.utils.BlockFileLoader;
 import org.neo4j.driver.v1.AuthTokens;
@@ -23,8 +21,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TransactionGrapherController {
-    private static final Logger logger = LoggerFactory.getLogger(TransactionGrapherController.class);
+public class BlockVisualiserController {
+    private static final Logger logger = LoggerFactory.getLogger(BlockVisualiserController.class);
     private FileChooser fc = new FileChooser();
     private Stage stage;
     private File blockFile;
@@ -38,7 +36,7 @@ public class TransactionGrapherController {
     @FXML
     private Button produceGraphButton;
 
-    public TransactionGrapherController(){
+    public BlockVisualiserController(){
     }
 
     @FXML
@@ -69,22 +67,13 @@ public class TransactionGrapherController {
         blockFiles.add(blockFile);
 
         BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
-        // Only use first block for now as it's easier to set up the program using a smaller number of transactions
-        Block block = blockFileLoader.next();
 
         Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "blockchain"));
         Session session = driver.session();
 
-        TransactionGrapher transactionGrapher = new TransactionGrapher(session);
-        for (Transaction transaction : block.getTransactions().subList(0, 30)) {
-            String transHash = transaction.getHashAsString();
-            try {
-                transactionGrapher.graphTransactionByHash(transHash);
-            } catch(NullPointerException e) {
-                logger.debug(e.toString());
-            }
-        }
-        transactionGrapher.closeSubdueGraphBuilderStream();
+        BlockVisualiser blockVisualiser = new BlockVisualiser(session);
+        blockVisualiser.produceGraphFromBlock(blockFileLoader.next());
+
         session.close();
         driver.close();
     }
