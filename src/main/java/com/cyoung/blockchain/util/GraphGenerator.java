@@ -18,7 +18,7 @@ public class GraphGenerator {
 
     public GraphGenerator(Session session) throws IOException {
         this.session = session;
-        graphFileBuilder = new GraphFileBuilder("/Users/callum/Projects/blockchain-analysis");
+        graphFileBuilder = new GraphFileBuilder(PropertyLoader.LoadProperty("graphOutputDirectory"));
     }
 
     public void graphTransactionByHash(String transHash) throws Exception {

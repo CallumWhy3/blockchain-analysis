@@ -1,6 +1,7 @@
 package com.cyoung.blockchain.controller;
 
 import com.cyoung.blockchain.util.BlockVisualiser;
+import com.cyoung.blockchain.util.PropertyLoader;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -68,7 +69,10 @@ public class BlockVisualiserController {
 
         BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
 
-        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic("neo4j", "blockchain"));
+        String neo4jName = PropertyLoader.LoadProperty("neo4jUsername");
+        String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
+
+        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jName, neo4jPassword));
         Session session = driver.session();
 
         BlockVisualiser blockVisualiser = new BlockVisualiser(session);
