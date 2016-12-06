@@ -14,11 +14,11 @@ public class GraphGenerator {
     private int subdueCounter;
     private ArrayList<String> subdueVertex;
     private ArrayList<String> subdueEdges;
-    private SubdueGraphBuilder subdueGraphBuilder;
+    private GraphFileBuilder graphFileBuilder;
 
     public GraphGenerator(Session session) throws IOException {
         this.session = session;
-        subdueGraphBuilder = new SubdueGraphBuilder("/Users/callum/Projects/blockchain-analysis");
+        graphFileBuilder = new GraphFileBuilder("/Users/callum/Projects/blockchain-analysis");
     }
 
     public void graphTransactionByHash(String transHash) throws Exception {
@@ -34,7 +34,7 @@ public class GraphGenerator {
         graphInputs(trans);
         graphOutputs(trans);
         try {
-            subdueGraphBuilder.buildSubdueGraphFile(subdueVertex, subdueEdges);
+            graphFileBuilder.buildSubdueGraphFile(subdueVertex, subdueEdges);
         } catch(IOException e){
             e.printStackTrace();
         }
@@ -63,6 +63,6 @@ public class GraphGenerator {
     }
 
     public void closeSubdueGraphBuilderStream() throws IOException {
-        subdueGraphBuilder.closeStream();
+        graphFileBuilder.closeStream();
     }
 }
