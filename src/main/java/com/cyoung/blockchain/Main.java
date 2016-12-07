@@ -1,6 +1,6 @@
 package com.cyoung.blockchain;
 
-import com.cyoung.blockchain.controller.BlockVisualiserController;
+import com.cyoung.blockchain.controller.MainMenuController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,11 +20,11 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/BlockVisualiser.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainMenu.fxml"));
             loader.load();
-            BlockVisualiserController controller = loader.getController();
+            MainMenuController controller = loader.getController();
             controller.setStage(primaryStage); // or what you want to do
-            Parent root = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
             primaryStage.setScene(new Scene(root));
             primaryStage.setTitle("Blockchain analysis");
             primaryStage.show();

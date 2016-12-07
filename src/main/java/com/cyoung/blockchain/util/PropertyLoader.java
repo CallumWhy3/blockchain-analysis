@@ -22,7 +22,7 @@ public class PropertyLoader {
                 try {
                     input.close();
                 } catch (IOException ex) {
-
+                    ex.printStackTrace();
                 }
             }
         }

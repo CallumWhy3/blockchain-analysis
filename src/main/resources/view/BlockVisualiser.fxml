@@ -6,29 +6,35 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockVisualiserController">
-   <children>
-       <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
-       <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
-           <image>
-               <Image url="@../images/btc-logo.png" />
-           </image>
-       </ImageView>
-       <Text fill="WHITE" layoutX="58.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transaction grapher" wrappingWidth="148.13671875">
-           <font>
-               <Font name="Arial Rounded MT Bold" size="14.0" />
-           </font>
-       </Text>
-       <ComboBox layoutX="501.0" layoutY="1.0" prefHeight="46.0" prefWidth="99.0" promptText="Options" style="-fx-background-color: #4a4d57;" visibleRowCount="3" />
-       <Text layoutX="25.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select .dat file" wrappingWidth="209.13671875">
-           <font>
-               <Font name="Arial Rounded MT Bold" size="14.0" />
-           </font>
-       </Text>
-       <TextField fx:id="selectedFile" disable="true" editable="false" layoutX="25.0" layoutY="88.0" prefHeight="25.0" prefWidth="328.0" />
-       <Button fx:id="fileBrowseButton" layoutX="358.0" layoutY="88.0" mnemonicParsing="false" onAction="#openFileBrowser" text="..." />
-       <Button fx:id="produceGraphButton" disable="true" layoutX="393.0" layoutY="88.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="184.0" onAction="#generateGraph" text="Produce graph" />
-       <ProgressBar layoutX="25.0" layoutY="123.0" prefHeight="25.0" prefWidth="553.0" progress="0.0" />
-       <TextArea layoutX="25.0" layoutY="160.0" prefHeight="216.0" prefWidth="553.0" />
-   </children>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0"
+      prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockVisualiserController">
+    <children>
+        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0"/>
+        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../images/btc-logo.png"/>
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="58.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transaction grapher" wrappingWidth="148.13671875">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0"/>
+            </font>
+        </Text>
+        <Text layoutX="25.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Select .dat file" wrappingWidth="209.13671875">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0"/>
+            </font>
+        </Text>
+        <TextField fx:id="selectedFile" disable="true" editable="false" layoutX="25.0" layoutY="88.0" prefHeight="25.0" prefWidth="328.0"/>
+        <Button layoutX="358.0" layoutY="88.0" mnemonicParsing="false" onAction="#openFileBrowser" text="..."/>
+        <Button fx:id="produceGraphButton" disable="true" layoutX="393.0" layoutY="88.0" mnemonicParsing="false" onAction="#generateGraph" prefHeight="27.0" prefWidth="184.0" text="Produce graph"/>
+        <ProgressBar layoutX="24.0" layoutY="223.0" prefHeight="25.0" prefWidth="553.0" progress="0.0"/>
+        <TextArea layoutX="25.0" layoutY="127.0" prefHeight="84.0" prefWidth="553.0"/>
+        <Button layoutX="504.0" mnemonicParsing="false" prefHeight="47.0" prefWidth="95.0" onAction="#returnToMainMenu" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0"/>
+            </font>
+        </Button>
+    </children>
 </Pane>

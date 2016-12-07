@@ -18,7 +18,7 @@ public class GraphGenerator {
 
     public GraphGenerator(Session session) throws IOException {
         this.session = session;
-        graphFileBuilder = new GraphFileBuilder(PropertyLoader.LoadProperty("graphOutputDirectory"));
+        graphFileBuilder = new GraphFileBuilder(PropertyLoader.LoadProperty("graphFileOutputDirectory"));
     }
 
     public void graphTransactionByHash(String transHash) throws Exception {

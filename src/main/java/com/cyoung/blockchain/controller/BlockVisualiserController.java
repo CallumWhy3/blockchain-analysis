@@ -2,7 +2,12 @@ package com.cyoung.blockchain.controller;
 
 import com.cyoung.blockchain.util.BlockVisualiser;
 import com.cyoung.blockchain.util.PropertyLoader;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
@@ -19,6 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,9 +36,6 @@ public class BlockVisualiserController {
 
     @FXML
     private TextField selectedFile;
-
-    @FXML
-    private Button fileBrowseButton;
 
     @FXML
     private Button produceGraphButton;
@@ -82,11 +85,15 @@ public class BlockVisualiserController {
         driver.close();
     }
 
-    private void loadBlockFile(String path) {
-        blockFile = new File(path);
+    public void returnToMainMenu(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        Scene scene = new Scene(parent);
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
-    public void setStage(Stage stage){
-        this.stage = stage;
+    private void loadBlockFile(String path) {
+        blockFile = new File(path);
     }
 }
