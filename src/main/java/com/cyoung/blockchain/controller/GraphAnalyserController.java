@@ -83,8 +83,9 @@ public class GraphAnalyserController {
 
                 updateMessage("Analysing results");
                 SubdueResultParser subdueResultParser = new SubdueResultParser(result);
-                outputTextArea.appendText(subdueResultParser.getAllResults());
-                System.out.println(subdueResultParser.getResult(0));
+                outputTextArea.appendText("Pattern 1:" + subdueResultParser.getResult(0) + "\n\n");
+                outputTextArea.appendText("Pattern 2:" + subdueResultParser.getResult(1) + "\n\n");
+                outputTextArea.appendText("Pattern 3:" + subdueResultParser.getResult(2) + "\n\n");
                 updateProgress(4, 4);
                 updateMessage("Done");
                 return null;

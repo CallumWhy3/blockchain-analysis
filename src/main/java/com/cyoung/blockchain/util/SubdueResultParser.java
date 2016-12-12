@@ -22,14 +22,13 @@ public class SubdueResultParser {
     }
 
     public String getResult(int index) {
-//        Pattern pattern = Pattern.compile("\\(" + index + "\\) Substructure: value = \\d*.\\d*, pos instances = \\d*, neg instances = \\d*\n  Graph\\(\\d*v,\\d*e\\):\n(.|\n)*\\(" + (index+1) + "\\)");
-//        Pattern pattern = Pattern.compile("[(]" + index + "[)] Substructure: value = \\d*.\\d*, pos instances = \\d*, neg instances = \\d*\n  Graph[(]d*v,\\d*e[)]:\n(.|\n)*[(]" + (index+1) + "[)]");
-//        Pattern pattern = Pattern.compile("(v \\d+ transaction\\s*|v \\d+ input\\s*|v \\d+ output\\s*|d \\d+ \\d+ input\\s*|d \\d+ \\d+ output\\s*)");
-//        Pattern pattern = Pattern.compile("(v \\d+ transaction\\n\\s*|v \\d+ input\\n\\s*|v \\d+ output\\n\\s*|d \\d+ \\d+ input\\n\\s*|d \\d+ \\d+ output\\n\\s*)*");
-//        String strippedResult = result.replace("\n", "");
-        Pattern pattern = Pattern.compile("Substructure");
+        Pattern pattern = Pattern.compile("(\\s*v\\s\\d+\\stransaction\\n(\\s*v\\s\\d+\\sinput\\n)+(\\s*v\\s\\d+\\soutput\\n)+(\\s*d\\s\\d+\\s\\d+\\sinput\\n)+(\\s*d\\s\\d+\\s\\d+\\soutput)+)");
         Matcher matcher = pattern.matcher(result);
-        return matcher.group(index);
-//        (v \d+ transaction\n\s*|v \d+ input\n\s*|v \d+ output\n\s*|d \d+ \d+ input\n\s*|d \d+ \d+ output\n\s*)*
+
+        if (matcher.find()) {
+            return matcher.group(index);
+        } else {
+            return "No match";
+        }
     }
 }
