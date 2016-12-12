@@ -7,7 +7,7 @@ class GraphFileBuilder {
     private PrintWriter out;
 
     GraphFileBuilder(String directory) throws IOException {
-        File graphFile = new File(directory + "/subdueGraph.g");
+        File graphFile = new File(directory);
         out = new PrintWriter(graphFile);
     }
 

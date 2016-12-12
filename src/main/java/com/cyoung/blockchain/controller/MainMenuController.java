@@ -16,6 +16,10 @@ public class MainMenuController {
     public MainMenuController() {
     }
 
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+
     @FXML
     public void openBlockVisualiser(ActionEvent event) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
@@ -26,12 +30,17 @@ public class MainMenuController {
     }
 
     @FXML
+    public void openGraphAnalyser(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+        Scene scene = new Scene(parent);
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     public void exitProgram(ActionEvent event) {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();
-    }
-
-    public void setStage(Stage stage){
-        this.stage = stage;
     }
 }

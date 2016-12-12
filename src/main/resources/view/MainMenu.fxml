@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
@@ -19,14 +20,19 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
+        <Button layoutX="534.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="47.0" prefWidth="65.0" style="-fx-background-color: #4a4d57;" text="Exit" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0" />
+            </font>
+        </Button>
         <Button layoutX="169.0" layoutY="70.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="262.0" text="Block visualiser">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button layoutX="534.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="47.0" prefWidth="65.0" style="-fx-background-color: #4a4d57;" text="Exit" textAlignment="CENTER" textFill="WHITE">
+        <Button layoutX="169.0" layoutY="122.0" mnemonicParsing="false" onAction="#openGraphAnalyser" prefHeight="35.0" prefWidth="262.0" text="Graph analyser">
             <font>
-                <Font name="Arial Rounded MT Bold" size="14.0" />
+                <Font size="14.0" />
             </font>
         </Button>
     </children>
