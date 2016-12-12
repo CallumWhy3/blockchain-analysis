@@ -24,6 +24,7 @@ public class MainMenuController {
     public void openBlockVisualiser(ActionEvent event) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
         Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
@@ -33,6 +34,7 @@ public class MainMenuController {
     public void openGraphAnalyser(ActionEvent event) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
         Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();

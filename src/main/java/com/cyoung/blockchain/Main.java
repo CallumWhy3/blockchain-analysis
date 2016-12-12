@@ -25,7 +25,9 @@ public class Main extends Application {
             MainMenuController controller = loader.getController();
             controller.setStage(primaryStage); // or what you want to do
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-            primaryStage.setScene(new Scene(root));
+            Scene scene = new Scene(root);
+            scene.getStylesheets().add("/css/style.css");
+            primaryStage.setScene(scene);
             primaryStage.setTitle("Blockchain analysis");
             primaryStage.show();
         } catch (Exception e) {

@@ -53,6 +53,9 @@ public class BlockVisualiserController {
     @FXML
     private Label currentTask;
 
+    @FXML
+    private Button analyseButton;
+
     public BlockVisualiserController(){
         params = MainNetParams.get();
         context = new Context(params);
@@ -68,6 +71,7 @@ public class BlockVisualiserController {
         blockFile = fc.showOpenDialog(stage);
         if(blockFile != null){
             produceGraphButton.setDisable(false);
+            analyseButton.setDisable(true);
             selectedFile.setText(blockFile.toString());
         } else {
             produceGraphButton.setDisable(true);
@@ -102,11 +106,12 @@ public class BlockVisualiserController {
                 updateProgress(8, 10);
 
                 updateMessage("Closing Neo4j session");
-                selectedFile.setText("");
                 session.close();
                 driver.close();
+                selectedFile.setText("");
                 updateProgress(10, 10);
                 updateMessage("Done");
+                analyseButton.setDisable(false);
 
                 return null;
             }
@@ -120,9 +125,20 @@ public class BlockVisualiserController {
     }
 
     @FXML
+    public void openGraphAnalyser(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+        Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     public void returnToMainMenu(ActionEvent event) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();

@@ -108,6 +108,7 @@ public class GraphAnalyserController {
     public void returnToMainMenu(ActionEvent event) throws IOException {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
