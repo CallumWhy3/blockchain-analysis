@@ -83,37 +83,37 @@ public class BlockVisualiserController {
     private void generateGraph() throws Exception {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
-                Context.propagate(context);
-                produceGraphButton.setDisable(true);
+            Context.propagate(context);
+            produceGraphButton.setDisable(true);
 
-                updateMessage("Adding block file");
-                List<File> blockFiles = new ArrayList<File>();
-                blockFiles.add(blockFile);
-                updateProgress(1, 10);
+            updateMessage("Adding block file");
+            List<File> blockFiles = new ArrayList<File>();
+            blockFiles.add(blockFile);
+            updateProgress(1, 10);
 
-                updateMessage("Creating block file loader");
-                BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
-                updateProgress(2, 10);
+            updateMessage("Creating block file loader");
+            BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
+            updateProgress(2, 10);
 
-                updateMessage("Creating Neo4j session");
-                Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
-                Session session = driver.session();
-                updateProgress(4, 10);
+            updateMessage("Creating Neo4j session");
+            Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
+            Session session = driver.session();
+            updateProgress(4, 10);
 
-                updateMessage("Creating nodes and relationships");
-                BlockVisualiser blockVisualiser = new BlockVisualiser(session);
-                blockVisualiser.produceGraphFromBlock(blockFileLoader.next());
-                updateProgress(8, 10);
+            updateMessage("Creating nodes and relationships");
+            BlockVisualiser blockVisualiser = new BlockVisualiser(session);
+            blockVisualiser.produceGraphFromBlock(blockFileLoader.next());
+            updateProgress(8, 10);
 
-                updateMessage("Closing Neo4j session");
-                session.close();
-                driver.close();
-                selectedFile.setText("");
-                updateProgress(10, 10);
-                updateMessage("Done");
-                analyseButton.setDisable(false);
+            updateMessage("Closing Neo4j session");
+            session.close();
+            driver.close();
+            selectedFile.setText("");
+            updateProgress(10, 10);
+            updateMessage("Done");
+            analyseButton.setDisable(false);
 
-                return null;
+            return null;
             }
         };
 

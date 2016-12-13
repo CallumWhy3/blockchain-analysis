@@ -72,23 +72,23 @@ public class GraphAnalyserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
-                updateMessage("Retrieving subdue location");
-                String subdueLocation = PropertyLoader.LoadProperty("subdueLocation");
-                updateProgress(1, 4);
+            updateMessage("Retrieving subdue location");
+            String subdueLocation = PropertyLoader.LoadProperty("subdueLocation");
+            updateProgress(1, 4);
 
-                updateMessage("Executing subdue");
-                String command = subdueLocation + "./subdue " + graphFilePath;
-                String result = executeCommand(command);
-                updateProgress(3, 4);
+            updateMessage("Executing subdue");
+            String command = subdueLocation + "./subdue " + graphFilePath;
+            String result = executeCommand(command);
+            updateProgress(3, 4);
 
-                updateMessage("Analysing results");
-                SubdueResultParser subdueResultParser = new SubdueResultParser(result);
-                outputTextArea.appendText("Pattern 1:" + subdueResultParser.getResult(0) + "\n\n");
-                outputTextArea.appendText("Pattern 2:" + subdueResultParser.getResult(1) + "\n\n");
-                outputTextArea.appendText("Pattern 3:" + subdueResultParser.getResult(2) + "\n\n");
-                updateProgress(4, 4);
-                updateMessage("Done");
-                return null;
+            updateMessage("Analysing results");
+            SubdueResultParser subdueResultParser = new SubdueResultParser(result);
+            outputTextArea.appendText("Pattern 1:" + subdueResultParser.getResult(0) + "\n\n");
+            outputTextArea.appendText("Pattern 2:" + subdueResultParser.getResult(1) + "\n\n");
+            outputTextArea.appendText("Pattern 3:" + subdueResultParser.getResult(2) + "\n\n");
+            updateProgress(4, 4);
+            updateMessage("Done");
+            return null;
             }
         };
 
