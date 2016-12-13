@@ -14,7 +14,9 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.bitcoinj.core.NetworkParameters;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 
 public class GraphAnalyserController {
@@ -38,18 +40,20 @@ public class GraphAnalyserController {
     @FXML
     private Label currentTask;
 
+    @FXML
+    private Button removeCommonCaseButton;
+
     public GraphAnalyserController() {
     }
 
     @FXML
     private void initialize(){
         fc = new FileChooser();
-        String graphFileOutputLocation = PropertyLoader.LoadProperty("graphFileOutputLocation");
-        File f = new File(graphFileOutputLocation);
+        graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
+        File f = new File(graphFilePath);
 
         if(f.exists() && !f.isDirectory()) {
-            graphFilePath = graphFileOutputLocation;
-            selectedFile.setText(graphFileOutputLocation);
+            selectedFile.setText(graphFilePath);
             executeSubdueButton.setDisable(false);
         }
     }
@@ -83,11 +87,12 @@ public class GraphAnalyserController {
 
             updateMessage("Analysing results");
             SubdueResultParser subdueResultParser = new SubdueResultParser(result);
-            outputTextArea.appendText("Pattern 1:" + subdueResultParser.getResult(0) + "\n\n");
-            outputTextArea.appendText("Pattern 2:" + subdueResultParser.getResult(1) + "\n\n");
-            outputTextArea.appendText("Pattern 3:" + subdueResultParser.getResult(2) + "\n\n");
+            outputTextArea.appendText("Pattern 1: " + subdueResultParser.getResult(1) + "\n\n");
+            outputTextArea.appendText("Pattern 2: " + subdueResultParser.getResult(2) + "\n\n");
+            outputTextArea.appendText("Pattern 3: " + subdueResultParser.getResult(3) + "\n\n");
             updateProgress(4, 4);
             updateMessage("Done");
+            removeCommonCaseButton.setDisable(false);
             return null;
             }
         };

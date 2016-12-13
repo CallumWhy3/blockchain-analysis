@@ -17,18 +17,20 @@ public class SubdueResultParser {
         }
     }
 
-    public String getAllResults() {
-        return result;
-    }
-
     public String getResult(int index) {
         Pattern pattern = Pattern.compile("(\\s*v\\s\\d+\\stransaction\\n(\\s*v\\s\\d+\\sinput\\n)+(\\s*v\\s\\d+\\soutput\\n)+(\\s*d\\s\\d+\\s\\d+\\sinput\\n)+(\\s*d\\s\\d+\\s\\d+\\soutput)+)");
         Matcher matcher = pattern.matcher(result);
+        int counter = index;
+
+        while (counter > 1) {
+            matcher.find();
+            counter--;
+        }
 
         if (matcher.find()) {
-            return matcher.group(index);
+            return matcher.group(0);
         } else {
-            return "No match";
+            return "No match at index " + index;
         }
     }
 }
