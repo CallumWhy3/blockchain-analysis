@@ -43,8 +43,9 @@ public class GraphGenerator {
     private void graphInputs(Transaction trans) {
         for (Input i : trans.getInputs()){
             String inputAddress = i.getPreviousOutput().getAddress();
+            double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
             session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
-            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT]->(t)");
+            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
             subdueVertex.add("v " + subdueCounter + " input");
             subdueEdges.add("e " + subdueCounter + " 1 input");
             subdueCounter++;
@@ -54,8 +55,9 @@ public class GraphGenerator {
     private void graphOutputs(Transaction trans){
         for (Output o : trans.getOutputs()) {
             String outputHash = o.getAddress();
+            double outputValue = o.getValue() * 0.00000001;
             session.run("MERGE(o:Output {name:'" + outputHash + "'})");
-            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT]->(o)");
+            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
             subdueVertex.add("v " + subdueCounter + " output");
             subdueEdges.add("e 1 " + subdueCounter + " output");
             subdueCounter++;
