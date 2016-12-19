@@ -14,7 +14,7 @@ Before runnig the program you must edit config.properties, which can be found in
 **Running the program**  
 Once you have installed subdue and set your configuration fields you are ready to run the program. To do this you need to run the main method. After that you can use the GUI to interact with the program.  
 
-**Example use**
+**Example use**  
 Launch the program and Neo4j, then click the 'Start' button. From the first screen select a .dat file and click the 'Produce graph' button. Once this process completes you should be able to view the graph on Neo4j by running a cypher query such as `MATCH (n) RETURN n`, which simply returns all nodes and relationships.  
 
 Next if you go back to program and click the 'Analyse' button you will be brought to a new screen titled 'Graph analyser'. From here you can analyse the graph you just made using Subdue. The program will automatically load the .g file that was created along with your graph but you can select a different file if you want. Finally if you click the 'Execute subdue' button and wait for the process to finish, you will see the 3 most common structures output to the text area in the middle of the screen which will be in the format of vertexes and edges.  
