@@ -25,27 +25,27 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Button layoutX="39.0" layoutY="163.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Block visualiser">
+        <Button layoutX="175.0" layoutY="163.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Block visualiser">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button layoutX="39.0" layoutY="211.0" mnemonicParsing="false" onAction="#openGraphAnalyser" prefHeight="35.0" prefWidth="250.0" text="Graph analyser">
+        <Button layoutX="175.0" layoutY="209.0" mnemonicParsing="false" onAction="#openGraphAnalyser" prefHeight="35.0" prefWidth="250.0" text="Graph analyser">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label layoutX="39.0" layoutY="139.0" style="-fx-background-color: eaeadf;" text="Tools">
+      <Label layoutX="175.0" layoutY="139.0" style="-fx-background-color: eaeadf;" text="Tools">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
       </Label>
-      <Label layoutX="42.0" layoutY="66.0" style="-fx-background-color: eaeadf;" text="Quick start">
+      <Label layoutX="175.0" layoutY="65.0" style="-fx-background-color: eaeadf;" text="Quick start">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
       </Label>
-      <Button layoutX="39.0" layoutY="90.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
+      <Button layoutX="175.0" layoutY="89.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
          <font>
             <Font size="14.0" />
          </font>
