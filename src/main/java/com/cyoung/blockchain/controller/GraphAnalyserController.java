@@ -14,16 +14,15 @@ import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.bitcoinj.core.NetworkParameters;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class GraphAnalyserController {
-    private FileChooser fc = new FileChooser();
+    private FileChooser fc;
+    private File graphFile;
     private String graphFilePath;
     private Stage stage;
     private NetworkParameters params;
+    private String pattern1, pattern2, pattern3;
 
     @FXML
     private TextField selectedFile;
@@ -50,9 +49,9 @@ public class GraphAnalyserController {
     private void initialize(){
         fc = new FileChooser();
         graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
-        File f = new File(graphFilePath);
+        graphFile = new File(graphFilePath);
 
-        if(f.exists() && !f.isDirectory()) {
+        if(graphFile.exists() && !graphFile.isDirectory()) {
             selectedFile.setText(graphFilePath);
             executeSubdueButton.setDisable(false);
         }
@@ -60,7 +59,7 @@ public class GraphAnalyserController {
 
     @FXML
     private void openFileBrowser(){
-        File graphFile = fc.showOpenDialog(stage);
+        graphFile = fc.showOpenDialog(stage);
         if(graphFile != null){
             graphFilePath = graphFile.getPath();
             executeSubdueButton.setDisable(false);
@@ -87,9 +86,12 @@ public class GraphAnalyserController {
 
             updateMessage("Analysing results");
             SubdueResultParser subdueResultParser = new SubdueResultParser(result);
-            outputTextArea.appendText("Pattern 1: " + subdueResultParser.getResult(1) + "\n\n");
-            outputTextArea.appendText("Pattern 2: " + subdueResultParser.getResult(2) + "\n\n");
-            outputTextArea.appendText("Pattern 3: " + subdueResultParser.getResult(3) + "\n\n");
+            pattern1 = subdueResultParser.getResult(1).replace("    ", "");
+            pattern2 = subdueResultParser.getResult(2).replace("    ", "");
+            pattern3 = subdueResultParser.getResult(3).replace("    ", "");
+            outputTextArea.appendText("Pattern 1: " + pattern1 + "\n\n");
+            outputTextArea.appendText("Pattern 2: " + pattern2 + "\n\n");
+            outputTextArea.appendText("Pattern 3: " + pattern3 + "\n\n");
             updateProgress(4, 4);
             updateMessage("Done");
             removeCommonCaseButton.setDisable(false);
@@ -108,6 +110,37 @@ public class GraphAnalyserController {
         Runtime runtime = Runtime.getRuntime();
         java.util.Scanner s = new java.util.Scanner(runtime.exec(cmd).getInputStream()).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+    @FXML
+    private void removeCommonCase() throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(graphFilePath));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append("\n");
+                line = br.readLine();
+            }
+            String fileAsString = sb.toString();
+
+//            File newGraphFile = new File(graphFilePath);
+            FileWriter fileWriter = new FileWriter(graphFile, false);
+            fileWriter.write(removeSubdueResultsFromString(fileAsString));
+            fileWriter.close();
+        } finally {
+            br.close();
+        }
+    }
+
+    private String removeSubdueResultsFromString(String fileAsString) {
+        fileAsString = fileAsString.replace(pattern1, "");
+        fileAsString = fileAsString.replace(pattern2, "");
+        fileAsString = fileAsString.replace(pattern3, "");
+        fileAsString = fileAsString.replace("XP\n\n", "");
+        return fileAsString;
     }
 
     @FXML

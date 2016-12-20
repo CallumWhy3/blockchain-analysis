@@ -1,10 +1,13 @@
 package com.cyoung.blockchain.util;
 
+import com.cyoung.blockchain.Main;
 import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.Input;
 import info.blockchain.api.blockexplorer.Output;
 import info.blockchain.api.blockexplorer.Transaction;
 import org.neo4j.driver.v1.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,6 +18,7 @@ public class GraphGenerator {
     private ArrayList<String> subdueVertex;
     private ArrayList<String> subdueEdges;
     private GraphFileBuilder graphFileBuilder;
+    private static final Logger logger = LoggerFactory.getLogger(GraphGenerator.class);
 
     public GraphGenerator(Session session) throws IOException {
         this.session = session;
@@ -28,11 +32,12 @@ public class GraphGenerator {
 
         BlockExplorer blockExplorer = new BlockExplorer();
         Transaction trans = blockExplorer.getTransaction(transHash);
-        session.run("CREATE(t:Transaction {hash:'" + trans.getHash() + "'})");
+        session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
         subdueVertex.add("v " + subdueCounter + " transaction");
         subdueCounter++;
         graphInputs(trans);
         graphOutputs(trans);
+        logger.info("Transaction " + transHash + " graphed successfully");
         try {
             graphFileBuilder.buildSubdueGraphFile(subdueVertex, subdueEdges);
         } catch(IOException e){
@@ -47,7 +52,7 @@ public class GraphGenerator {
             session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
             session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
             subdueVertex.add("v " + subdueCounter + " input");
-            subdueEdges.add("e " + subdueCounter + " 1 input");
+            subdueEdges.add("d " + subdueCounter + " 1 input");
             subdueCounter++;
         }
     }
@@ -59,7 +64,7 @@ public class GraphGenerator {
             session.run("MERGE(o:Output {name:'" + outputHash + "'})");
             session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
             subdueVertex.add("v " + subdueCounter + " output");
-            subdueEdges.add("e 1 " + subdueCounter + " output");
+            subdueEdges.add("d 1 " + subdueCounter + " output");
             subdueCounter++;
         }
     }
