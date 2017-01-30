@@ -13,8 +13,12 @@ import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.bitcoinj.core.NetworkParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class GraphAnalyserController {
     private FileChooser fc;
@@ -23,6 +27,7 @@ public class GraphAnalyserController {
     private Stage stage;
     private NetworkParameters params;
     private String pattern1, pattern2, pattern3;
+    private static final Logger logger = LoggerFactory.getLogger(GraphAnalyserController.class);
 
     @FXML
     private TextField selectedFile;
@@ -125,8 +130,6 @@ public class GraphAnalyserController {
                 line = br.readLine();
             }
             String fileAsString = sb.toString();
-
-//            File newGraphFile = new File(graphFilePath);
             FileWriter fileWriter = new FileWriter(graphFile, false);
             fileWriter.write(removeSubdueResultsFromString(fileAsString));
             fileWriter.close();
@@ -136,11 +139,25 @@ public class GraphAnalyserController {
     }
 
     private String removeSubdueResultsFromString(String fileAsString) {
+        logger.info("Initial number of structures: " + getNumberOfStructuresInString(fileAsString));
         fileAsString = fileAsString.replace(pattern1, "");
         fileAsString = fileAsString.replace(pattern2, "");
         fileAsString = fileAsString.replace(pattern3, "");
         fileAsString = fileAsString.replace("XP\n\n", "");
+        logger.info("Remaining number of structures: " + getNumberOfStructuresInString(fileAsString));
         return fileAsString;
+    }
+
+    private int getNumberOfStructuresInString(String file) {
+        int numberOfStuctures = 0;
+        Pattern pattern = Pattern.compile("XP");
+        Matcher matcher = pattern.matcher(file);
+
+        while (matcher.find()) {
+            numberOfStuctures++;
+        }
+
+        return numberOfStuctures;
     }
 
     @FXML
