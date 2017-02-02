@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import org.bitcoinj.core.NetworkParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +24,6 @@ public class GraphAnalyserController {
     private File graphFile;
     private String graphFilePath;
     private Stage stage;
-    private NetworkParameters params;
     private String pattern1, pattern2, pattern3;
     private static final Logger logger = LoggerFactory.getLogger(GraphAnalyserController.class);
 
@@ -94,6 +92,7 @@ public class GraphAnalyserController {
             pattern1 = subdueResultParser.getResult(1).replace("    ", "");
             pattern2 = subdueResultParser.getResult(2).replace("    ", "");
             pattern3 = subdueResultParser.getResult(3).replace("    ", "");
+            outputTextArea.clear();
             outputTextArea.appendText("Pattern 1: " + pattern1 + "\n\n");
             outputTextArea.appendText("Pattern 2: " + pattern2 + "\n\n");
             outputTextArea.appendText("Pattern 3: " + pattern3 + "\n\n");
@@ -135,6 +134,7 @@ public class GraphAnalyserController {
             fileWriter.close();
         } finally {
             br.close();
+            removeCommonCaseButton.setDisable(true);
         }
     }
 
@@ -165,7 +165,7 @@ public class GraphAnalyserController {
         Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         Scene scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
