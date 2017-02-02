@@ -23,8 +23,6 @@ import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockVisualiserController {
-    private static final Logger logger = LoggerFactory.getLogger(BlockVisualiserController.class);
     private Context context;
     private FileChooser fc = new FileChooser();
     private File blockFile;
@@ -42,19 +39,22 @@ public class BlockVisualiserController {
     private String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
 
     @FXML
-    private ProgressBar progressBar;
+    private TextField selectedFile;
 
     @FXML
-    private TextField selectedFile;
+    private Button fileSelectButton;
 
     @FXML
     private Button produceGraphButton;
 
     @FXML
-    private Label currentTask;
+    private ProgressBar progressBar;
 
     @FXML
     private Button analyseButton;
+
+    @FXML
+    private Label currentTask;
 
     public BlockVisualiserController(){
         params = MainNetParams.get();
@@ -84,6 +84,7 @@ public class BlockVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
             Context.propagate(context);
+            fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
 
             updateMessage("Adding block file");
@@ -111,6 +112,7 @@ public class BlockVisualiserController {
             selectedFile.setText("");
             updateProgress(10, 10);
             updateMessage("Done");
+            fileSelectButton.setDisable(false);
             analyseButton.setDisable(false);
 
             return null;
