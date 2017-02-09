@@ -31,6 +31,9 @@ public class GraphAnalyserController {
     private TextField selectedFile;
 
     @FXML
+    private Button fileSelectButton;
+
+    @FXML
     private Button executeSubdueButton;
 
     @FXML
@@ -44,6 +47,9 @@ public class GraphAnalyserController {
 
     @FXML
     private Button removeCommonCaseButton;
+
+    @FXML
+    private Button visualiseResultsButton;
 
     public GraphAnalyserController() {
     }
@@ -79,6 +85,8 @@ public class GraphAnalyserController {
             @Override public Void call() throws Exception {
 
             updateMessage("Retrieving subdue location");
+            fileSelectButton.setDisable(true);
+            executeSubdueButton.setDisable(true);
             String subdueLocation = PropertyLoader.LoadProperty("subdueLocation");
             updateProgress(1, 4);
 
@@ -97,7 +105,10 @@ public class GraphAnalyserController {
             outputTextArea.appendText("Pattern 2: " + pattern2 + "\n\n");
             outputTextArea.appendText("Pattern 3: " + pattern3 + "\n\n");
             updateProgress(4, 4);
+
             updateMessage("Done");
+            fileSelectButton.setDisable(false);
+            executeSubdueButton.setDisable(false);
             removeCommonCaseButton.setDisable(false);
             return null;
             }
@@ -135,6 +146,7 @@ public class GraphAnalyserController {
         } finally {
             br.close();
             removeCommonCaseButton.setDisable(true);
+            visualiseResultsButton.setDisable(false);
         }
     }
 
@@ -158,6 +170,16 @@ public class GraphAnalyserController {
         }
 
         return numberOfStuctures;
+    }
+
+    @FXML
+    public void openAnomalyVisualiser(ActionEvent event) throws IOException {
+        Parent parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
+        Scene scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML
