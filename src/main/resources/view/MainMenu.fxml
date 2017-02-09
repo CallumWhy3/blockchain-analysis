@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="278.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
     <children>
         <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -46,6 +46,11 @@
          </font>
       </Label>
       <Button layoutX="175.0" layoutY="89.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="175.0" layoutY="256.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="35.0" prefWidth="250.0" text="Anomaly visualiser">
          <font>
             <Font size="14.0" />
          </font>
