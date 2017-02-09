@@ -35,8 +35,6 @@ public class BlockVisualiserController {
     private File blockFile;
     private Stage stage;
     private NetworkParameters params;
-    private String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
-    private String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
 
     @FXML
     private TextField selectedFile;
@@ -56,18 +54,13 @@ public class BlockVisualiserController {
     @FXML
     private Label currentTask;
 
-    public BlockVisualiserController(){
+    public BlockVisualiserController() {
         params = MainNetParams.get();
         context = new Context(params);
     }
 
     @FXML
-    private void initialize(){
-        fc = new FileChooser();
-    }
-
-    @FXML
-    private void openFileBrowser(){
+    private void openFileBrowser() {
         blockFile = fc.showOpenDialog(stage);
         if(blockFile != null){
             produceGraphButton.setDisable(false);
@@ -97,6 +90,8 @@ public class BlockVisualiserController {
             updateProgress(2, 10);
 
             updateMessage("Creating Neo4j session");
+            String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
+            String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
             Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
             Session session = driver.session();
             updateProgress(4, 10);
