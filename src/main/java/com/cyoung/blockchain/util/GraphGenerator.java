@@ -1,6 +1,5 @@
 package com.cyoung.blockchain.util;
 
-import com.cyoung.blockchain.Main;
 import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.Input;
 import info.blockchain.api.blockexplorer.Output;
@@ -23,6 +22,7 @@ public class GraphGenerator {
     public GraphGenerator(Session session) throws IOException {
         this.session = session;
         graphFileBuilder = new GraphFileBuilder(PropertyLoader.LoadProperty("graphFileOutputLocation"));
+        session.run("MATCH (n) DETACH DELETE n");
     }
 
     public void graphTransactionByHash(String transHash) throws Exception {

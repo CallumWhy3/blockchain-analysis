@@ -9,10 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.bitcoinj.core.Context;
@@ -73,7 +70,19 @@ public class BlockVisualiserController {
     }
 
     @FXML
-    private void generateGraph() throws Exception {
+    private void confirmGenerateGraph() throws Exception {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete all nodes and relationships in the current neo4j graph, do you still want to continue?");
+        alert.setHeaderText(null);
+
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.OK) {
+                generateGraph();
+            }
+        });
+    }
+
+    @FXML
+    private void generateGraph() {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
             Context.propagate(context);

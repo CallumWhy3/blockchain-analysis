@@ -54,46 +54,49 @@ public class AnomalyVisualiserController {
     }
 
     @FXML
-    private void generateGraph() {
+    private void confirmGenerateGraph() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete all nodes and relationships in the current neo4j graph, do you still want to continue?");
         alert.setHeaderText(null);
 
         alert.showAndWait().ifPresent(response -> {
             if (response == ButtonType.OK) {
-
-                Task<Void> task = new Task<Void>() {
-                    @Override public Void call() throws Exception {
-
-                        updateMessage("Creating Neo4j session");
-                        fileSelectButton.setDisable(true);
-                        produceGraphButton.setDisable(true);
-                        String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
-                        String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
-                        Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
-                        Session session = driver.session();
-                        updateProgress(1, 4);
-
-                        updateMessage("Creating nodes and relationships");
-                        AnomalyVisualiser av = new AnomalyVisualiser(session);
-                        av.produceGraphFromGraphFile(graphFile);
-                        updateProgress(3, 4);
-
-                        updateMessage("Done");
-                        updateProgress(4, 4);
-                        fileSelectButton.setDisable(false);
-                        produceGraphButton.setDisable(false);
-
-                        return null;
-                    }
-                };
-
-                progressBar.progressProperty().bind(task.progressProperty());
-                currentTask.textProperty().bind(task.messageProperty());
-                Thread th = new Thread(task);
-                th.setDaemon(true);
-                th.start();
+                generateGraph();
             }
         });
+    }
+
+    private void generateGraph() {
+        Task<Void> task = new Task<Void>() {
+            @Override public Void call() throws Exception {
+
+            updateMessage("Creating Neo4j session");
+            fileSelectButton.setDisable(true);
+            produceGraphButton.setDisable(true);
+            String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
+            String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
+            Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
+            Session session = driver.session();
+            updateProgress(1, 4);
+
+            updateMessage("Creating nodes and relationships");
+            AnomalyVisualiser av = new AnomalyVisualiser(session);
+            av.produceGraphFromGraphFile(graphFile);
+            updateProgress(3, 4);
+
+            updateMessage("Done");
+            updateProgress(4, 4);
+            fileSelectButton.setDisable(false);
+            produceGraphButton.setDisable(false);
+
+            return null;
+            }
+        };
+
+        progressBar.progressProperty().bind(task.progressProperty());
+        currentTask.textProperty().bind(task.messageProperty());
+        Thread th = new Thread(task);
+        th.setDaemon(true);
+        th.start();
     }
 
     @FXML
