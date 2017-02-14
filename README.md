@@ -19,4 +19,6 @@ Launch the program and Neo4j, then click the 'Start' button. From the first scre
 
 Next if you go back to program and click the 'Analyse' button you will be brought to a new screen titled 'Graph analyser'. From here you can analyse the graph you just made using Subdue. The program will automatically load the .g file that was created along with your graph but you can select a different file if you want. Finally if you click the 'Execute subdue' button and wait for the process to finish, you will see the 3 most common structures output to the text area in the middle of the screen which will be in the format of vertexes and edges. If one of the results says 'No match at index #' then the result subdue found didn't contain at least one transaction, input and output.  
 
-After getting the Subdue results you will then be able to click a 'Remove common cases button'. This will take the Subdue results and remove them from the previously selected .g file, leaving the uncommon cases.
+After getting the Subdue results you will then be able to click a 'Remove common cases button'. This will take the Subdue results and remove them from the previously selected .g file, leaving the uncommon cases.  
+
+Once you have done this you will be able to click the 'Visualise' button which will take you to a new screen. Here you can select the .g file you removed the common cases from and visualise the structures in Neo4j.
