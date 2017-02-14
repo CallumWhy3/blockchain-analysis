@@ -42,6 +42,18 @@ public class AnomalyVisualiserController {
     private Label currentTask;
 
     @FXML
+    private void initialize(){
+        fc = new FileChooser();
+        String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
+        graphFile = new File(graphFilePath);
+
+        if(graphFile.exists() && !graphFile.isDirectory()) {
+            selectedFile.setText(graphFilePath);
+            produceGraphButton.setDisable(false);
+        }
+    }
+
+    @FXML
     public void openFileBrowser() {
         graphFile = fc.showOpenDialog(stage);
         if(graphFile != null){
