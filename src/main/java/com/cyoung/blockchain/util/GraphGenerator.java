@@ -26,8 +26,8 @@ public class GraphGenerator {
     }
 
     public void graphTransactionByHash(String transHash) throws Exception {
-        subdueVertex = new ArrayList<String>();
-        subdueEdges = new ArrayList<String>();
+        subdueVertex = new ArrayList<>();
+        subdueEdges = new ArrayList<>();
         subdueCounter = 1;
 
         BlockExplorer blockExplorer = new BlockExplorer();
@@ -46,11 +46,19 @@ public class GraphGenerator {
     }
 
     private void graphInputs(Transaction trans) {
-        for (Input i : trans.getInputs()){
-            String inputAddress = i.getPreviousOutput().getAddress();
-            double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
-            session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
-            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+        try {
+            for (Input i : trans.getInputs()) {
+                String inputAddress = i.getPreviousOutput().getAddress();
+                double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
+                session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
+                session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+                subdueVertex.add("v " + subdueCounter + " input");
+                subdueEdges.add("d " + subdueCounter + " 1 input");
+                subdueCounter++;
+            }
+        } catch (NullPointerException e) {
+            session.run("MERGE(i:Input {name:'COINBASE'})");
+            session.run("MATCH(i:Input {name:'COINBASE'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT]->(t)");
             subdueVertex.add("v " + subdueCounter + " input");
             subdueEdges.add("d " + subdueCounter + " 1 input");
             subdueCounter++;
@@ -66,6 +74,7 @@ public class GraphGenerator {
             subdueVertex.add("v " + subdueCounter + " output");
             subdueEdges.add("d 1 " + subdueCounter + " output");
             subdueCounter++;
+            session.run("MATCH(o:Output {name:'" + outputHash + "'}),(i:Input {name:'" + outputHash + "'}) MERGE(o)-[:MATCH]->(i)");
         }
     }
 
