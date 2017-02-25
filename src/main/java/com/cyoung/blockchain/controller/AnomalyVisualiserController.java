@@ -44,6 +44,10 @@ public class AnomalyVisualiserController {
     @FXML
     private void initialize(){
         fc = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
+        fc.getExtensionFilters().add(extFilter);
+
         String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
         graphFile = new File(graphFilePath);
 

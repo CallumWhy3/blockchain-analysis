@@ -57,6 +57,10 @@ public class GraphAnalyserController {
     @FXML
     private void initialize(){
         fc = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
+        fc.getExtensionFilters().add(extFilter);
+
         graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
         graphFile = new File(graphFilePath);
 

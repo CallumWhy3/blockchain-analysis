@@ -28,7 +28,7 @@ import java.util.List;
 
 public class BlockVisualiserController {
     private Context context;
-    private FileChooser fc = new FileChooser();
+    private FileChooser fc;
     private File blockFile;
     private Stage stage;
     private NetworkParameters params;
@@ -54,6 +54,11 @@ public class BlockVisualiserController {
     public BlockVisualiserController() {
         params = MainNetParams.get();
         context = new Context(params);
+
+        fc = new FileChooser();
+        FileChooser.ExtensionFilter extFilter =
+                new FileChooser.ExtensionFilter("Block files (*.dat)", "*.dat");
+        fc.getExtensionFilters().add(extFilter);
     }
 
     @FXML
