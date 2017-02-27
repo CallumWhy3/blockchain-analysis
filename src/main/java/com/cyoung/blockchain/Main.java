@@ -23,7 +23,7 @@ public class Main extends Application {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/MainMenu.fxml"));
             loader.load();
             MainMenuController controller = loader.getController();
-            controller.setStage(primaryStage); // or what you want to do
+            controller.setStage(primaryStage);
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/css/style.css");
