@@ -11,13 +11,13 @@ class GraphFileBuilder {
         out = new PrintWriter(graphFile);
     }
 
-    void buildSubdueGraphFile(ArrayList<String> vertexArray, ArrayList<String> edgeArray) throws IOException {
+    void buildSubdueGraphFile(ArrayList<String> vertexes, ArrayList<String> edges) throws IOException {
         out.println("XP");
-        for(int i = 0; i < vertexArray.size(); i++){
-            out.println(vertexArray.get(i));
+        for(int i = 0; i < vertexes.size(); i++){
+            out.println(vertexes.get(i));
         }
-        for(int i = 0; i < edgeArray.size(); i++){
-            out.println(edgeArray.get(i));
+        for(int i = 0; i < edges.size(); i++){
+            out.println(edges.get(i));
         }
         out.println();
     }

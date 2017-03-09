@@ -15,8 +15,8 @@ import static org.junit.Assert.assertEquals;
 
 public class GraphFileBuilderTest {
     private GraphFileBuilder graphFileBuilder;
-    private ArrayList vertexArray;
-    private ArrayList edgeArray;
+    private ArrayList vertexes;
+    private ArrayList edges;
 
     @Before
     public void createTestGraphFile() throws IOException {
@@ -32,16 +32,16 @@ public class GraphFileBuilderTest {
     @Test
     public void shouldBuildValidGraphFileWithOneGraph() throws IOException {
 
-        vertexArray = new ArrayList<>(Arrays.asList(
+        vertexes = new ArrayList<>(Arrays.asList(
                 "v 1 transaction",
                 "v 2 input",
                 "v 3 output"));
 
-        edgeArray = new ArrayList<>(Arrays.asList(
+        edges = new ArrayList<>(Arrays.asList(
                 "d 2 1 input",
                 "d 1 3 output"));
 
-        graphFileBuilder.buildSubdueGraphFile(vertexArray, edgeArray);
+        graphFileBuilder.buildSubdueGraphFile(vertexes, edges);
         graphFileBuilder.closeStream();
 
         String fileAsString = getFileAsString("subdueGraphTest.g");
@@ -59,42 +59,42 @@ public class GraphFileBuilderTest {
     @Test
     public void shouldBuildValidGraphFileWithMultipleGraphs() throws IOException {
 
-        vertexArray = new ArrayList<>(Arrays.asList(
+        vertexes = new ArrayList<>(Arrays.asList(
                 "v 1 transaction",
                 "v 2 input",
                 "v 3 output"));
 
-        edgeArray = new ArrayList<>(Arrays.asList(
+        edges = new ArrayList<>(Arrays.asList(
                 "d 2 1 input",
                 "d 1 3 output"));
 
-        graphFileBuilder.buildSubdueGraphFile(vertexArray, edgeArray);
+        graphFileBuilder.buildSubdueGraphFile(vertexes, edges);
 
-        vertexArray = new ArrayList<>(Arrays.asList(
+        vertexes = new ArrayList<>(Arrays.asList(
                 "v 1 transaction",
                 "v 2 input",
                 "v 3 input",
                 "v 4 output"));
 
-        edgeArray = new ArrayList<>(Arrays.asList(
+        edges = new ArrayList<>(Arrays.asList(
                 "d 2 1 input",
                 "d 3 1 input",
                 "d 1 4 output"));
 
-        graphFileBuilder.buildSubdueGraphFile(vertexArray, edgeArray);
+        graphFileBuilder.buildSubdueGraphFile(vertexes, edges);
 
-        vertexArray = new ArrayList<>(Arrays.asList(
+        vertexes = new ArrayList<>(Arrays.asList(
                 "v 1 transaction",
                 "v 2 input",
                 "v 3 output",
                 "v 4 output"));
 
-        edgeArray = new ArrayList<>(Arrays.asList(
+        edges = new ArrayList<>(Arrays.asList(
                 "d 2 1 input",
                 "d 1 3 output",
                 "d 1 4 output"));
 
-        graphFileBuilder.buildSubdueGraphFile(vertexArray, edgeArray);
+        graphFileBuilder.buildSubdueGraphFile(vertexes, edges);
 
         graphFileBuilder.closeStream();
 
