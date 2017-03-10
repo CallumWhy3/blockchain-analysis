@@ -61,7 +61,7 @@ public class GraphAnalyserController {
                 new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
         fc.getExtensionFilters().add(extFilter);
 
-        graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
+        graphFilePath = PropertyLoader.LoadProperty("graphFileOutputDirectory") + "/subdueGraph.g";
         graphFile = new File(graphFilePath);
 
         if(graphFile.exists() && !graphFile.isDirectory()) {
@@ -91,7 +91,7 @@ public class GraphAnalyserController {
             updateMessage("Retrieving subdue location");
             fileSelectButton.setDisable(true);
             executeSubdueButton.setDisable(true);
-            String subdueLocation = PropertyLoader.LoadProperty("subdueLocation");
+            String subdueLocation = PropertyLoader.LoadProperty("subdueBaseDirectory") + "/bin/";
             updateProgress(1, 4);
 
             updateMessage("Executing subdue");
@@ -105,9 +105,9 @@ public class GraphAnalyserController {
             pattern2 = subdueResultParser.getResult(2).replace("    ", "");
             pattern3 = subdueResultParser.getResult(3).replace("    ", "");
             outputTextArea.clear();
-            outputTextArea.appendText("Pattern 1: " + pattern1 + "\n\n");
-            outputTextArea.appendText("Pattern 2: " + pattern2 + "\n\n");
-            outputTextArea.appendText("Pattern 3: " + pattern3 + "\n\n");
+            outputTextArea.appendText("Pattern 1:\n" + pattern1 + "\n\n");
+            outputTextArea.appendText("Pattern 2:\n" + pattern2 + "\n\n");
+            outputTextArea.appendText("Pattern 3:\n" + pattern3 + "\n\n");
             updateProgress(4, 4);
 
             updateMessage("Done");

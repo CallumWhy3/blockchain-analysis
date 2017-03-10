@@ -48,7 +48,7 @@ public class AnomalyVisualiserController {
                 new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
         fc.getExtensionFilters().add(extFilter);
 
-        String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputLocation");
+        String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputDirectory") + "/subdueGraph.g";
         graphFile = new File(graphFilePath);
 
         if(graphFile.exists() && !graphFile.isDirectory()) {

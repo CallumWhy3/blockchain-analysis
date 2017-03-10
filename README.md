@@ -6,10 +6,10 @@ You wil need a couple of things before using the program:
 
 **Configuration**  
 Before runnig the program you must edit config.properties, which can be found in src/main/resources. There are 3 values to set:  
-`graphFileOutputDirectory` - This specifies the output directory for the graph file that can be read by Subdue  
+`graphFileOutputDirectory` - Specifies the output directory of the graph file that is produced by the program
 `neo4jUsername` - Name used to log in to Neo4j (default is 'neo4j')  
 `neo4jPassword` - Password used to log in to Neo4j (default is also 'neo4j')  
-`subdueLoaction` - Directory that holds the subdue executable
+`subdueLocation` - Directory that holds the subdue executable
 
 **Running the program**  
 Once you have installed subdue and set your configuration fields you are ready to run the program. To do this you need to run the main method. After that you can use the GUI to interact with the program.  
