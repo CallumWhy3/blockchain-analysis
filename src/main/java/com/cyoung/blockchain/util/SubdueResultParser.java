@@ -18,7 +18,7 @@ public class SubdueResultParser {
     }
 
     public String getResult(int index) {
-        Pattern pattern = Pattern.compile("(\\s*v\\s\\d+\\stransaction\\n(\\s*v\\s\\d+\\sinput\\n)+(\\s*v\\s\\d+\\soutput\\n)+(\\s*d\\s\\d+\\s\\d+\\sinput\\n)+(\\s*d\\s\\d+\\s\\d+\\soutput)+)");
+        Pattern pattern = Pattern.compile("(v\\s\\d+\\stransaction\\n(\\s*v\\s\\d+\\sinput\\n)+(\\s*v\\s\\d+\\soutput\\n)+(\\s*d\\s\\d+\\s\\d+\\sinput\\n)+(\\s*d\\s\\d+\\s\\d+\\soutput)+)");
         Matcher matcher = pattern.matcher(result);
         int counter = index;
 
