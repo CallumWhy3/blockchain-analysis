@@ -10,6 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
@@ -88,10 +89,17 @@ public class GraphAnalyserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
-            updateMessage("Retrieving subdue location");
+            updateMessage("Searching for subdue executable");
             fileSelectButton.setDisable(true);
             executeSubdueButton.setDisable(true);
             String subdueLocation = PropertyLoader.LoadProperty("subdueBaseDirectory") + "/bin/";
+            File f = new File(subdueLocation + "subdue");
+            if(!f.exists() || f.isDirectory()) {
+                currentTask.setTextFill(Color.web("#f43636"));
+                updateMessage("No subdue executable in \'" + subdueLocation + "\' reconfigure and restart");
+                updateProgress(0, 4);
+                return null;
+            }
             updateProgress(1, 4);
 
             updateMessage("Executing subdue");
