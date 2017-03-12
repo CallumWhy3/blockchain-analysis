@@ -11,19 +11,18 @@ import javafx.stage.Stage;
 import java.io.IOException;
 
 public class MainMenuController {
+    private Parent parent;
+    private Scene scene;
     private Stage stage;
-
-    public MainMenuController() {
-    }
 
     public void setStage(Stage stage) {
         this.stage = stage;
     }
 
     @FXML
-    public void openBlockVisualiser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
-        Scene scene = new Scene(parent);
+    private void openBlockVisualiser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -31,9 +30,9 @@ public class MainMenuController {
     }
 
     @FXML
-    public void openGraphAnalyser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
-        Scene scene = new Scene(parent);
+    private void openGraphAnalyser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -41,9 +40,9 @@ public class MainMenuController {
     }
 
     @FXML
-    public void openAnomalyVisualiser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
-        Scene scene = new Scene(parent);
+    private void openAnomalyVisualiser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -51,7 +50,7 @@ public class MainMenuController {
     }
 
     @FXML
-    public void exitProgram(ActionEvent event) {
+    private void exitProgram(ActionEvent event) {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();
     }

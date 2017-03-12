@@ -21,10 +21,12 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class GraphAnalyserController {
+    private Parent parent;
+    private Scene scene;
+    private Stage stage;
     private FileChooser fc;
     private File graphFile;
     private String graphFilePath;
-    private Stage stage;
     private String pattern1, pattern2, pattern3;
     private static final Logger logger = LoggerFactory.getLogger(GraphAnalyserController.class);
 
@@ -52,11 +54,8 @@ public class GraphAnalyserController {
     @FXML
     private Button visualiseResultsButton;
 
-    public GraphAnalyserController() {
-    }
-
     @FXML
-    private void initialize(){
+    private void initialize() {
         fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
                 new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
@@ -72,7 +71,7 @@ public class GraphAnalyserController {
     }
 
     @FXML
-    private void openFileBrowser(){
+    private void openFileBrowser() {
         graphFile = fc.showOpenDialog(stage);
         if(graphFile != null){
             graphFilePath = graphFile.getPath();
@@ -93,8 +92,8 @@ public class GraphAnalyserController {
             fileSelectButton.setDisable(true);
             executeSubdueButton.setDisable(true);
             String subdueLocation = PropertyLoader.LoadProperty("subdueBaseDirectory") + "/bin/";
-            File f = new File(subdueLocation + "subdue");
-            if(!f.exists() || f.isDirectory()) {
+            File subdueExecutable = new File(subdueLocation + "subdue");
+            if(!subdueExecutable.exists() || subdueExecutable.isDirectory()) {
                 currentTask.setTextFill(Color.web("#f43636"));
                 updateMessage("No subdue executable in \'" + subdueLocation + "\' reconfigure and restart");
                 updateProgress(0, 4);
@@ -108,14 +107,7 @@ public class GraphAnalyserController {
             updateProgress(3, 4);
 
             updateMessage("Analysing results");
-            SubdueResultParser subdueResultParser = new SubdueResultParser(result);
-            pattern1 = subdueResultParser.getResult(1).replace("    ", "");
-            pattern2 = subdueResultParser.getResult(2).replace("    ", "");
-            pattern3 = subdueResultParser.getResult(3).replace("    ", "");
-            outputTextArea.clear();
-            outputTextArea.appendText("Pattern 1:\n" + pattern1 + "\n\n");
-            outputTextArea.appendText("Pattern 2:\n" + pattern2 + "\n\n");
-            outputTextArea.appendText("Pattern 3:\n" + pattern3 + "\n\n");
+            parserSubdueResults(result);
             updateProgress(4, 4);
 
             updateMessage("Done");
@@ -137,6 +129,17 @@ public class GraphAnalyserController {
         Runtime runtime = Runtime.getRuntime();
         java.util.Scanner s = new java.util.Scanner(runtime.exec(cmd).getInputStream()).useDelimiter("\\A");
         return s.hasNext() ? s.next() : "";
+    }
+
+    private void parserSubdueResults(String result) {
+        SubdueResultParser subdueResultParser = new SubdueResultParser(result);
+        pattern1 = subdueResultParser.getResult(1).replace("    ", "");
+        pattern2 = subdueResultParser.getResult(2).replace("    ", "");
+        pattern3 = subdueResultParser.getResult(3).replace("    ", "");
+        outputTextArea.clear();
+        outputTextArea.appendText("Pattern 1:\n" + pattern1 + "\n\n");
+        outputTextArea.appendText("Pattern 2:\n" + pattern2 + "\n\n");
+        outputTextArea.appendText("Pattern 3:\n" + pattern3 + "\n\n");
     }
 
     @FXML
@@ -186,8 +189,8 @@ public class GraphAnalyserController {
 
     @FXML
     public void openAnomalyVisualiser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
-        Scene scene = new Scene(parent);
+        parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -196,8 +199,8 @@ public class GraphAnalyserController {
 
     @FXML
     public void returnToMainMenu(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        Scene scene = new Scene(parent);
+        parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);

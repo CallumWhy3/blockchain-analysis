@@ -27,10 +27,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlockVisualiserController {
-    private Context context;
+    private Parent parent;
+    private Scene scene;
+    private Stage stage;
     private FileChooser fc;
     private File blockFile;
-    private Stage stage;
+    private Context context;
     private NetworkParameters params;
 
     @FXML
@@ -51,14 +53,15 @@ public class BlockVisualiserController {
     @FXML
     private Label currentTask;
 
-    public BlockVisualiserController() {
-        params = MainNetParams.get();
-        context = new Context(params);
-
+    @FXML
+    private void initialize() {
         fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
                 new FileChooser.ExtensionFilter("Block files (*.dat)", "*.dat");
         fc.getExtensionFilters().add(extFilter);
+
+        params = MainNetParams.get();
+        context = new Context(params);
     }
 
     @FXML
@@ -137,8 +140,8 @@ public class BlockVisualiserController {
 
     @FXML
     public void openGraphAnalyser(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
-        Scene scene = new Scene(parent);
+        parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
@@ -147,10 +150,10 @@ public class BlockVisualiserController {
 
     @FXML
     public void returnToMainMenu(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        Scene scene = new Scene(parent);
+        parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }

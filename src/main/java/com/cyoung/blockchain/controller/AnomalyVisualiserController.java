@@ -21,10 +21,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class AnomalyVisualiserController {
-
+    private Parent parent;
+    private Scene scene;
     private Stage stage;
+    private FileChooser fc;
     private File graphFile;
-    private FileChooser fc = new FileChooser();
 
     @FXML
     private TextField selectedFile;
@@ -42,7 +43,7 @@ public class AnomalyVisualiserController {
     private Label currentTask;
 
     @FXML
-    private void initialize(){
+    private void initialize() {
         fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
                 new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
@@ -117,10 +118,10 @@ public class AnomalyVisualiserController {
 
     @FXML
     public void returnToMainMenu(ActionEvent event) throws IOException {
-        Parent parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
-        Scene scene = new Scene(parent);
+        parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
+        scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene(scene);
         stage.show();
     }
