@@ -6,7 +6,7 @@ You wil need a couple of things before using the program:
 
 **Configuration**  
 Before runnig the program you must edit config.properties, which can be found in src/main/resources. There are 3 values to set:  
-`graphFileOutputDirectory` - Specifies the output directory of the graph file that is produced by the program
+`graphFileOutputDirectory` - Specifies the output directory of the graph file that is produced by the program  
 `neo4jUsername` - Name used to log in to Neo4j (default is 'neo4j')  
 `neo4jPassword` - Password used to log in to Neo4j (default is also 'neo4j')  
 `subdueLocation` - Directory that holds the subdue executable
