@@ -1,6 +1,5 @@
 package com.cyoung.blockchain.util;
 
-import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.Input;
 import info.blockchain.api.blockexplorer.Output;
 import info.blockchain.api.blockexplorer.Transaction;
@@ -31,7 +30,7 @@ public class GraphGenerator {
         subdueCounter = 1;
 
         String transHash = trans.getHash();
-        session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
+        session.run("CREATE(t:Transaction {hash:'" + transHash + "', time:'" + trans.getTime() + "', index:'" + trans.getIndex() + "', size:'" + trans.getSize() + "'})");
         subdueVertexes.add("v " + subdueCounter + " transaction");
         subdueCounter++;
         graphInputs(trans);
@@ -39,7 +38,7 @@ public class GraphGenerator {
         logger.info("Transaction " + transHash + " graphed successfully");
         try {
             graphFileBuilder.buildSubdueGraphFile(subdueVertexes, subdueEdges);
-        } catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -64,7 +63,7 @@ public class GraphGenerator {
         }
     }
 
-    private void graphOutputs(Transaction trans){
+    private void graphOutputs(Transaction trans) {
         for (Output o : trans.getOutputs()) {
             String outputHash = o.getAddress();
             double outputValue = o.getValue() * 0.00000001;
