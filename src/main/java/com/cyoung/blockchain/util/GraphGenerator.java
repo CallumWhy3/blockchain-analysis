@@ -25,13 +25,12 @@ public class GraphGenerator {
         session.run("MATCH (n) DETACH DELETE n");
     }
 
-    public void graphTransactionByHash(String transHash) throws Exception {
+    public void graphTransactionByHash(Transaction trans) throws Exception {
         subdueVertexes = new ArrayList<>();
         subdueEdges = new ArrayList<>();
         subdueCounter = 1;
 
-        BlockExplorer blockExplorer = new BlockExplorer();
-        Transaction trans = blockExplorer.getTransaction(transHash);
+        String transHash = trans.getHash();
         session.run("CREATE(t:Transaction {hash:'" + transHash + "'})");
         subdueVertexes.add("v " + subdueCounter + " transaction");
         subdueCounter++;

@@ -1,7 +1,8 @@
 package com.cyoung.blockchain.util;
 
-import org.bitcoinj.core.Block;
-import org.bitcoinj.core.Transaction;
+import info.blockchain.api.blockexplorer.Block;
+import info.blockchain.api.blockexplorer.BlockExplorer;
+import info.blockchain.api.blockexplorer.Transaction;
 import org.neo4j.driver.v1.Session;
 
 public class BlockVisualiser {
@@ -11,12 +12,14 @@ public class BlockVisualiser {
         graphGenerator = new GraphGenerator(session);
     }
 
-    public void produceGraphFromBlock(Block block) throws Exception {
-        for (Transaction transaction : block.getTransactions().subList(1, 30)) {
-            String transHash = transaction.getHashAsString();
+    public void produceGraphFromBlockHash(String hash) throws Exception {
+        BlockExplorer blockExplorer = new BlockExplorer();
+        Block block = blockExplorer.getBlock(hash);
+        for (Transaction transaction : block.getTransactions().subList(0, 100)) {
+
             try {
-                graphGenerator.graphTransactionByHash(transHash);
-            } catch(NullPointerException e) {
+                graphGenerator.graphTransactionByHash(transaction);
+            } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
