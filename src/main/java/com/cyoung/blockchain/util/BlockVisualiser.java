@@ -15,8 +15,7 @@ public class BlockVisualiser {
     public void produceGraphFromBlockHash(String hash) throws Exception {
         BlockExplorer blockExplorer = new BlockExplorer();
         Block block = blockExplorer.getBlock(hash);
-        for (Transaction transaction : block.getTransactions().subList(0, 100)) {
-
+        for (Transaction transaction : block.getTransactions().subList(1, 300)) {
             try {
                 graphGenerator.graphTransactionByHash(transaction);
             } catch (NullPointerException e) {

@@ -52,16 +52,16 @@ public class AnomalyVisualiserController {
         String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputDirectory") + "/subdueGraph.g";
         graphFile = new File(graphFilePath);
 
-        if(graphFile.exists() && !graphFile.isDirectory()) {
+        if (graphFile.exists() && !graphFile.isDirectory()) {
             selectedFile.setText(graphFilePath);
             produceGraphButton.setDisable(false);
         }
     }
 
     @FXML
-    public void openFileBrowser() {
+    private void openFileBrowser() {
         graphFile = fc.showOpenDialog(stage);
-        if(graphFile != null){
+        if (graphFile != null) {
             produceGraphButton.setDisable(false);
             selectedFile.setText(graphFile.toString());
         } else {
@@ -96,8 +96,8 @@ public class AnomalyVisualiserController {
             updateProgress(1, 4);
 
             updateMessage("Creating nodes and relationships");
-            AnomalyVisualiser av = new AnomalyVisualiser(session);
-            av.produceGraphFromGraphFile(graphFile);
+            AnomalyVisualiser anomalyVisualiser = new AnomalyVisualiser(session);
+            anomalyVisualiser.produceAnomalyGraph(graphFile, BlockVisualiserController.blockHash);
             updateProgress(3, 4);
 
             updateMessage("Done");
@@ -117,7 +117,7 @@ public class AnomalyVisualiserController {
     }
 
     @FXML
-    public void returnToMainMenu(ActionEvent event) throws IOException {
+    private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");

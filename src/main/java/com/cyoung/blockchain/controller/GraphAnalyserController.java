@@ -64,7 +64,7 @@ public class GraphAnalyserController {
         graphFilePath = PropertyLoader.LoadProperty("graphFileOutputDirectory") + "/subdueGraph.g";
         graphFile = new File(graphFilePath);
 
-        if(graphFile.exists() && !graphFile.isDirectory()) {
+        if (graphFile.exists() && !graphFile.isDirectory()) {
             selectedFile.setText(graphFilePath);
             executeSubdueButton.setDisable(false);
         }
@@ -73,7 +73,7 @@ public class GraphAnalyserController {
     @FXML
     private void openFileBrowser() {
         graphFile = fc.showOpenDialog(stage);
-        if(graphFile != null){
+        if (graphFile != null) {
             graphFilePath = graphFile.getPath();
             executeSubdueButton.setDisable(false);
             selectedFile.setText(graphFile.toString());
@@ -84,7 +84,7 @@ public class GraphAnalyserController {
     }
 
     @FXML
-    public void executeSubdue() throws IOException {
+    private void executeSubdue() throws IOException {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
@@ -93,7 +93,7 @@ public class GraphAnalyserController {
             executeSubdueButton.setDisable(true);
             String subdueLocation = PropertyLoader.LoadProperty("subdueBaseDirectory") + "/bin/";
             File subdueExecutable = new File(subdueLocation + "subdue");
-            if(!subdueExecutable.exists() || subdueExecutable.isDirectory()) {
+            if (!subdueExecutable.exists() || subdueExecutable.isDirectory()) {
                 currentTask.setTextFill(Color.web("#f43636"));
                 updateMessage("No subdue executable in \'" + subdueLocation + "\' reconfigure and restart");
                 updateProgress(0, 4);
@@ -188,7 +188,7 @@ public class GraphAnalyserController {
     }
 
     @FXML
-    public void openAnomalyVisualiser(ActionEvent event) throws IOException {
+    private void openAnomalyVisualiser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
@@ -198,7 +198,7 @@ public class GraphAnalyserController {
     }
 
     @FXML
-    public void returnToMainMenu(ActionEvent event) throws IOException {
+    private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");

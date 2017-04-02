@@ -6,7 +6,7 @@ import java.util.Properties;
 
 public class PropertyLoader {
 
-    public static String LoadProperty(String propertyName){
+    public static String LoadProperty(String propertyName) {
         Properties properties = new Properties();
         InputStream input = null;
         String propertyValue = "";

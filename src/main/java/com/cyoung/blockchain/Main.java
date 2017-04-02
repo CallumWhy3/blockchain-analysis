@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public class Main extends Application {
     private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String args[]) throws Exception{
+    public static void main(String args[]) throws Exception {
         Application.launch(Main.class, (java.lang.String[])null);
     }
 

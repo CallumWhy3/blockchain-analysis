@@ -41,7 +41,7 @@ public class BlockVisualiserController {
     private Context context;
     private NetworkParameters params;
     private boolean inFileMode = true;
-    private String blockHash;
+    public static String blockHash;
 
     @FXML
     private ToggleButton inputModeToggleButton;
@@ -125,7 +125,7 @@ public class BlockVisualiserController {
     @FXML
     private void openFileBrowser() {
         blockFile = fc.showOpenDialog(stage);
-        if(blockFile != null){
+        if (blockFile != null) {
             produceGraphButton.setDisable(false);
             analyseButton.setDisable(true);
             selectedFileField.setText(blockFile.toString());
@@ -151,9 +151,12 @@ public class BlockVisualiserController {
     private void produceGraph() {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
-            Context.propagate(context);
+
+            updateMessage("Preparing API");
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
+            Context.propagate(context);
+            updateProgress(2, 10);
 
             updateMessage("Creating Neo4j session");
             String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
@@ -224,7 +227,7 @@ public class BlockVisualiserController {
     }
 
     @FXML
-    public void openGraphAnalyser(ActionEvent event) throws IOException {
+    private void openGraphAnalyser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
@@ -234,7 +237,7 @@ public class BlockVisualiserController {
     }
 
     @FXML
-    public void returnToMainMenu(ActionEvent event) throws IOException {
+    private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");

@@ -1,5 +1,7 @@
 package com.cyoung.blockchain.util;
 
+import info.blockchain.api.APIException;
+import info.blockchain.api.blockexplorer.*;
 import org.neo4j.driver.v1.Session;
 
 import java.io.*;
@@ -13,23 +15,22 @@ import java.util.regex.Pattern;
 public class AnomalyVisualiser {
 
     private Session session;
-    private int transactionNodeId = 1;
-    private int userNodeID = 2;
-
+    private double totalBitcoinsSent = 0;
+    private int totalBitcoinSenders = 0;
 
     public AnomalyVisualiser(Session session) {
         this.session = session;
     }
 
-    public void produceGraphFromGraphFile(File file) {
-        String graphFileAsString = fileToString(file);
-        Set<String> structures = getStructuresFromString(graphFileAsString);
+    public void produceAnomalyGraph(File graphFile, String blockHash) {
+        String graphFileAsString = fileToString(graphFile);
+        Set<String> anomalousStructures = getUniqueStructuresFromString(graphFileAsString);
         session.run("MATCH (n) DETACH DELETE n");
-
-        for(String structure : structures) {
-            graphStructureFromString(structure);
+        try {
+            graphAnomalousTransactions(anomalousStructures, blockHash);
+        } catch (APIException | IOException e) {
+            e.printStackTrace();
         }
-
     }
 
     private String fileToString(File file) {
@@ -54,7 +55,7 @@ public class AnomalyVisualiser {
         }
     }
 
-    private Set<String> getStructuresFromString(String graphFileAsString) {
+    private Set<String> getUniqueStructuresFromString(String graphFileAsString) {
         Set<String> structures = new HashSet<String>();
         Pattern pattern = Pattern.compile("(XP\\nv\\s\\d+\\stransaction\\n)+(v\\s\\d+\\sinput\\n)+(v\\s\\d+\\soutput\\n)+(d\\s\\d+\\s\\d+\\sinput\\n)+(d\\s\\d+\\s\\d+\\soutput\\n)+");
         Matcher matcher = pattern.matcher(graphFileAsString);
@@ -68,51 +69,80 @@ public class AnomalyVisualiser {
         return structures;
     }
 
-    private void graphStructureFromString(String structure) {
+    private void graphAnomalousTransactions(Set<String> anomalousStructures, String blockHash) throws APIException, IOException {
+        BlockExplorer blockExplorer = new BlockExplorer();
+        Block block = blockExplorer.getBlock(blockHash);
+        ArrayList<Transaction> anomalousTransactions = new ArrayList<>();
+
+        for (Transaction transaction : block.getTransactions().subList(1, 300)) {
+            totalBitcoinsSent += getTotalBitcoinsTansferred(transaction.getInputs());
+            totalBitcoinSenders++;
+
+            for (String structure : anomalousStructures) {
+                if (transactionMatchesStructure(transaction, structure)) {
+                    anomalousTransactions.add(transaction);
+                }
+            }
+        }
+
+        double averageBitcoinsSent = totalBitcoinsSent / totalBitcoinSenders;
+        for (Transaction transaction : anomalousTransactions) {
+            session.run("CREATE(t:Transaction {hash:'" + transaction.getHash() + "', time:'" + transaction.getTime() + "', index:'" + transaction.getIndex() + "', size:'" + transaction.getSize() + "'})");
+            graphInputs(transaction);
+            graphOutputs(transaction);
+        }
+        System.out.println("Average Bitcoins sent per transaction: " + averageBitcoinsSent);
+    }
+
+    private double getTotalBitcoinsTansferred(List<Input> inputs) {
+        double total = 0;
+        for (Input input : inputs) {
+            total += input.getPreviousOutput().getValue();
+        }
+        return total;
+    }
+
+    private boolean transactionMatchesStructure(Transaction transaction, String structure) {
         Pattern pattern;
         Matcher matcher;
-        String match;
 
-        List<String> transactions = new ArrayList<String>();
-        List<String> inputs = new ArrayList<String>();
-        List<String> outputs = new ArrayList<String>();
+        int transactionInputs = transaction.getInputs().size();
+        int transactionOutputs = transaction.getOutputs().size();
 
-        pattern = Pattern.compile("(v\\s\\d+\\stransaction)");
-        matcher = pattern.matcher(structure);
-        while (matcher.find()) {
-            match = matcher.group();
-            transactions.add(match);
-        }
+        int structureInputs = 0;
+        int structureOutputs = 0;
 
         pattern = Pattern.compile("(v\\s\\d+\\sinput)");
         matcher = pattern.matcher(structure);
         while (matcher.find()) {
-            match = matcher.group();
-            inputs.add(match);
+            structureInputs++;
         }
 
         pattern = Pattern.compile("(v\\s\\d+\\soutput)");
         matcher = pattern.matcher(structure);
         while (matcher.find()) {
-            match = matcher.group();
-            outputs.add(match);
+            structureOutputs++;
         }
 
-        for(String transaction : transactions) {
-            session.run("MERGE(t:Transaction{id:'" + transactionNodeId + "'})");
-        }
+        return transactionInputs == structureInputs && transactionOutputs == structureOutputs;
+    }
 
-        for(String input : inputs) {
-            session.run("MERGE(i:Input{id:'" + userNodeID + "'})");
-            session.run("MATCH(i:Input {id:'" + userNodeID + "'}),(t:Transaction {id:'" + transactionNodeId + "'}) CREATE(i)-[:INPUT]->(t)");
-            userNodeID++;
+    private void graphInputs(Transaction transaction) {
+        for (Input i : transaction.getInputs()) {
+            String inputAddress = i.getPreviousOutput().getAddress();
+            double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
+            session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
+            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + transaction.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
         }
+    }
 
-        for(String output: outputs) {
-            session.run("MERGE(o:Output{id:'" + userNodeID + "'})");
-            session.run("MATCH(t:Transaction {id:'" + transactionNodeId + "'}),(o:Output {id:'" + userNodeID + "'}) CREATE(t)-[:OUTPUT]->(o)");
-            userNodeID++;
+    private void graphOutputs(Transaction transaction) {
+        for (Output o : transaction.getOutputs()) {
+            String outputHash = o.getAddress();
+            double outputValue = o.getValue() * 0.00000001;
+            session.run("MERGE(o:Output {name:'" + outputHash + "'})");
+            session.run("MATCH(t:Transaction {hash:'" + transaction.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
+            session.run("MATCH(o:Output {name:'" + outputHash + "'}),(i:Input {name:'" + outputHash + "'}) MERGE(o)-[:MATCH]->(i)");
         }
-        transactionNodeId++;
     }
 }
