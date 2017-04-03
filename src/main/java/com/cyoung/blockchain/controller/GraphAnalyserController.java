@@ -34,10 +34,10 @@ public class GraphAnalyserController {
     private TextField selectedFile;
 
     @FXML
-    private Button fileSelectButton;
+    private Button fileSelectButton, executeSubdueButton;
 
     @FXML
-    private Button executeSubdueButton;
+    private Button removeSubdueResult1Button, removeSubdueResult2Button, removeSubdueResult3Button, removeCommonCaseButton, visualiseResultsButton;
 
     @FXML
     private TextArea outputTextArea;
@@ -47,12 +47,6 @@ public class GraphAnalyserController {
 
     @FXML
     private Label currentTask;
-
-    @FXML
-    private Button removeCommonCaseButton;
-
-    @FXML
-    private Button visualiseResultsButton;
 
     @FXML
     private void initialize() {
@@ -114,6 +108,9 @@ public class GraphAnalyserController {
             fileSelectButton.setDisable(false);
             executeSubdueButton.setDisable(false);
             removeCommonCaseButton.setDisable(false);
+            removeSubdueResult1Button.setDisable(false);
+            removeSubdueResult2Button.setDisable(false);
+            removeSubdueResult3Button.setDisable(false);
             return null;
             }
         };
@@ -156,7 +153,7 @@ public class GraphAnalyserController {
             }
             String fileAsString = sb.toString();
             FileWriter fileWriter = new FileWriter(graphFile, false);
-            fileWriter.write(removeSubdueResultsFromString(fileAsString));
+            fileWriter.write(removeCommonCaseFromString(fileAsString));
             fileWriter.close();
         } finally {
             br.close();
@@ -165,11 +162,86 @@ public class GraphAnalyserController {
         }
     }
 
-    private String removeSubdueResultsFromString(String fileAsString) {
+    private String removeCommonCaseFromString(String fileAsString) {
         logger.info("Initial number of structures: " + getNumberOfStructuresInString(fileAsString));
-        fileAsString = fileAsString.replace(pattern1, "");
-        fileAsString = fileAsString.replace(pattern2, "");
-        fileAsString = fileAsString.replace(pattern3, "");
+
+        fileAsString = fileAsString.replace("v 1 transaction\n" +
+                                            "v 2 input\n" +
+                                            "v 3 output\n" +
+                                            "d 2 1 input\n" +
+                                            "d 1 3 output\n\n", "");
+
+        fileAsString = fileAsString.replace("v 1 transaction\n" +
+                                            "v 2 input\n" +
+                                            "v 3 output\n" +
+                                            "v 4 output\n" +
+                                            "d 2 1 input\n" +
+                                            "d 1 3 output\n" +
+                                            "d 1 4 output\n\n", "");
+
+        fileAsString = fileAsString.replace("v 1 transaction\n" +
+                                            "v 2 input\n" +
+                                            "v 3 input\n" +
+                                            "v 4 output\n" +
+                                            "d 2 1 input\n" +
+                                            "d 3 1 input\n" +
+                                            "d 1 4 output\n\n", "");
+
+        fileAsString = fileAsString.replace("v 1 transaction\n" +
+                                            "v 2 input\n" +
+                                            "v 3 input\n" +
+                                            "v 4 output\n" +
+                                            "v 5 output\n" +
+                                            "d 2 1 input\n" +
+                                            "d 3 1 input\n" +
+                                            "d 1 4 output\n" +
+                                            "d 1 5 output\n\n", "");
+
+        fileAsString = fileAsString.replaceAll("(XP\\n)+", "XP\n");
+        fileAsString = fileAsString.replaceAll("XP\\n\\B", "");
+        logger.info("Remaining number of structures: " + getNumberOfStructuresInString(fileAsString));
+
+        return fileAsString;
+    }
+
+    @FXML
+    private void removeSubdueResult(ActionEvent event) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(graphFilePath));
+        try {
+            StringBuilder sb = new StringBuilder();
+            String line = br.readLine();
+
+            while (line != null) {
+                sb.append(line);
+                sb.append("\n");
+                line = br.readLine();
+            }
+            String fileAsString = sb.toString();
+            FileWriter fileWriter = new FileWriter(graphFile, false);
+            String buttonName = event.getSource().toString();
+            int resultNumber = Integer.valueOf(buttonName.substring(buttonName.length()-2, buttonName.length()-1));
+
+            if (resultNumber == 1) {
+                fileWriter.write(removePatternFromString(pattern1, fileAsString));
+                removeSubdueResult1Button.setDisable(true);
+            } else if (resultNumber == 2) {
+                fileWriter.write(removePatternFromString(pattern2, fileAsString));
+                removeSubdueResult2Button.setDisable(true);
+            } else if (resultNumber == 3) {
+                fileWriter.write(removePatternFromString(pattern3, fileAsString));
+                removeSubdueResult3Button.setDisable(true);
+            }
+
+            fileWriter.close();
+        } finally {
+            br.close();
+            visualiseResultsButton.setDisable(false);
+        }
+    }
+
+    private String removePatternFromString(String pattern, String fileAsString) {
+        logger.info("Initial number of structures: " + getNumberOfStructuresInString(fileAsString));
+        fileAsString = fileAsString.replace(pattern+"\n", "");
         fileAsString = fileAsString.replace("XP\n\n", "");
         logger.info("Remaining number of structures: " + getNumberOfStructuresInString(fileAsString));
         return fileAsString;
