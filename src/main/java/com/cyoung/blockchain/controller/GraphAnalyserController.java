@@ -140,7 +140,7 @@ public class GraphAnalyserController {
     }
 
     @FXML
-    private void removeCommonCase() throws IOException {
+    private void removeCommonStructures() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(graphFilePath));
         try {
             StringBuilder sb = new StringBuilder();
@@ -153,7 +153,7 @@ public class GraphAnalyserController {
             }
             String fileAsString = sb.toString();
             FileWriter fileWriter = new FileWriter(graphFile, false);
-            fileWriter.write(removeCommonCaseFromString(fileAsString));
+            fileWriter.write(removeCommonStructuresFromString(fileAsString));
             fileWriter.close();
         } finally {
             br.close();
@@ -162,7 +162,7 @@ public class GraphAnalyserController {
         }
     }
 
-    private String removeCommonCaseFromString(String fileAsString) {
+    private String removeCommonStructuresFromString(String fileAsString) {
         logger.info("Initial number of structures: " + getNumberOfStructuresInString(fileAsString));
 
         fileAsString = fileAsString.replace("v 1 transaction\n" +
@@ -247,10 +247,10 @@ public class GraphAnalyserController {
         return fileAsString;
     }
 
-    private int getNumberOfStructuresInString(String file) {
+    private int getNumberOfStructuresInString(String fileAsString) {
         int numberOfStuctures = 0;
         Pattern pattern = Pattern.compile("XP");
-        Matcher matcher = pattern.matcher(file);
+        Matcher matcher = pattern.matcher(fileAsString);
 
         while (matcher.find()) {
             numberOfStuctures++;
