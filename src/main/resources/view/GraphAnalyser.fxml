@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.shape.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.GraphAnalyserController">
     <children>
@@ -34,12 +36,17 @@
         <Button fx:id="removeCommonCaseButton" disable="true" layoutX="457.0" layoutY="238.0" mnemonicParsing="false" onAction="#removeCommonStructures" prefHeight="50.0" prefWidth="126.0" text="Remove common structures" textAlignment="CENTER" wrapText="true" />
         <TextArea fx:id="outputTextArea" editable="false" layoutX="25.0" layoutY="127.0" prefHeight="162.0" prefWidth="427.0" />
         <ProgressBar fx:id="progressBar" layoutX="25.0" layoutY="301.0" prefHeight="25.0" prefWidth="427.0" progress="0.0" />
-        <Label fx:id="currentTask" layoutX="25.0" layoutY="333.0" prefHeight="17.0" prefWidth="547.0" />
+        <Label fx:id="currentTask" layoutX="51.0" layoutY="333.0" prefHeight="17.0" prefWidth="547.0" />
         <Button fx:id="visualiseResultsButton" disable="true" layoutX="458.0" layoutY="301.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="27.0" prefWidth="126.0" text="Visualise results" />
         <Button layoutX="504.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
+        <ProgressIndicator fx:id="progressSpinner" layoutX="25.0" layoutY="333.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
+            <cursor>
+                <Cursor fx:constant="DEFAULT" />
+            </cursor>
+        </ProgressIndicator>
     </children>
 </Pane>

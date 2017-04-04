@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import java.lang.*?>
 <?import javafx.scene.effect.*?>
 <?import javafx.scene.image.*?>
@@ -7,6 +8,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
+<?import javafx.scene.Cursor?>
 
 <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.AnomalyVisualiserController">
     <children>
@@ -35,6 +37,11 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Label fx:id="currentTask" layoutX="27.0" layoutY="159.0" prefHeight="17.0" prefWidth="547.0" />
+        <Label fx:id="currentTask" layoutX="51.0" layoutY="159.0" prefHeight="17.0" prefWidth="526.0" />
+        <ProgressIndicator fx:id="progressSpinner" layoutX="25.0" layoutY="158.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
+            <cursor>
+                <Cursor fx:constant="DEFAULT" />
+            </cursor>
+        </ProgressIndicator>
     </children>
 </Pane>

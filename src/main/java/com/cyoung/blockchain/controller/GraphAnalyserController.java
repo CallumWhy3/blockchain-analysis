@@ -46,6 +46,9 @@ public class GraphAnalyserController {
     private ProgressBar progressBar;
 
     @FXML
+    private ProgressIndicator progressSpinner;
+
+    @FXML
     private Label currentTask;
 
     @FXML
@@ -82,6 +85,8 @@ public class GraphAnalyserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
+            progressSpinner.setVisible(true);
+            currentTask.setLayoutX(51);
             updateMessage("Searching for subdue executable");
             fileSelectButton.setDisable(true);
             executeSubdueButton.setDisable(true);
@@ -105,6 +110,8 @@ public class GraphAnalyserController {
             updateProgress(4, 4);
 
             updateMessage("Done");
+            progressSpinner.setVisible(false);
+            currentTask.setLayoutX(26);
             fileSelectButton.setDisable(false);
             executeSubdueButton.setDisable(false);
             removeCommonCaseButton.setDisable(false);

@@ -50,25 +50,16 @@ public class BlockVisualiserController {
     private Text inputModeText;
 
     @FXML
-    private TextField selectedFileField;
+    private TextField selectedFileField, blockHashField;
 
     @FXML
-    private TextField blockHashField;
-
-    @FXML
-    private Button fileSelectButton;
-
-    @FXML
-    private Button validateBlockHashButton;
-
-    @FXML
-    private Button produceGraphButton;
+    private Button fileSelectButton, validateBlockHashButton, produceGraphButton, analyseButton;
 
     @FXML
     private ProgressBar progressBar;
 
     @FXML
-    private Button analyseButton;
+    private ProgressIndicator progressSpinner;
 
     @FXML
     private Label currentTask;
@@ -152,6 +143,8 @@ public class BlockVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
+            currentTask.setLayoutX(51);
+            progressSpinner.setVisible(true);
             updateMessage("Preparing API");
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
@@ -178,6 +171,8 @@ public class BlockVisualiserController {
             updateProgress(10, 10);
 
             updateMessage("Done");
+            progressSpinner.setVisible(false);
+            currentTask.setLayoutX(26);
             fileSelectButton.setDisable(false);
             analyseButton.setDisable(false);
 

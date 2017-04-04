@@ -31,13 +31,13 @@ public class AnomalyVisualiserController {
     private TextField selectedFile;
 
     @FXML
-    private Button fileSelectButton;
-
-    @FXML
-    private Button produceGraphButton;
+    private Button fileSelectButton, produceGraphButton;
 
     @FXML
     private ProgressBar progressBar;
+
+    @FXML
+    private ProgressIndicator progressSpinner;
 
     @FXML
     private Label currentTask;
@@ -86,6 +86,8 @@ public class AnomalyVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
+            progressSpinner.setVisible(true);
+            currentTask.setLayoutX(51);
             updateMessage("Creating Neo4j session");
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
@@ -102,6 +104,8 @@ public class AnomalyVisualiserController {
 
             updateMessage("Done");
             updateProgress(4, 4);
+            progressSpinner.setVisible(false);
+            currentTask.setLayoutX(26);
             fileSelectButton.setDisable(false);
             produceGraphButton.setDisable(false);
 
