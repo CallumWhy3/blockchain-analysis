@@ -41,7 +41,7 @@ public class BlockVisualiserController {
     private Context context;
     private NetworkParameters params;
     private boolean inFileMode = true;
-    public static String blockHash;
+    public static Block block;
 
     @FXML
     private ToggleButton inputModeToggleButton;
@@ -146,6 +146,7 @@ public class BlockVisualiserController {
             currentTask.setLayoutX(51);
             progressSpinner.setVisible(true);
             updateMessage("Preparing API");
+            inputModeToggleButton.setDisable(true);
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
             Context.propagate(context);
@@ -159,9 +160,10 @@ public class BlockVisualiserController {
             updateProgress(4, 10);
 
             updateMessage("Creating nodes and relationships");
+            BlockExplorer blockExplorer = new BlockExplorer();
+            block = blockExplorer.getBlock(getInputHash());
             BlockVisualiser blockVisualiser = new BlockVisualiser(session);
-            blockHash = getInputHash();
-            blockVisualiser.produceGraphFromBlockHash(blockHash);
+            blockVisualiser.produceGraphFromBlockHash(block.getHash());
             updateProgress(8, 10);
 
             updateMessage("Closing Neo4j session");
@@ -173,6 +175,7 @@ public class BlockVisualiserController {
             updateMessage("Done");
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
+            inputModeToggleButton.setDisable(false);
             fileSelectButton.setDisable(false);
             analyseButton.setDisable(false);
 
@@ -199,7 +202,7 @@ public class BlockVisualiserController {
     }
 
     @FXML
-    private void validateHashBlock() {
+    private void validateBlockHash() {
         if (blockHashField.getText().length() == 64) {
             try {
                 BlockExplorer blockExplorer = new BlockExplorer();
@@ -222,8 +225,8 @@ public class BlockVisualiserController {
     }
 
     @FXML
-    private void openGraphAnalyser(ActionEvent event) throws IOException {
-        parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+    private void openBlockAnalyser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/BlockAnalyser.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

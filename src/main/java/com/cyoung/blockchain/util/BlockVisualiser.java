@@ -16,12 +16,7 @@ public class BlockVisualiser {
         BlockExplorer blockExplorer = new BlockExplorer();
         Block block = blockExplorer.getBlock(hash);
         for (Transaction transaction : block.getTransactions().subList(1, 300)) {
-            try {
-                graphGenerator.graphTransactionByHash(transaction);
-            } catch (NullPointerException e) {
-                e.printStackTrace();
-            }
+            graphGenerator.graphTransaction(transaction);
         }
-        graphGenerator.closeSubdueGraphBuilderStream();
     }
 }

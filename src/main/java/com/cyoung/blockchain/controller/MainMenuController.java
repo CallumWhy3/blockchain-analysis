@@ -30,8 +30,8 @@ public class MainMenuController {
     }
 
     @FXML
-    private void openGraphAnalyser(ActionEvent event) throws IOException {
-        parent = FXMLLoader.load(getClass().getResource("/view/GraphAnalyser.fxml"));
+    private void openBlockAnalyser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/BlockAnalyser.fxml"));
         scene = new Scene(parent);
         scene.getStylesheets().add("/css/style.css");
         stage = (Stage) ((Node) event.getSource()).getScene().getWindow();

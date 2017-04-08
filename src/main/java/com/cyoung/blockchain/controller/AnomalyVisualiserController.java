@@ -1,6 +1,8 @@
 package com.cyoung.blockchain.controller;
 
-import com.cyoung.blockchain.util.AnomalyVisualiser;
+import com.cyoung.blockchain.domain.BitcoinTransaction;
+import com.cyoung.blockchain.util.BlockAnalyser;
+import com.cyoung.blockchain.util.GraphGenerator;
 import com.cyoung.blockchain.util.PropertyLoader;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
@@ -10,28 +12,21 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 
-import java.io.File;
 import java.io.IOException;
 
 public class AnomalyVisualiserController {
     private Parent parent;
     private Scene scene;
     private Stage stage;
-    private FileChooser fc;
-    private File graphFile;
 
     @FXML
-    private TextField selectedFile;
-
-    @FXML
-    private Button fileSelectButton, produceGraphButton;
+    private Button produceGraphButton;
 
     @FXML
     private ProgressBar progressBar;
@@ -41,34 +36,6 @@ public class AnomalyVisualiserController {
 
     @FXML
     private Label currentTask;
-
-    @FXML
-    private void initialize() {
-        fc = new FileChooser();
-        FileChooser.ExtensionFilter extFilter =
-                new FileChooser.ExtensionFilter("Graph files (*.g)", "*.g");
-        fc.getExtensionFilters().add(extFilter);
-
-        String graphFilePath = PropertyLoader.LoadProperty("graphFileOutputDirectory") + "/subdueGraph.g";
-        graphFile = new File(graphFilePath);
-
-        if (graphFile.exists() && !graphFile.isDirectory()) {
-            selectedFile.setText(graphFilePath);
-            produceGraphButton.setDisable(false);
-        }
-    }
-
-    @FXML
-    private void openFileBrowser() {
-        graphFile = fc.showOpenDialog(stage);
-        if (graphFile != null) {
-            produceGraphButton.setDisable(false);
-            selectedFile.setText(graphFile.toString());
-        } else {
-            produceGraphButton.setDisable(true);
-            selectedFile.setText("");
-        }
-    }
 
     @FXML
     private void confirmGenerateGraph() {
@@ -89,7 +56,6 @@ public class AnomalyVisualiserController {
             progressSpinner.setVisible(true);
             currentTask.setLayoutX(51);
             updateMessage("Creating Neo4j session");
-            fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
             String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
             String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
@@ -98,15 +64,16 @@ public class AnomalyVisualiserController {
             updateProgress(1, 4);
 
             updateMessage("Creating nodes and relationships");
-            AnomalyVisualiser anomalyVisualiser = new AnomalyVisualiser(session);
-            anomalyVisualiser.produceAnomalyGraph(graphFile, BlockVisualiserController.blockHash);
+            GraphGenerator graphGenerator = new GraphGenerator(session);
+            for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
+                graphGenerator.graphTransaction(t.getTransaction());
+            }
             updateProgress(3, 4);
 
             updateMessage("Done");
             updateProgress(4, 4);
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
-            fileSelectButton.setDisable(false);
             produceGraphButton.setDisable(false);
 
             return null;

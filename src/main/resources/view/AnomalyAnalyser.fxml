@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<?import javafx.scene.control.Button?>
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="337.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockVisualiserController">
+    <children>
+        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+        <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+            <image>
+                <Image url="@../images/btc-logo.png" />
+            </image>
+        </ImageView>
+        <Text fill="WHITE" layoutX="58.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Anomaly analyser" wrappingWidth="148.13671875">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0" />
+            </font>
+        </Text>
+        <Button layoutX="504.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0" />
+            </font>
+        </Button>
+    </children>
+</Pane>

@@ -30,12 +30,12 @@
                 <Font size="14.0" />
             </font>
         </Button>
-        <Button layoutX="175.0" layoutY="209.0" mnemonicParsing="false" onAction="#openGraphAnalyser" prefHeight="35.0" prefWidth="250.0" text="Graph analyser">
+        <Button layoutX="175.0" layoutY="209.0" mnemonicParsing="false" onAction="#openBlockAnalyser" prefHeight="35.0" prefWidth="250.0" text="Graph analyser">
             <font>
                 <Font size="14.0" />
             </font>
         </Button>
-      <Label layoutX="175.0" layoutY="139.0" style="-fx-background-color: eaeadf;" text="Tools">
+      <Label layoutX="175.0" layoutY="139.0" style="-fx-background-color: eaeadf;" text="Debug tools">
          <font>
             <Font name="Arial Rounded MT Bold" size="14.0" />
          </font>
