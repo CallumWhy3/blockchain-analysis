@@ -27,6 +27,7 @@ public class Main extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/css/style.css");
+            primaryStage.setResizable(false);
             primaryStage.setScene(scene);
             primaryStage.setTitle("Blockchain analysis");
             primaryStage.show();
