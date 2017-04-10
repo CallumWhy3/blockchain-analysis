@@ -70,8 +70,12 @@ public class AnomalyVisualiserController {
             }
             updateProgress(3, 4);
 
-            updateMessage("Done");
+            updateMessage("Closing Neo4j session");
+            session.close();
+            driver.close();
             updateProgress(4, 4);
+
+            updateMessage("Done");
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             produceGraphButton.setDisable(false);
