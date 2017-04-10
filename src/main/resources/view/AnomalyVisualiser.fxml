@@ -10,9 +10,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.AnomalyVisualiserController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="184.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.AnomalyVisualiserController">
     <children>
-        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../images/btc-logo.png" />
@@ -23,21 +23,21 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <Text layoutX="25.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected block" wrappingWidth="209.13671875">
+        <Text layoutX="20.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected block" wrappingWidth="209.13671875">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <TextField fx:id="selectedBlock" disable="true" editable="false" layoutX="25.0" layoutY="88.0" prefHeight="27.0" prefWidth="434.0" />
-        <Button fx:id="produceGraphButton" layoutX="467.0" layoutY="88.0" mnemonicParsing="false" onAction="#confirmGenerateGraph" prefHeight="27.0" prefWidth="110.0" text="Produce graph" />
-        <ProgressBar fx:id="progressBar" layoutX="25.0" layoutY="127.0" prefHeight="25.0" prefWidth="553.0" progress="0.0" />
-        <Button layoutX="504.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
+        <TextField fx:id="selectedBlock" disable="true" editable="false" layoutX="20.0" layoutY="88.0" prefHeight="27.0" prefWidth="485.0" />
+        <Button fx:id="produceGraphButton" layoutX="509.0" layoutY="88.0" mnemonicParsing="false" onAction="#confirmGenerateGraph" prefHeight="27.0" prefWidth="110.0" text="Produce graph" />
+        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="127.0" prefHeight="25.0" prefWidth="600.0" progress="0.0" />
+        <Button layoutX="545.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Label fx:id="currentTask" layoutX="51.0" layoutY="159.0" prefHeight="17.0" prefWidth="526.0" />
-        <ProgressIndicator fx:id="progressSpinner" layoutX="25.0" layoutY="158.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
+        <Label fx:id="currentTask" layoutX="46.0" layoutY="159.0" prefHeight="17.0" prefWidth="572.0" />
+        <ProgressIndicator fx:id="progressSpinner" layoutX="20.0" layoutY="158.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
             <cursor>
                 <Cursor fx:constant="DEFAULT" />
             </cursor>

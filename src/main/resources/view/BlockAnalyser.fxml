@@ -9,9 +9,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.Cursor?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockAnalyserController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="360.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockAnalyserController">
     <children>
-        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../images/btc-logo.png" />
@@ -22,26 +22,26 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <Text layoutX="25.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected block" wrappingWidth="209.13671875">
+        <Text layoutX="20.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Selected block" wrappingWidth="209.13671875">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <TextField fx:id="selectedBlock" disable="true" editable="false" layoutX="25.0" layoutY="88.0" prefHeight="27.0" prefWidth="483.0" />
-        <Button fx:id="analyseButton" layoutX="516.0" layoutY="88.0" mnemonicParsing="false" onAction="#analyseBlock" prefHeight="27.0" prefWidth="67.0" text="Analyse" />
-        <TextArea fx:id="outputTextArea" editable="false" layoutX="25.0" layoutY="127.0" prefHeight="162.0" prefWidth="558.0" />
-        <ProgressBar fx:id="progressBar" layoutX="25.0" layoutY="301.0" prefHeight="25.0" prefWidth="477.0" progress="0.0" />
-        <Label fx:id="currentTask" layoutX="51.0" layoutY="333.0" prefHeight="17.0" prefWidth="547.0" />
-        <Button layoutX="504.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
+        <TextField fx:id="selectedBlock" disable="true" editable="false" layoutX="20.0" layoutY="88.0" prefHeight="27.0" prefWidth="530.0" />
+        <Button fx:id="analyseButton" layoutX="552.0" layoutY="88.0" mnemonicParsing="false" onAction="#analyseBlock" prefHeight="27.0" prefWidth="67.0" text="Analyse" />
+        <TextArea fx:id="outputTextArea" editable="false" layoutX="20.0" layoutY="127.0" prefHeight="162.0" prefWidth="600.0" />
+        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="301.0" prefHeight="25.0" prefWidth="524.0" progress="0.0" />
+        <Label fx:id="currentTask" layoutX="46.0" layoutY="333.0" prefHeight="17.0" prefWidth="574.0" />
+        <Button layoutX="545.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <ProgressIndicator fx:id="progressSpinner" layoutX="25.0" layoutY="333.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
+        <ProgressIndicator fx:id="progressSpinner" layoutX="20.0" layoutY="333.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
             <cursor>
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ProgressIndicator>
-      <Button layoutX="510.0" layoutY="300.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="27.0" prefWidth="73.0" text="Visualise" />
+      <Button layoutX="546.0" layoutY="300.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="27.0" prefWidth="73.0" text="Visualise" />
     </children>
 </Pane>
