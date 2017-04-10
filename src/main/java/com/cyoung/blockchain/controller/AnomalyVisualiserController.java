@@ -26,6 +26,9 @@ public class AnomalyVisualiserController {
     private Stage stage;
 
     @FXML
+    private TextField selectedBlock;
+
+    @FXML
     private Button produceGraphButton;
 
     @FXML
@@ -36,6 +39,12 @@ public class AnomalyVisualiserController {
 
     @FXML
     private Label currentTask;
+
+    @FXML
+    private void initialize() {
+        selectedBlock.setText(BlockVisualiserController.block.getHash());
+    }
+
 
     @FXML
     private void confirmGenerateGraph() {

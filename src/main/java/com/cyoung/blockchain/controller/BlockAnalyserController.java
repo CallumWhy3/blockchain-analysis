@@ -22,8 +22,10 @@ public class BlockAnalyserController {
     private Parent parent;
     private Scene scene;
     private Stage stage;
-    private Block block;
     private static final Logger logger = LoggerFactory.getLogger(BlockAnalyserController.class);
+
+    @FXML
+    private TextField selectedBlock;
 
     @FXML
     private Button analyseButton;
@@ -41,6 +43,11 @@ public class BlockAnalyserController {
     private Label currentTask;
 
     @FXML
+    private void initialize() {
+        selectedBlock.setText(BlockVisualiserController.block.getHash());
+    }
+
+    @FXML
     private void analyseBlock() throws IOException {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
@@ -49,20 +56,24 @@ public class BlockAnalyserController {
             currentTask.setLayoutX(51);
             updateProgress(1, 5);
 
-            updateMessage("Finding block");
+            updateTitle("Finding block");
             BlockExplorer blockExplorer = new BlockExplorer();
             String blockHash = BlockVisualiserController.block.getHash();
-            block = blockExplorer.getBlock(blockHash);
+            Block block = blockExplorer.getBlock(blockHash);
             updateProgress(2, 5);
 
-            updateMessage("Finding anomalous transactions");
+            updateTitle("Finding anomalous transactions");
             BlockAnalyser blockAnalyser = new BlockAnalyser(block);
+            String message = "";
+            int counter = 1;
             for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions()) {
-                logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n");
+                message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
+                updateMessage(message);
+                logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
             }
             updateProgress(4, 5);
 
-            updateMessage("Done");
+            updateTitle("Done");
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             analyseButton.setDisable(false);
@@ -73,7 +84,8 @@ public class BlockAnalyserController {
         };
 
         progressBar.progressProperty().bind(task.progressProperty());
-        currentTask.textProperty().bind(task.messageProperty());
+        currentTask.textProperty().bind(task.titleProperty());
+        outputTextArea.textProperty().bind(task.messageProperty());
         Thread th = new Thread(task);
         th.setDaemon(true);
         th.start();
