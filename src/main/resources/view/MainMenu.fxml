@@ -7,9 +7,9 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="317.0" prefWidth="600.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="468.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
     <children>
-        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="600.0" />
+        <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="468.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
             <image>
                 <Image url="@../images/btc-logo.png" />
@@ -20,37 +20,17 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <Button layoutX="534.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="47.0" prefWidth="65.0" style="-fx-background-color: #4a4d57;" text="Exit" textAlignment="CENTER" textFill="WHITE">
+        <Button layoutX="402.0" mnemonicParsing="false" onAction="#exitProgram" prefHeight="47.0" prefWidth="65.0" style="-fx-background-color: #4a4d57;" text="Exit" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Button layoutX="175.0" layoutY="163.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Block visualiser">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-        <Button layoutX="175.0" layoutY="209.0" mnemonicParsing="false" onAction="#openBlockAnalyser" prefHeight="35.0" prefWidth="250.0" text="Graph analyser">
-            <font>
-                <Font size="14.0" />
-            </font>
-        </Button>
-      <Label layoutX="175.0" layoutY="139.0" style="-fx-background-color: eaeadf;" text="Debug tools">
-         <font>
-            <Font name="Arial Rounded MT Bold" size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="175.0" layoutY="65.0" style="-fx-background-color: eaeadf;" text="Quick start">
-         <font>
-            <Font name="Arial Rounded MT Bold" size="14.0" />
-         </font>
-      </Label>
-      <Button layoutX="175.0" layoutY="89.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
+      <Button layoutX="109.0" layoutY="71.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="175.0" layoutY="256.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="35.0" prefWidth="250.0" text="Anomaly visualiser">
+      <Button layoutX="109.0" layoutY="117.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Options">
          <font>
             <Font size="14.0" />
          </font>
