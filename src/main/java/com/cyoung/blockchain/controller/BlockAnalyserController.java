@@ -58,8 +58,7 @@ public class BlockAnalyserController {
             updateMessage("Finding anomalous transactions");
             BlockAnalyser blockAnalyser = new BlockAnalyser(block);
             for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions()) {
-                updateMessage("Calculating transaction " + t.getHash());
-                outputTextArea.appendText(t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n");
+                logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n");
             }
             updateProgress(4, 5);
 
