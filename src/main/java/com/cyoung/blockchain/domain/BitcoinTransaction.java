@@ -50,7 +50,7 @@ public class BitcoinTransaction {
         return inputs;
     }
 
-    public int getTotalInputs() {
+    public int getTotalNumberOfInputs() {
         return inputs.size();
     }
 
@@ -62,7 +62,7 @@ public class BitcoinTransaction {
         return totalBitcoinsInput;
     }
 
-    public int getTotalUniqueInputs() {
+    public int getTotalNumberOfUniqueInputs() {
         Set<String> uniqueInputs = new HashSet<>();
         for (Input i : inputs) {
             uniqueInputs.add(i.getPreviousOutput().getAddress());
@@ -91,14 +91,14 @@ public class BitcoinTransaction {
         for (Input i : inputs) {
             values += i.getPreviousOutput().getValue();
         }
-        return values / getTotalInputs();
+        return values / getTotalNumberOfInputs();
     }
 
     public List<Output> getOutputs() {
         return outputs;
     }
 
-    public int getTotalOutputs() {
+    public int getTotalNumberOfOutputs() {
         return outputs.size();
     }
 
@@ -110,7 +110,7 @@ public class BitcoinTransaction {
         return totalBitcoinsOutput;
     }
 
-    public int getTotalUniqueOutputs() {
+    public int getTotalNumberOfUniqueOutputs() {
         Set<String> uniqueOutputs = new HashSet<>();
         for (Output o : outputs) {
             uniqueOutputs.add(o.getAddress());
@@ -139,7 +139,7 @@ public class BitcoinTransaction {
         for (Output o : outputs) {
             values += o.getValue();
         }
-        return values / getTotalOutputs();
+        return values / getTotalNumberOfOutputs();
     }
 
     public long getTransactionFee() {
