@@ -28,7 +28,7 @@ public class BlockAnalyserController {
     private TextField selectedBlock;
 
     @FXML
-    private Button analyseButton;
+    private Button analyseButton, visualiseButton;
 
     @FXML
     private TextArea outputTextArea;
@@ -70,6 +70,7 @@ public class BlockAnalyserController {
                 message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
                 updateMessage(message);
                 logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
+                counter++;
             }
             updateProgress(4, 5);
 
@@ -77,6 +78,7 @@ public class BlockAnalyserController {
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             analyseButton.setDisable(false);
+            visualiseButton.setDisable(false);
             updateProgress(5, 5);
 
             return null;

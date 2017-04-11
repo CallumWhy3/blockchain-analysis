@@ -42,6 +42,6 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ProgressIndicator>
-      <Button layoutX="546.0" layoutY="300.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="27.0" prefWidth="73.0" text="Visualise" />
+      <Button fx:id="visualiseButton" layoutX="546.0" layoutY="300.0" mnemonicParsing="false" onAction="#openAnomalyVisualiser" prefHeight="27.0" prefWidth="73.0" text="Visualise" disable="true"/>
     </children>
 </Pane>
