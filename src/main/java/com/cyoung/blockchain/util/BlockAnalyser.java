@@ -21,7 +21,7 @@ public class BlockAnalyser {
     public ArrayList<BitcoinTransaction> calculateAnomalousTransactions() {
         calculateTransactionWeights();
         for (BitcoinTransaction t : allTransactions) {
-            if (t.getWeight() >= 0.3) {
+            if (t.getWeight() >= 0.1) {
                 anomalousTransactions.add(t);
             }
         }
@@ -52,11 +52,11 @@ public class BlockAnalyser {
             }
         }
 
-        double weightMultiplier = 0.8 / largestDifference;
+        double weightMultiplier = 0.8 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : allTransactions) {
             totalBitcoinsInput = t.getTotalBitcoinsInput();
             double difference = Math.abs(averageBitcoinsInput - totalBitcoinsInput) * 0.00000001;
-            t.addToWeight(difference * weightMultiplier);
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
 
@@ -76,11 +76,11 @@ public class BlockAnalyser {
             }
         }
 
-        double weightMultiplier = 0.05 / largestDifference;
+        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : allTransactions) {
             totalInputs = t.getTotalNumberOfInputs();
             double difference = Math.abs(averageTotalInputs - totalInputs);
-            t.addToWeight(difference * weightMultiplier);
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
 
@@ -100,11 +100,11 @@ public class BlockAnalyser {
             }
         }
 
-        double weightMultiplier = 0.05 / largestDifference;
+        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : allTransactions) {
             totalOutputs = t.getTotalNumberOfOutputs();
             double difference = Math.abs(averageTotalOutputs - totalOutputs);
-            t.addToWeight(difference * weightMultiplier);
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
 
@@ -124,11 +124,11 @@ public class BlockAnalyser {
             }
         }
 
-        double weightMultiplier = 0.05 / largestDifference;
+        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : allTransactions) {
             totalUniqueInputs = t.getTotalNumberOfUniqueInputs();
             double difference = Math.abs(averageTotalUniqueInputs - totalUniqueInputs);
-            t.addToWeight(difference * weightMultiplier);
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
 
@@ -148,11 +148,11 @@ public class BlockAnalyser {
             }
         }
 
-        double weightMultiplier = 0.05 / largestDifference;
+        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : allTransactions) {
             totalUniqueOutputs = t.getTotalNumberOfUniqueOutputs();
             double difference = Math.abs(averageTotalUniqueOutputs - totalUniqueOutputs);
-            t.addToWeight(difference * weightMultiplier);
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
 
