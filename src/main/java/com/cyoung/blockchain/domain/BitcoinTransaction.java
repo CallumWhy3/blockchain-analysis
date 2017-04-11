@@ -86,8 +86,8 @@ public class BitcoinTransaction {
         return Collections.min(values);
     }
 
-    public long getAverageInput() {
-        long values = 0;
+    public double getAverageInput() {
+        double values = 0;
         for (Input i : inputs) {
             values += i.getPreviousOutput().getValue();
         }
@@ -134,8 +134,8 @@ public class BitcoinTransaction {
         return Collections.min(values);
     }
 
-    public long getAverageOutput() {
-        long values = 0;
+    public double getAverageOutput() {
+        double values = 0;
         for (Output o : outputs) {
             values += o.getValue();
         }
