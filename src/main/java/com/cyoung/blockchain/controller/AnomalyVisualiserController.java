@@ -29,7 +29,7 @@ public class AnomalyVisualiserController {
     private TextField selectedBlock;
 
     @FXML
-    private Button produceGraphButton;
+    private Button produceGraphButton, analyseButton;
 
     @FXML
     private ProgressBar progressBar;
@@ -88,6 +88,7 @@ public class AnomalyVisualiserController {
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             produceGraphButton.setDisable(false);
+            analyseButton.setDisable(false);
 
             return null;
             }
@@ -98,6 +99,16 @@ public class AnomalyVisualiserController {
         Thread th = new Thread(task);
         th.setDaemon(true);
         th.start();
+    }
+
+    @FXML
+    private void openAnomalyAnalyser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/AnomalyAnalyser.fxml"));
+        scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
     }
 
     @FXML

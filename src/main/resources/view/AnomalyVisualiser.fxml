@@ -30,7 +30,7 @@
         </Text>
         <TextField fx:id="selectedBlock" disable="true" editable="false" layoutX="20.0" layoutY="88.0" prefHeight="27.0" prefWidth="485.0" />
         <Button fx:id="produceGraphButton" layoutX="509.0" layoutY="88.0" mnemonicParsing="false" onAction="#confirmGenerateGraph" prefHeight="27.0" prefWidth="110.0" text="Produce graph" />
-        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="127.0" prefHeight="25.0" prefWidth="600.0" progress="0.0" />
+        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="127.0" prefHeight="25.0" prefWidth="485.0" progress="0.0" />
         <Button layoutX="545.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
@@ -42,5 +42,6 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ProgressIndicator>
+      <Button fx:id="analyseButton" layoutX="509.0" layoutY="126.0" mnemonicParsing="false" onAction="#openAnomalyAnalyser" prefHeight="27.0" prefWidth="110.0" text="Analyse" disable="true"/>
     </children>
 </Pane>
