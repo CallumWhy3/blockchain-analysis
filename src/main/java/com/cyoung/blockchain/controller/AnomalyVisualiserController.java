@@ -45,7 +45,6 @@ public class AnomalyVisualiserController {
         selectedBlock.setText(BlockVisualiserController.block.getHash());
     }
 
-
     @FXML
     private void confirmGenerateGraph() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete all nodes and relationships in the current neo4j graph, do you still want to continue?");
