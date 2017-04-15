@@ -1,5 +1,6 @@
 package com.cyoung.blockchain.util;
 
+import com.cyoung.blockchain.controller.OptionsMenuController;
 import com.cyoung.blockchain.domain.BitcoinTransaction;
 import info.blockchain.api.blockexplorer.Block;
 import info.blockchain.api.blockexplorer.Transaction;
@@ -21,7 +22,7 @@ public class BlockAnalyser {
     public ArrayList<BitcoinTransaction> calculateAnomalousTransactions() {
         calculateTransactionWeights();
         for (BitcoinTransaction t : allTransactions) {
-            if (t.getWeight() >= 0.1) {
+            if (t.getWeight() >= OptionsMenuController.anomalyWeightValue) {
                 anomalousTransactions.add(t);
             }
         }

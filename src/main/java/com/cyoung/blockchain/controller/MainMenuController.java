@@ -30,6 +30,16 @@ public class MainMenuController {
     }
 
     @FXML
+    private void openOptionsMenu(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/OptionsMenu.fxml"));
+        scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
     private void exitProgram(ActionEvent event) {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
         stage.close();
