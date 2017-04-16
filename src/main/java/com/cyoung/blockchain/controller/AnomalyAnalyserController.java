@@ -24,7 +24,7 @@ public class AnomalyAnalyserController {
     private Stage stage;
 
     @FXML
-    private Label totalTransactionsLabel, totalBitcoinsTransferredLabel;
+    private Label totalTransactionsLabel, totalBitcoinsTransferredLabel, anomalyWeightThresholdLabel;
 
     @FXML
     private Label totalAnomalousTransactionsLabel, totalAnomalousBitcoinsTransferredLabel, percentageAnomalousTransactionsLabel;
@@ -40,6 +40,9 @@ public class AnomalyAnalyserController {
         Block block = BlockVisualiserController.block;
         int totalTransactions = block.getTransactions().size();
         totalTransactionsLabel.setText(String.valueOf(totalTransactions));
+
+        double anomalyWeightThreshold = OptionsMenuController.anomalyWeightValue;
+        anomalyWeightThresholdLabel.setText(String.valueOf(anomalyWeightThreshold));
 
         ArrayList<BitcoinTransaction> anomalousTransactions = BlockAnalyser.anomalousTransactions;
         int totalAnomalousTransactions = anomalousTransactions.size();

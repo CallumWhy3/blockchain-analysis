@@ -50,6 +50,16 @@
                 <Font name="Arial" size="12.0" />
             </font>
         </Label>
+        <Text layoutX="20.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Anomaly weight threshold:" wrappingWidth="190.0">
+            <font>
+                <Font name="Arial" size="12.0" />
+            </font>
+        </Text>
+        <Label fx:id="anomalyWeightThresholdLabel" layoutX="240.0" layoutY="136.0" prefHeight="17.0" prefWidth="35.0" text="0">
+            <font>
+                <Font name="Arial" size="12.0" />
+            </font>
+        </Label>
         <Text layoutX="280.0" layoutY="101.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Total anomalous transactions identified in block:" wrappingWidth="290.0">
          <font>
             <Font name="Arial" size="12.0" />
