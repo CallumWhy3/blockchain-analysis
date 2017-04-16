@@ -21,6 +21,7 @@ public class BlockAnalyser {
 
     public ArrayList<BitcoinTransaction> calculateAnomalousTransactions() {
         calculateTransactionWeights();
+        anomalousTransactions.clear();
         for (BitcoinTransaction t : allTransactions) {
             if (t.getWeight() >= OptionsMenuController.anomalyWeightValue) {
                 anomalousTransactions.add(t);
