@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="460.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.AnomalyAnalyserController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="590.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.AnomalyAnalyserController">
     <children>
         <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -95,10 +95,32 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Text>
-        <TableView fx:id="anomalousTransactionTable" layoutX="20.0" layoutY="193.0" prefHeight="220.0" prefWidth="600.0">
+        <TableView fx:id="anomalousTransactionTable" layoutX="20.0" layoutY="193.0" prefHeight="150.0" prefWidth="600.0">
             <columns>
                 <TableColumn fx:id="weightColumn" maxWidth="68.0" prefWidth="68.0" resizable="false" text="Weight" />
                 <TableColumn fx:id="hashColumn" prefWidth="510.0" resizable="false" text="Transaction hash" />
+            </columns>
+        </TableView>
+        <Text layoutX="20.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reoccurring input addresses:" wrappingWidth="215.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0" />
+            </font>
+        </Text>
+        <TableView fx:id="reoccurringInputsTable" layoutX="20.0" layoutY="378.0" prefHeight="79.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="inputAddress" prefWidth="480.0" resizable="false" text="Address" />
+                <TableColumn fx:id="inputOccurrences" prefWidth="98.0" resizable="false" text="Occurrences" />
+            </columns>
+        </TableView>
+        <Text layoutX="20.0" layoutY="479.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reoccurring output addresses:" wrappingWidth="215.0">
+            <font>
+                <Font name="Arial Rounded MT Bold" size="14.0" />
+            </font>
+        </Text>
+        <TableView fx:id="reoccurringOutputsTable" layoutX="20.0" layoutY="489.0" prefHeight="79.0" prefWidth="600.0">
+            <columns>
+                <TableColumn fx:id="outputAddress" prefWidth="480.0" resizable="false" text="Address" />
+                <TableColumn fx:id="outputOccurrences" prefWidth="98.0" resizable="false" text="Occurrences" />
             </columns>
         </TableView>
     </children>

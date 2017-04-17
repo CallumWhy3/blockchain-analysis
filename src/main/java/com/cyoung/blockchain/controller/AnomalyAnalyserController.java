@@ -1,8 +1,13 @@
 package com.cyoung.blockchain.controller;
 
 import com.cyoung.blockchain.domain.BitcoinTransaction;
+import com.cyoung.blockchain.domain.ReoccurringInputRow;
+import com.cyoung.blockchain.domain.ReoccurringOutputRow;
 import com.cyoung.blockchain.util.BlockAnalyser;
 import info.blockchain.api.blockexplorer.Block;
+import info.blockchain.api.blockexplorer.Input;
+import info.blockchain.api.blockexplorer.Output;
+import info.blockchain.api.blockexplorer.Transaction;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.*;
 
 public class AnomalyAnalyserController {
     private Parent parent;
@@ -36,13 +41,26 @@ public class AnomalyAnalyserController {
     private TableColumn<BitcoinTransaction, String> weightColumn, hashColumn;
 
     @FXML
+    private TableView<ReoccurringInputRow> reoccurringInputsTable;
+
+    @FXML
+    private TableColumn<ReoccurringInputRow, String> inputAddress, inputOccurrences;
+
+    @FXML
+    private TableView<ReoccurringOutputRow> reoccurringOutputsTable;
+
+    @FXML
+    private TableColumn<ReoccurringOutputRow, String> outputAddress, outputOccurrences;
+
+    @FXML
     private void initialize() {
         Block block = BlockVisualiserController.block;
         int totalTransactions = block.getTransactions().size();
         totalTransactionsLabel.setText(String.valueOf(totalTransactions));
 
         double anomalyWeightThreshold = OptionsMenuController.anomalyWeightValue;
-        anomalyWeightThresholdLabel.setText(String.valueOf(anomalyWeightThreshold));
+        String formattedWeightThreshold = String.format("%.2f", anomalyWeightThreshold);
+        anomalyWeightThresholdLabel.setText(formattedWeightThreshold);
 
         ArrayList<BitcoinTransaction> anomalousTransactions = BlockAnalyser.anomalousTransactions;
         int totalAnomalousTransactions = anomalousTransactions.size();
@@ -55,6 +73,74 @@ public class AnomalyAnalyserController {
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         hashColumn.setCellValueFactory(new PropertyValueFactory<>("hash"));
         anomalousTransactionTable.getItems().setAll(anomalousTransactions);
+
+        List<Transaction> transactions = new ArrayList<>();
+        for (BitcoinTransaction t : anomalousTransactions) {
+            transactions.add(t.getTransaction());
+        }
+        inputAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        inputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
+        reoccurringInputsTable.getItems().setAll(listReoccurringInputs(transactions));
+
+        outputAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
+        outputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
+        reoccurringOutputsTable.getItems().setAll(listReoccurringOutputs(transactions));
+    }
+
+    private List<ReoccurringInputRow> listReoccurringInputs(List<Transaction> transactions) {
+        List<String> inputs = new ArrayList<>();
+        List<ReoccurringInputRow> reoccurringInputs = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            for (Input i : t.getInputs()) {
+                inputs.add(i.getPreviousOutput().getAddress());
+            }
+        }
+
+        for (String s : inputs) {
+            int occurrences = Collections.frequency(inputs, s);
+            boolean contains = false;
+            for (ReoccurringInputRow r : reoccurringInputs) {
+                if (r.getAddress().equals(s)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (occurrences > 1 && !contains) {
+                ReoccurringInputRow r = new ReoccurringInputRow(s, occurrences);
+                reoccurringInputs.add(r);
+            }
+        }
+
+        return reoccurringInputs;
+    }
+
+    private List<ReoccurringOutputRow> listReoccurringOutputs(List<Transaction> transactions) {
+        List<String> outputs = new ArrayList<>();
+        List<ReoccurringOutputRow> reoccurringOutputs = new ArrayList<>();
+
+        for (Transaction t : transactions) {
+            for (Output o : t.getOutputs()) {
+                outputs.add(o.getAddress());
+            }
+        }
+
+        for (String s : outputs) {
+            int occurrences = Collections.frequency(outputs, s);
+            boolean contains = false;
+            for (ReoccurringOutputRow r : reoccurringOutputs) {
+                if (r.getAddress().equals(s)) {
+                    contains = true;
+                    break;
+                }
+            }
+            if (occurrences > 1 && !contains) {
+                ReoccurringOutputRow r = new ReoccurringOutputRow(s, occurrences);
+                reoccurringOutputs.add(r);
+            }
+        }
+
+        return reoccurringOutputs;
     }
 
     @FXML
