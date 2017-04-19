@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
@@ -73,7 +74,9 @@ public class AnomalyVisualiserController {
 
             progressSpinner.setVisible(true);
             currentTask.setLayoutX(51);
+
             updateMessage("Creating Neo4j session");
+            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
             produceGraphButton.setDisable(true);
             String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
             String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
@@ -94,6 +97,7 @@ public class AnomalyVisualiserController {
             updateProgress(4, 4);
 
             updateMessage("Done");
+            jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             produceGraphButton.setDisable(false);

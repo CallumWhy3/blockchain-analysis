@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.AudioClip;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -154,13 +155,15 @@ public class BlockVisualiserController {
 
             currentTask.setLayoutX(51);
             progressSpinner.setVisible(true);
+            updateProgress(1, 10);
 
             updateMessage("Preparing API");
+            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
             inputModeToggleButton.setDisable(true);
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
             Context.propagate(context);
-            updateProgress(2, 10);
+            updateProgress(3, 10);
 
             updateMessage("Creating Neo4j session");
             String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
@@ -183,6 +186,7 @@ public class BlockVisualiserController {
             updateProgress(10, 10);
 
             updateMessage("Done");
+            jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             inputModeToggleButton.setDisable(false);

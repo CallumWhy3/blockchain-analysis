@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,7 @@ public class BlockAnalyserController {
             updateProgress(1, 5);
 
             updateTitle("Finding block");
+            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
             BlockExplorer blockExplorer = new BlockExplorer();
             String blockHash = BlockVisualiserController.block.getHash();
             Block block = blockExplorer.getBlock(blockHash);
@@ -81,6 +83,7 @@ public class BlockAnalyserController {
             updateProgress(4, 5);
 
             updateTitle("Done");
+            jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
             analyseButton.setDisable(false);
