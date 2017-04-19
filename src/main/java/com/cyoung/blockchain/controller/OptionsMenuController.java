@@ -18,14 +18,17 @@ public class OptionsMenuController {
     private Parent parent;
     private Scene scene;
     private Stage stage;
-    public static double anomalyWeightValue = 0.3;
+    public static double anomalyWeightValue = 0.15;
 
     @FXML
     private Slider anomalyWeightThresholdSlider;
 
     @FXML
-    private Label weightValue;
+    private Label weightValueLabel;
 
+    /**
+     * Initialise anomaly weight threshold slider
+     */
     @FXML
     private void initialize() {
         anomalyWeightThresholdSlider.setValue(anomalyWeightValue);
@@ -38,12 +41,20 @@ public class OptionsMenuController {
         });
     }
 
+    /**
+     * Update label with value of anomaly weight threshold slider
+     */
     @FXML
     private void updateWeightValue() {
         double weight = anomalyWeightThresholdSlider.getValue();
-        weightValue.setText(String.format("%.2f", weight));
+        weightValueLabel.setText(String.format("%.2f", weight));
     }
 
+    /**
+     * Open main manu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));

@@ -40,11 +40,18 @@ public class AnomalyVisualiserController {
     @FXML
     private Label currentTask;
 
+    /**
+     * Initialise selected block hash field
+     */
     @FXML
     private void initialize() {
         selectedBlock.setText(BlockVisualiserController.block.getHash());
     }
 
+    /**
+     * Display dialog to confirm user wants to create graph of anomalous transactions and
+     * overwrite any existing Neo4j nodes or relationships
+     */
     @FXML
     private void confirmGenerateGraph() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete all nodes and relationships in the current neo4j graph, do you still want to continue?");
@@ -57,6 +64,9 @@ public class AnomalyVisualiserController {
         });
     }
 
+    /**
+     * Create Neo4j graph of anomalous transactions
+     */
     private void generateGraph() {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
@@ -100,6 +110,11 @@ public class AnomalyVisualiserController {
         th.start();
     }
 
+    /**
+     * Open anomaly analyser page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void openAnomalyAnalyser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/AnomalyAnalyser.fxml"));
@@ -110,6 +125,11 @@ public class AnomalyVisualiserController {
         stage.show();
     }
 
+    /**
+     * Open main menu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));

@@ -19,6 +19,11 @@ public class MainMenuController {
         this.stage = stage;
     }
 
+    /**
+     * Open block visualiser page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void openBlockVisualiser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/BlockVisualiser.fxml"));
@@ -29,6 +34,11 @@ public class MainMenuController {
         stage.show();
     }
 
+    /**
+     * Open options menu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void openOptionsMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/OptionsMenu.fxml"));
@@ -39,6 +49,10 @@ public class MainMenuController {
         stage.show();
     }
 
+    /**
+     * Close application
+     * @param event Event from button
+     */
     @FXML
     private void exitProgram(ActionEvent event) {
         stage = (Stage) ((Node)event.getSource()).getScene().getWindow();

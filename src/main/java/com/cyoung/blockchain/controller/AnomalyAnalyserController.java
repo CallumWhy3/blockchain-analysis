@@ -52,6 +52,9 @@ public class AnomalyAnalyserController {
     @FXML
     private TableColumn<ReoccurringOutputRow, String> outputAddress, outputOccurrences;
 
+    /**
+     * Calculate and set values for stats section and tables
+     */
     @FXML
     private void initialize() {
         Block block = BlockVisualiserController.block;
@@ -87,6 +90,11 @@ public class AnomalyAnalyserController {
         reoccurringOutputsTable.getItems().setAll(listReoccurringOutputs(transactions));
     }
 
+    /**
+     * Find all inputs that occur more than once in a list of transactions
+     * @param transactions  List of transactions to search through for inputs
+     * @return  List of inputs that occur more than once
+     */
     private List<ReoccurringInputRow> listReoccurringInputs(List<Transaction> transactions) {
         List<String> inputs = new ArrayList<>();
         List<ReoccurringInputRow> reoccurringInputs = new ArrayList<>();
@@ -115,6 +123,11 @@ public class AnomalyAnalyserController {
         return reoccurringInputs;
     }
 
+    /**
+     * Find all outputs that occur more than once in a list of transactions
+     * @param transactions  List of transactions to search through for outputs
+     * @return  List of outputs that occur more than once
+     */
     private List<ReoccurringOutputRow> listReoccurringOutputs(List<Transaction> transactions) {
         List<String> outputs = new ArrayList<>();
         List<ReoccurringOutputRow> reoccurringOutputs = new ArrayList<>();
@@ -143,6 +156,11 @@ public class AnomalyAnalyserController {
         return reoccurringOutputs;
     }
 
+    /**
+     * Open main menu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));

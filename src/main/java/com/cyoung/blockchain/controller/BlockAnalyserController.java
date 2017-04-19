@@ -42,13 +42,19 @@ public class BlockAnalyserController {
     @FXML
     private Label currentTask;
 
+    /**
+     * Initialise selected block hash field
+     */
     @FXML
     private void initialize() {
         selectedBlock.setText(BlockVisualiserController.block.getHash());
     }
 
+    /**
+     * Analyse block for anomalous transactions
+     */
     @FXML
-    private void analyseBlock() throws IOException {
+    private void analyseBlock() {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
@@ -63,10 +69,10 @@ public class BlockAnalyserController {
             updateProgress(2, 5);
 
             updateTitle("Finding anomalous transactions");
-            BlockAnalyser blockAnalyser = new BlockAnalyser(block);
+            BlockAnalyser blockAnalyser = new BlockAnalyser();
             String message = "";
             int counter = 1;
-            for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions()) {
+            for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions(block)) {
                 message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
                 updateMessage(message);
                 logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
@@ -93,6 +99,11 @@ public class BlockAnalyserController {
         th.start();
     }
 
+    /**
+     * Open anomaly visualiser page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void openAnomalyVisualiser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/AnomalyVisualiser.fxml"));
@@ -103,6 +114,11 @@ public class BlockAnalyserController {
         stage.show();
     }
 
+    /**
+     * Open main menu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));

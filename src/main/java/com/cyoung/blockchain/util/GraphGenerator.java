@@ -16,7 +16,11 @@ public class GraphGenerator {
         session.run("MATCH (n) DETACH DELETE n");
     }
 
-    public void graphTransaction(Transaction trans) throws Exception {
+    /**
+     * Graph bitcoin transaction in Neo4j
+     * @param trans Transaction you want to graph
+     */
+    public void graphTransaction(Transaction trans) {
         String transHash = trans.getHash();
         session.run("CREATE(t:Transaction {hash:'" + transHash + "', time:'" + trans.getTime() + "', index:'" + trans.getIndex() + "', size:'" + trans.getSize() + "'})");
         graphInputs(trans);
@@ -24,18 +28,28 @@ public class GraphGenerator {
         logger.info("Transaction " + transHash + " graphed successfully");
     }
 
+    /**
+     * Graph inputs of bitcoin transaction
+     * @param trans Transaction containing inputs you want to graph
+     */
     private void graphInputs(Transaction trans) {
         for (Input i : trans.getInputs()) {
             String inputAddress = i.getPreviousOutput().getAddress();
+            // 1 Satoshi = 0.00000001 Bitcoin
             double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
             session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
             session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
         }
     }
 
+    /**
+     * Graph outputs of bitcoin transaction
+     * @param trans Transaction cointaing outputs you want to graph
+     */
     private void graphOutputs(Transaction trans) {
         for (Output o : trans.getOutputs()) {
             String outputHash = o.getAddress();
+            // 1 Satoshi = 0.00000001 Bitcoin
             double outputValue = o.getValue() * 0.00000001;
             session.run("MERGE(o:Output {name:'" + outputHash + "'})");
             session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");

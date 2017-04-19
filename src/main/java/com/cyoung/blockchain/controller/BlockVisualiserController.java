@@ -64,6 +64,9 @@ public class BlockVisualiserController {
     @FXML
     private Label currentTask;
 
+    /**
+     * Initialise file chooser and input mode toggle button
+     */
     @FXML
     private void initialize() {
         fc = new FileChooser();
@@ -126,8 +129,12 @@ public class BlockVisualiserController {
         }
     }
 
+    /**
+     * Display dialog to confirm user wants to create graph of a blocks transactions and
+     * overwrite any existing Neo4j nodes or relationships
+     */
     @FXML
-    private void confirmProduceGraph() throws Exception {
+    private void confirmProduceGraph() {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will delete all nodes and relationships in the current neo4j graph, do you still want to continue?");
         alert.setHeaderText(null);
 
@@ -138,13 +145,16 @@ public class BlockVisualiserController {
         });
     }
 
-    @FXML
+    /**
+     * Create Neo4j graph of transactions in user specified block
+     */
     private void produceGraph() {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
             currentTask.setLayoutX(51);
             progressSpinner.setVisible(true);
+
             updateMessage("Preparing API");
             inputModeToggleButton.setDisable(true);
             fileSelectButton.setDisable(true);
@@ -162,8 +172,8 @@ public class BlockVisualiserController {
             updateMessage("Creating nodes and relationships");
             BlockExplorer blockExplorer = new BlockExplorer();
             block = blockExplorer.getBlock(getInputHash());
-            BlockVisualiser blockVisualiser = new BlockVisualiser(session);
-            blockVisualiser.produceGraphFromBlockHash(block.getHash());
+            BlockVisualiser blockVisualiser = new BlockVisualiser();
+            blockVisualiser.produceGraphFromBlockHash(session, block.getHash());
             updateProgress(8, 10);
 
             updateMessage("Closing Neo4j session");
@@ -190,6 +200,10 @@ public class BlockVisualiserController {
         uiThread.start();
     }
 
+    /**
+     * Get block hash based on selected input mode
+     * @return  Hash of block you want to visualise
+     */
     private String getInputHash() {
         if (inFileMode) {
             List<File> blockFiles = new ArrayList<File>();
@@ -201,6 +215,9 @@ public class BlockVisualiserController {
         }
     }
 
+    /**
+     * Validate that block exists with user provided hash
+     */
     @FXML
     private void validateBlockHash() {
         if (blockHashField.getText().length() == 64) {
@@ -224,6 +241,11 @@ public class BlockVisualiserController {
         produceGraphButton.setDisable(true);
     }
 
+    /**
+     * Open block analyser page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void openBlockAnalyser(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/BlockAnalyser.fxml"));
@@ -234,6 +256,11 @@ public class BlockVisualiserController {
         stage.show();
     }
 
+    /**
+     * Open main menu page
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
     @FXML
     private void returnToMainMenu(ActionEvent event) throws IOException {
         parent = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));

@@ -6,6 +6,11 @@ import java.util.Properties;
 
 public class PropertyLoader {
 
+    /**
+     * Load value of property stored in config.properties
+     * @param propertyName  Name of property you want to load
+     * @return  Value of property
+     */
     public static String LoadProperty(String propertyName) {
         Properties properties = new Properties();
         InputStream input = null;
