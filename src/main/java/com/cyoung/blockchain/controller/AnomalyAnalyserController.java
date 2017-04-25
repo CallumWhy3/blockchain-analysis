@@ -57,8 +57,11 @@ public class AnomalyAnalyserController {
      */
     @FXML
     private void initialize() {
-        Block block = BlockVisualiserController.block;
-        int totalTransactions = block.getTransactions().size();
+
+        int totalTransactions = 0;
+        for (Block block : BlockVisualiserController.blocks) {
+            totalTransactions += block.getTransactions().size();
+        }
         totalTransactionsLabel.setText(String.valueOf(totalTransactions));
 
         double anomalyWeightThreshold = OptionsMenuController.anomalyWeightValue;

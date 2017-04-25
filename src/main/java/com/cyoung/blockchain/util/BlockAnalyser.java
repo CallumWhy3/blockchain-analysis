@@ -4,25 +4,32 @@ import com.cyoung.blockchain.controller.OptionsMenuController;
 import com.cyoung.blockchain.domain.BitcoinTransaction;
 import info.blockchain.api.blockexplorer.Block;
 import info.blockchain.api.blockexplorer.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BlockAnalyser {
     public static ArrayList<BitcoinTransaction> anomalousTransactions = new ArrayList<>();
+    private static final Logger logger = LoggerFactory.getLogger(GraphGenerator.class);
 
     /**
      * Assess transactions of a block to identify those considered anomalous
-     * @param block Block containing transactions to be assessed
+     * @param blocks List of blocks containing transactions to be assessed
      * @return  List of transactions identified as anomalous
      */
-    public ArrayList<BitcoinTransaction> calculateAnomalousTransactions(Block block) {
+    public ArrayList<BitcoinTransaction> calculateAnomalousTransactions(List<Block> blocks) {
         ArrayList<BitcoinTransaction> allTransactions = new ArrayList<>();
         // Remove coinbase transaction
-        int numberOfTransactions = block.getTransactions().size();
-        for (Transaction t : block.getTransactions().subList(1, numberOfTransactions)) {
-            allTransactions.add(new BitcoinTransaction(t));
+        for (Block block : blocks) {
+            int numberOfTransactions = block.getTransactions().size();
+            for (Transaction t : block.getTransactions().subList(1, numberOfTransactions)) {
+                allTransactions.add(new BitcoinTransaction(t));
+            }
         }
 
+        logger.info("Transactions analysed: " + allTransactions.size());
         calculateTransactionWeights(allTransactions);
         anomalousTransactions.clear();
         for (BitcoinTransaction t : allTransactions) {

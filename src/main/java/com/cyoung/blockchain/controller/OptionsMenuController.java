@@ -18,7 +18,7 @@ public class OptionsMenuController {
     private Parent parent;
     private Scene scene;
     private Stage stage;
-    public static double anomalyWeightValue = 0.15;
+    public static double anomalyWeightValue = 0.05;
 
     @FXML
     private Slider anomalyWeightThresholdSlider;

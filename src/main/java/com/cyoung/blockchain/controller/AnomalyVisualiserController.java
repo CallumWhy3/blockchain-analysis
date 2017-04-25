@@ -4,6 +4,7 @@ import com.cyoung.blockchain.domain.BitcoinTransaction;
 import com.cyoung.blockchain.util.BlockAnalyser;
 import com.cyoung.blockchain.util.GraphGenerator;
 import com.cyoung.blockchain.util.PropertyLoader;
+import info.blockchain.api.blockexplorer.Block;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ import org.neo4j.driver.v1.GraphDatabase;
 import org.neo4j.driver.v1.Session;
 
 import java.io.IOException;
+import java.util.List;
 
 public class AnomalyVisualiserController {
     private Parent parent;
@@ -46,7 +48,12 @@ public class AnomalyVisualiserController {
      */
     @FXML
     private void initialize() {
-        selectedBlock.setText(BlockVisualiserController.block.getHash());
+        List<Block> blocks = BlockVisualiserController.blocks;
+        if (blocks.size() > 1) {
+            selectedBlock.setText("Multiple blocks selected");
+        } else {
+            selectedBlock.setText(blocks.get(0).getHash());
+        }
     }
 
     /**

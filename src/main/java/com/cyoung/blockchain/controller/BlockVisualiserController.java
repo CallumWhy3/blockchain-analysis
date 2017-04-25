@@ -15,6 +15,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.media.AudioClip;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
@@ -42,7 +43,8 @@ public class BlockVisualiserController {
     private Context context;
     private NetworkParameters params;
     private boolean inFileMode = true;
-    public static Block block;
+    public static List<Block> blocks;
+    private BlockExplorer blockExplorer = new BlockExplorer();
 
     @FXML
     private ToggleButton inputModeToggleButton;
@@ -54,7 +56,7 @@ public class BlockVisualiserController {
     private TextField selectedFileField, blockHashField;
 
     @FXML
-    private Button fileSelectButton, validateBlockHashButton, produceGraphButton, analyseButton;
+    private Button fileSelectButton, validateBlockHashButton, addBlockButton, produceGraphButton, analyseButton;
 
     @FXML
     private ProgressBar progressBar;
@@ -65,11 +67,18 @@ public class BlockVisualiserController {
     @FXML
     private Label currentTask;
 
+    @FXML
+    private TableView addedBlocksTable;
+
+    @FXML
+    private TableColumn<Block, String> addedBlockHash;
+
     /**
      * Initialise file chooser and input mode toggle button
      */
     @FXML
     private void initialize() {
+        blocks = new ArrayList<>();
         fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
                 new FileChooser.ExtensionFilter("Block files (*.dat)", "*.dat");
@@ -117,11 +126,14 @@ public class BlockVisualiserController {
         inFileMode = true;
     }
 
+    /**
+     * Opens file browser so block files can be selected
+     */
     @FXML
     private void openFileBrowser() {
         blockFile = fc.showOpenDialog(stage);
         if (blockFile != null) {
-            produceGraphButton.setDisable(false);
+            addBlockButton.setDisable(false);
             analyseButton.setDisable(true);
             selectedFileField.setText(blockFile.toString());
         } else {
@@ -155,7 +167,9 @@ public class BlockVisualiserController {
 
             currentTask.setLayoutX(51);
             progressSpinner.setVisible(true);
-            updateProgress(1, 10);
+            int numberOfBlocks = blocks.size();
+            int maxProgress = numberOfBlocks + 5;
+            updateProgress(1, maxProgress);
 
             updateMessage("Preparing API");
             AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
@@ -163,27 +177,29 @@ public class BlockVisualiserController {
             fileSelectButton.setDisable(true);
             produceGraphButton.setDisable(true);
             Context.propagate(context);
-            updateProgress(3, 10);
+            updateProgress(2, maxProgress);
 
             updateMessage("Creating Neo4j session");
             String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
             String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
             Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
             Session session = driver.session();
-            updateProgress(4, 10);
+            updateProgress(3, maxProgress);
 
             updateMessage("Creating nodes and relationships");
-            BlockExplorer blockExplorer = new BlockExplorer();
-            block = blockExplorer.getBlock(getInputHash());
+            List<String> hashes = new ArrayList<>();
+            for (Block block : blocks) {
+                hashes.add(block.getHash());
+            }
             BlockVisualiser blockVisualiser = new BlockVisualiser();
-            blockVisualiser.produceGraphFromBlockHash(session, block.getHash());
-            updateProgress(8, 10);
+            blockVisualiser.produceGraphFromBlockHashes(session, hashes);
+            updateProgress(maxProgress - 1, maxProgress);
 
             updateMessage("Closing Neo4j session");
             session.close();
             driver.close();
             selectedFileField.setText("");
-            updateProgress(10, 10);
+            updateProgress(maxProgress, maxProgress);
 
             updateMessage("Done");
             jobDone.play();
@@ -197,11 +213,67 @@ public class BlockVisualiserController {
             }
         };
 
+        if (blocks.size() > 0) {
+            progressBar.progressProperty().bind(task.progressProperty());
+            currentTask.textProperty().bind(task.messageProperty());
+            Thread uiThread = new Thread(task);
+            uiThread.setDaemon(true);
+            uiThread.start();
+        } else {
+            currentTask.setText("No blocks selected");
+        }
+
+    }
+
+    /**
+     * Add block to list of blocks that will be visualised
+     */
+    @FXML
+    private void addBlock() {
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception {
+
+                currentTask.setLayoutX(51);
+                progressSpinner.setVisible(true);
+                addBlockButton.setDisable(true);
+                updateMessage("Finding block");
+                updateProgress(1, 4);
+                Context.propagate(context);
+                if (inFileMode) {
+                    List<File> blockFiles = new ArrayList<File>();
+                    updateMessage("Adding block");
+                    updateProgress(2, 4);
+                    blockFiles.add(blockFile);
+                    BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
+                    String hash = blockFileLoader.next().getHash().toString();
+                    blocks.add(blockExplorer.getBlock(hash));
+                } else {
+                    blocks.add(blockExplorer.getBlock(blockHashField.getText()));
+                }
+                progressSpinner.setVisible(false);
+                currentTask.setLayoutX(26);
+                produceGraphButton.setDisable(false);
+                updateMessage("Block added");
+                updateProgress(4, 4);
+                updateAddedBlocksTable();
+
+            return null;
+            }
+        };
         progressBar.progressProperty().bind(task.progressProperty());
         currentTask.textProperty().bind(task.messageProperty());
-        Thread uiThread = new Thread(task);
-        uiThread.setDaemon(true);
-        uiThread.start();
+        Thread addBlockThread = new Thread(task);
+        addBlockThread.setDaemon(true);
+        addBlockThread.start();
+    }
+
+    /**
+     * Update table of added blocks
+     */
+    private void updateAddedBlocksTable() {
+        addedBlockHash.setCellValueFactory(new PropertyValueFactory<>("hash"));
+        addedBlocksTable.getItems().setAll(blocks);
     }
 
     /**
@@ -224,20 +296,35 @@ public class BlockVisualiserController {
      */
     @FXML
     private void validateBlockHash() {
-        if (blockHashField.getText().length() == 64) {
-            try {
-                BlockExplorer blockExplorer = new BlockExplorer();
-                blockExplorer.getBlock(blockHashField.getText());
-                produceGraphButton.setDisable(false);
-                currentTask.setText("");
-            } catch (APIException | IOException e) {
-                produceGraphButton.setDisable(true);
-                currentTask.setText("Invalid block hash, please try again");
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() throws Exception {
+                if (blockHashField.getText().length() == 64) {
+                    updateProgress(1,2);
+                    updateMessage("Finding block");
+                    try {
+                        BlockExplorer blockExplorer = new BlockExplorer();
+                        blockExplorer.getBlock(blockHashField.getText());
+                        addBlockButton.setDisable(false);
+                    } catch (APIException | IOException e) {
+                        addBlockButton.setDisable(true);
+                        updateMessage("Invalid block hash");
+                    }
+                } else {
+                    addBlockButton.setDisable(true);
+                    updateMessage("Invalid block hash");
+                }
+                updateProgress(2,2);
+                updateMessage("Block found");
+                return null;
             }
-        } else {
-            produceGraphButton.setDisable(true);
-            currentTask.setText("Invalid block hash, please try again");
-        }
+        };
+        progressBar.progressProperty().bind(task.progressProperty());
+        currentTask.textProperty().bind(task.messageProperty());
+        Thread findBlockThread = new Thread(task);
+        findBlockThread.setDaemon(true);
+        findBlockThread.start();
+
     }
 
     @FXML

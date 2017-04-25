@@ -5,20 +5,24 @@ import info.blockchain.api.blockexplorer.BlockExplorer;
 import info.blockchain.api.blockexplorer.Transaction;
 import org.neo4j.driver.v1.Session;
 
+import java.util.List;
+
 public class BlockVisualiser {
 
     /**
      * Produce graph of transactions found in block using Neo4j
      * @param session   Neo4j session you want to create the graph in
-     * @param hash  Hash of block you want to graph
+     * @param hashes    List of hashes for blocks you want to graph
      * @throws Exception    Block cannot be found with specified hash
      */
-    public void produceGraphFromBlockHash(Session session, String hash) throws Exception {
+    public void produceGraphFromBlockHashes(Session session, List<String> hashes) throws Exception {
         GraphGenerator graphGenerator = new GraphGenerator(session);
         BlockExplorer blockExplorer = new BlockExplorer();
-        Block block = blockExplorer.getBlock(hash);
-        for (Transaction transaction : block.getTransactions().subList(1, 300)) {
-            graphGenerator.graphTransaction(transaction);
+        for (String hash : hashes) {
+            Block block = blockExplorer.getBlock(hash);
+            for (Transaction transaction : block.getTransactions().subList(1, 300)) {
+                graphGenerator.graphTransaction(transaction);
+            }
         }
     }
 }

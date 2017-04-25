@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockVisualiserController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="320.0" prefWidth="640.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.BlockVisualiserController">
     <children>
         <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="640.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -17,7 +17,7 @@
                 <Image url="@../images/btc-logo.png" />
             </image>
         </ImageView>
-        <Text fill="WHITE" layoutX="58.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transaction grapher" wrappingWidth="148.13671875">
+        <Text fill="WHITE" layoutX="58.0" layoutY="29.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Block visualiser" wrappingWidth="148.13671875">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
@@ -32,19 +32,25 @@
         <TextField fx:id="blockHashField" layoutX="20.0" layoutY="95.0" onKeyReleased="#disableProduceGraphButton" prefHeight="27.0" prefWidth="539.0" visible="false" />
         <Button fx:id="fileSelectButton" layoutX="589.0" layoutY="95.0" mnemonicParsing="false" onAction="#openFileBrowser" text="..." />
         <Button fx:id="validateBlockHashButton" layoutX="561.0" layoutY="95.0" mnemonicParsing="false" onAction="#validateBlockHash" prefHeight="27.0" prefWidth="58.0" text="Find" visible="false" />
-        <Button fx:id="produceGraphButton" disable="true" layoutX="416.0" layoutY="167.0" mnemonicParsing="false" onAction="#confirmProduceGraph" prefHeight="27.0" prefWidth="120.0" text="Produce graph" />
-        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="134.0" prefHeight="25.0" prefWidth="600.0" progress="0.0" />
+        <Button fx:id="produceGraphButton" disable="true" layoutX="416.0" layoutY="277.0" mnemonicParsing="false" onAction="#confirmProduceGraph" prefHeight="27.0" prefWidth="120.0" text="Produce graph" />
+        <ProgressBar fx:id="progressBar" layoutX="20.0" layoutY="244.0" prefHeight="25.0" prefWidth="600.0" progress="0.0" />
         <Button layoutX="545.0" mnemonicParsing="false" onAction="#returnToMainMenu" prefHeight="47.0" prefWidth="95.0" style="-fx-background-color: #4a4d57;" text="Main menu" textAlignment="CENTER" textFill="WHITE">
             <font>
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-        <Label fx:id="currentTask" layoutX="46.0" layoutY="164.0" prefHeight="17.0" prefWidth="369.0" />
-      <Button fx:id="analyseButton" disable="true" layoutX="545.0" layoutY="167.0" mnemonicParsing="false" onAction="#openBlockAnalyser" prefHeight="27.0" prefWidth="73.0" text="Analyse" />
-      <ProgressIndicator fx:id="progressSpinner" layoutX="20.0" layoutY="163.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
-         <cursor>
-            <Cursor fx:constant="DEFAULT" />
-         </cursor>
-      </ProgressIndicator>
+        <Label fx:id="currentTask" layoutX="46.0" layoutY="274.0" prefHeight="17.0" prefWidth="369.0" />
+        <Button fx:id="analyseButton" disable="true" layoutX="545.0" layoutY="277.0" mnemonicParsing="false" onAction="#openBlockAnalyser" prefHeight="27.0" prefWidth="73.0" text="Analyse" />
+        <ProgressIndicator fx:id="progressSpinner" layoutX="20.0" layoutY="273.0" prefHeight="18.0" prefWidth="22.0" progress="-1.0" visible="false">
+            <cursor>
+                <Cursor fx:constant="DEFAULT" />
+            </cursor>
+        </ProgressIndicator>
+        <Button fx:id="addBlockButton" disable="true" layoutX="546.0" layoutY="129.0" mnemonicParsing="false" onAction="#addBlock" prefHeight="106.0" prefWidth="73.0" text="Add block" textAlignment="CENTER" wrapText="true" />
+        <TableView fx:id="addedBlocksTable" layoutX="20.0" layoutY="129.0" prefHeight="106.0" prefWidth="517.0">
+            <columns>
+                <TableColumn fx:id="addedBlockHash" prefWidth="500.0" text="Added blocks" />
+            </columns>
+        </TableView>
     </children>
 </Pane>
