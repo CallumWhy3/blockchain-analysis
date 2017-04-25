@@ -61,6 +61,7 @@ public class BlockAnalyserController {
 
             progressSpinner.setVisible(true);
             currentTask.setLayoutX(51);
+            analyseButton.setDisable(true);
             updateProgress(1, 5);
 
             updateTitle("Finding block");
