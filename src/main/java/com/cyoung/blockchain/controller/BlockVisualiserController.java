@@ -94,7 +94,6 @@ public class BlockVisualiserController {
         ToggleGroup group = new ToggleGroup();
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
             public void changed(ObservableValue<? extends Toggle> ov, Toggle toggle, Toggle new_toggle) {
-                produceGraphButton.setDisable(true);
                 if (new_toggle == null) {
                     useBlockFileMode();
                 } else {
@@ -175,6 +174,7 @@ public class BlockVisualiserController {
             AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
             inputModeToggleButton.setDisable(true);
             fileSelectButton.setDisable(true);
+            validateBlockHashButton.setDisable(true);
             produceGraphButton.setDisable(true);
             Context.propagate(context);
             updateProgress(2, maxProgress);
@@ -205,8 +205,6 @@ public class BlockVisualiserController {
             jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
-            inputModeToggleButton.setDisable(false);
-            fileSelectButton.setDisable(false);
             analyseButton.setDisable(false);
 
             return null;
@@ -300,22 +298,29 @@ public class BlockVisualiserController {
             @Override
             public Void call() throws Exception {
                 if (blockHashField.getText().length() == 64) {
+                    currentTask.setLayoutX(51);
+                    progressSpinner.setVisible(true);
                     updateProgress(1,2);
                     updateMessage("Finding block");
                     try {
                         BlockExplorer blockExplorer = new BlockExplorer();
                         blockExplorer.getBlock(blockHashField.getText());
                         addBlockButton.setDisable(false);
+                        updateProgress(2,2);
+                        updateMessage("Block found");
+
                     } catch (APIException | IOException e) {
                         addBlockButton.setDisable(true);
+                        updateProgress(2,2);
                         updateMessage("Invalid block hash");
                     }
                 } else {
                     addBlockButton.setDisable(true);
+                    updateProgress(2,2);
                     updateMessage("Invalid block hash");
                 }
-                updateProgress(2,2);
-                updateMessage("Block found");
+                progressSpinner.setVisible(false);
+                currentTask.setLayoutX(26);
                 return null;
             }
         };
@@ -325,11 +330,6 @@ public class BlockVisualiserController {
         findBlockThread.setDaemon(true);
         findBlockThread.start();
 
-    }
-
-    @FXML
-    private void disableProduceGraphButton() {
-        produceGraphButton.setDisable(true);
     }
 
     /**

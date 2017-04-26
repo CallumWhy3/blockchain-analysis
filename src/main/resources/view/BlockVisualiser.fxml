@@ -29,7 +29,7 @@
         </Text>
         <ToggleButton fx:id="inputModeToggleButton" layoutX="394.0" layoutY="60.0" mnemonicParsing="false" prefHeight="27.0" prefWidth="226.0" text="Change input mode" />
         <TextField fx:id="selectedFileField" disable="true" editable="false" layoutX="20.0" layoutY="95.0" prefHeight="27.0" prefWidth="566.0" />
-        <TextField fx:id="blockHashField" layoutX="20.0" layoutY="95.0" onKeyReleased="#disableProduceGraphButton" prefHeight="27.0" prefWidth="539.0" visible="false" />
+        <TextField fx:id="blockHashField" layoutX="20.0" layoutY="95.0" prefHeight="27.0" prefWidth="539.0" visible="false" />
         <Button fx:id="fileSelectButton" layoutX="589.0" layoutY="95.0" mnemonicParsing="false" onAction="#openFileBrowser" text="..." />
         <Button fx:id="validateBlockHashButton" layoutX="561.0" layoutY="95.0" mnemonicParsing="false" onAction="#validateBlockHash" prefHeight="27.0" prefWidth="58.0" text="Find" visible="false" />
         <Button fx:id="produceGraphButton" disable="true" layoutX="416.0" layoutY="277.0" mnemonicParsing="false" onAction="#confirmProduceGraph" prefHeight="27.0" prefWidth="120.0" text="Produce graph" />
@@ -46,10 +46,10 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ProgressIndicator>
-        <Button fx:id="addBlockButton" disable="true" layoutX="546.0" layoutY="129.0" mnemonicParsing="false" onAction="#addBlock" prefHeight="106.0" prefWidth="73.0" text="Add block" textAlignment="CENTER" wrapText="true" />
-        <TableView fx:id="addedBlocksTable" layoutX="20.0" layoutY="129.0" prefHeight="106.0" prefWidth="517.0">
+        <Button fx:id="addBlockButton" disable="true" layoutX="561.0" layoutY="129.0" mnemonicParsing="false" onAction="#addBlock" prefHeight="106.0" prefWidth="58.0" text="Add block" textAlignment="CENTER" wrapText="true" />
+        <TableView fx:id="addedBlocksTable" layoutX="20.0" layoutY="129.0" prefHeight="106.0" prefWidth="539.0">
             <columns>
-                <TableColumn fx:id="addedBlockHash" prefWidth="500.0" text="Added blocks" />
+                <TableColumn fx:id="addedBlockHash" prefWidth="523.0" resizable="false" text="Added blocks" />
             </columns>
         </TableView>
     </children>

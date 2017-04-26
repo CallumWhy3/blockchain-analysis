@@ -91,7 +91,6 @@ public class BlockAnalyserController {
             jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
-            analyseButton.setDisable(false);
             visualiseButton.setDisable(false);
             updateProgress(5, 5);
 

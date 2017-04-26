@@ -107,7 +107,6 @@ public class AnomalyVisualiserController {
             jobDone.play();
             progressSpinner.setVisible(false);
             currentTask.setLayoutX(26);
-            produceGraphButton.setDisable(false);
             analyseButton.setDisable(false);
 
             return null;
