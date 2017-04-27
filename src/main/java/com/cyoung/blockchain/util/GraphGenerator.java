@@ -39,6 +39,7 @@ public class GraphGenerator {
             double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
             session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
             session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(o:Output {name:'" + inputAddress + "'}) MERGE(i)-[:MATCH]->(o)");
         }
     }
 
@@ -48,12 +49,12 @@ public class GraphGenerator {
      */
     private void graphOutputs(Transaction trans) {
         for (Output o : trans.getOutputs()) {
-            String outputHash = o.getAddress();
+            String outputAddress = o.getAddress();
             // 1 Satoshi = 0.00000001 Bitcoin
             double outputValue = o.getValue() * 0.00000001;
-            session.run("MERGE(o:Output {name:'" + outputHash + "'})");
-            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputHash + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
-            session.run("MATCH(o:Output {name:'" + outputHash + "'}),(i:Input {name:'" + outputHash + "'}) MERGE(o)-[:MATCH]->(i)");
+            session.run("MERGE(o:Output {name:'" + outputAddress + "'})");
+            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputAddress + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
+            session.run("MATCH(o:Output {name:'" + outputAddress + "'}),(i:Input {name:'" + outputAddress + "'}) MERGE(o)-[:MATCH]->(i)");
         }
     }
 }
