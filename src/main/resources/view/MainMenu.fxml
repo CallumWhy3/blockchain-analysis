@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.*?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="173.0" prefWidth="468.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="468.0" style="-fx-background-color: #eaeadf;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.cyoung.blockchain.controller.MainMenuController">
     <children>
         <Rectangle fill="#4a4d57" height="48.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="468.0" />
         <ImageView fitHeight="35.0" fitWidth="35.0" layoutX="7.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
@@ -25,12 +25,17 @@
                 <Font name="Arial Rounded MT Bold" size="14.0" />
             </font>
         </Button>
-      <Button layoutX="109.0" layoutY="71.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
+      <Button layoutX="109.0" layoutY="62.0" mnemonicParsing="false" onAction="#openBlockVisualiser" prefHeight="35.0" prefWidth="250.0" text="Start">
          <font>
             <Font size="14.0" />
          </font>
       </Button>
-      <Button layoutX="109.0" layoutY="117.0" mnemonicParsing="false" onAction="#openOptionsMenu" prefHeight="35.0" prefWidth="250.0" text="Options">
+      <Button layoutX="109.0" layoutY="108.0" mnemonicParsing="false" onAction="#openOptionsMenu" prefHeight="35.0" prefWidth="250.0" text="Options">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </Button>
+      <Button layoutX="109.0" layoutY="154.0" mnemonicParsing="false" onAction="#openLiveBlockAnalyser" prefHeight="35.0" prefWidth="250.0" text="Live Detection (WIP)">
          <font>
             <Font size="14.0" />
          </font>

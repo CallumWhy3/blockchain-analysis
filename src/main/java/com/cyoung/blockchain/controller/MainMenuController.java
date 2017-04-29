@@ -50,6 +50,21 @@ public class MainMenuController {
     }
 
     /**
+     * Open live block analyser
+     * @param event Event from button
+     * @throws IOException  FXML file cannot be found
+     */
+    @FXML
+    private void openLiveBlockAnalyser(ActionEvent event) throws IOException {
+        parent = FXMLLoader.load(getClass().getResource("/view/LiveBlockAnalyser.fxml"));
+        scene = new Scene(parent);
+        scene.getStylesheets().add("/css/style.css");
+        stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    /**
      * Close application
      * @param event Event from button
      */

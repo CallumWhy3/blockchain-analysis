@@ -97,8 +97,8 @@
         </Text>
         <TableView fx:id="anomalousTransactionTable" layoutX="20.0" layoutY="193.0" prefHeight="150.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="weightColumn" maxWidth="68.0" prefWidth="68.0" resizable="false" text="Weight" />
-                <TableColumn fx:id="hashColumn" prefWidth="510.0" resizable="false" text="Transaction hash" />
+                <TableColumn fx:id="weightColumn" prefWidth="70.0" resizable="false" text="Weight" />
+                <TableColumn fx:id="hashColumn" prefWidth="512.0" resizable="false" text="Transaction hash" />
             </columns>
         </TableView>
         <Text layoutX="20.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reoccurring input addresses:" wrappingWidth="215.0">
@@ -108,8 +108,8 @@
         </Text>
         <TableView fx:id="reoccurringInputsTable" layoutX="20.0" layoutY="378.0" prefHeight="79.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="inputAddress" prefWidth="480.0" resizable="false" text="Address" />
-                <TableColumn fx:id="inputOccurrences" prefWidth="98.0" resizable="false" text="Occurrences" />
+                <TableColumn fx:id="inputAddress" prefWidth="482.0" resizable="false" text="Address" />
+                <TableColumn fx:id="inputOccurrences" prefWidth="100.0" resizable="false" text="Occurrences" />
             </columns>
         </TableView>
         <Text layoutX="20.0" layoutY="479.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Reoccurring output addresses:" wrappingWidth="215.0">
@@ -119,8 +119,8 @@
         </Text>
         <TableView fx:id="reoccurringOutputsTable" layoutX="20.0" layoutY="489.0" prefHeight="79.0" prefWidth="600.0">
             <columns>
-                <TableColumn fx:id="outputAddress" prefWidth="480.0" resizable="false" text="Address" />
-                <TableColumn fx:id="outputOccurrences" prefWidth="98.0" resizable="false" text="Occurrences" />
+                <TableColumn fx:id="outputAddress" prefWidth="482.0" resizable="false" text="Address" />
+                <TableColumn fx:id="outputOccurrences" prefWidth="100.0" resizable="false" text="Occurrences" />
             </columns>
         </TableView>
     </children>
