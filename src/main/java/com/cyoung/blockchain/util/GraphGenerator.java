@@ -17,6 +17,26 @@ public class GraphGenerator {
     }
 
     /**
+     * Graph bitcoin coinbase transaction in Neo4j
+     * @param trans Coinbase transaction you want to graph
+     */
+    public void graphCoinbaseTransaction(Transaction trans) {
+        String transHash = trans.getHash();
+        session.run("CREATE(t:Transaction {hash:'" + transHash + "', time:'" + trans.getTime() + "', index:'" + trans.getIndex() + "', size:'" + trans.getSize() + "'})");
+
+        // Coinbase transactions have no input value so use the value from its only output instead
+        Output coinbaseInput = trans.getOutputs().get(0);
+        String inputAddress = "COINBASE" + trans.getBlockHeight();
+        // 1 Satoshi = 0.00000001 Bitcoin
+        double inputValue = coinbaseInput.getValue() * 0.00000001;
+        session.run("CREATE(i:Input {name:'" + inputAddress + "'})");
+        session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+
+        graphOutputs(trans);
+        logger.info("Coinbase transaction " + transHash + " graphed successfully");
+    }
+
+    /**
      * Graph bitcoin transaction in Neo4j
      * @param trans Transaction you want to graph
      */

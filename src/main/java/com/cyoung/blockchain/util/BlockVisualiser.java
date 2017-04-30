@@ -20,7 +20,12 @@ public class BlockVisualiser {
         BlockExplorer blockExplorer = new BlockExplorer();
         for (String hash : hashes) {
             Block block = blockExplorer.getBlock(hash);
-            for (Transaction transaction : block.getTransactions().subList(1, 300)) {
+
+            // Graph coinbase transaction
+            graphGenerator.graphCoinbaseTransaction(block.getTransactions().get(0));
+
+            // Graph other transactions
+            for (Transaction transaction : block.getTransactions().subList(1, block.getTransactions().size())) {
                 graphGenerator.graphTransaction(transaction);
             }
         }
