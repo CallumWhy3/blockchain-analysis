@@ -198,7 +198,6 @@ public class BlockVisualiserController {
             updateMessage("Closing Neo4j session");
             session.close();
             driver.close();
-            selectedFileField.setText("");
             updateProgress(maxProgress, maxProgress);
 
             updateMessage("Done");
@@ -244,8 +243,17 @@ public class BlockVisualiserController {
                     updateProgress(2, 4);
                     blockFiles.add(blockFile);
                     BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
-                    String hash = blockFileLoader.next().getHash().toString();
-                    blocks.add(blockExplorer.getBlock(hash));
+
+                    if (blockFileLoader.hasNext()) {
+                        String hash = blockFileLoader.next().getHash().toString();
+                        blocks.add(blockExplorer.getBlock(hash));
+                    } else {
+                        progressSpinner.setVisible(false);
+                        currentTask.setLayoutX(26);
+                        updateMessage("Invalid file, no block added");
+                        updateProgress(4, 4);
+                        return null;
+                    }
                 } else {
                     blocks.add(blockExplorer.getBlock(blockHashField.getText()));
                 }
