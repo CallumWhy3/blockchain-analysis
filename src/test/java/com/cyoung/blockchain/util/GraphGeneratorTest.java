@@ -130,32 +130,36 @@ public class GraphGeneratorTest {
         result = session.run("MATCH (t:Transaction) RETURN t.index");
         assertEquals("1", result.next().values().get(0).asString());
 
-        // Validate 2 input nodes with names address1 and address2
-        result = session.run("MATCH (i:Input) RETURN i.name");
+        // Validate 2 input nodes with address address1 and address2
+        result = session.run("MATCH (i:Input) RETURN i.address");
         List<Record> inputNameList = result.list();
         assertEquals(2, inputNameList.size());
         assertEquals("address1", inputNameList.get(0).values().get(0).asString());
         assertEquals("address2", inputNameList.get(1).values().get(0).asString());
 
-        // Validate 2 output nodes with names address3 and address4
-        result = session.run("MATCH (o:Output) RETURN o.name");
+        // Validate 2 output nodes with addresses address3 and address4
+        result = session.run("MATCH (o:Output) RETURN o.address");
         List<Record> outputNameList = result.list();
         assertEquals(2, outputNameList.size());
         assertEquals("address3", outputNameList.get(0).values().get(0).asString());
         assertEquals("address4", outputNameList.get(1).values().get(0).asString());
 
         // Validate 2 input relationships with values 1 and 2
-        result = session.run("MATCH (i:Input)-[n:INPUT]->(t:Transaction) RETURN n.value");
+        result = session.run("MATCH (i:Input)-[n:INPUT]->(t:Transaction) RETURN n");
         List<Record> inputValueList = result.list();
         assertEquals(2, inputValueList.size());
-        assertEquals((float)2.0, inputValueList.get(0).values().get(0).asFloat());
-        assertEquals((float)1.0, inputValueList.get(1).values().get(0).asFloat());
+        result = session.run("MATCH (i:Input)-[n:INPUT{value:1}]->(t:Transaction) RETURN n");
+        assertEquals(1, result.list().size());
+        result = session.run("MATCH (i:Input)-[n:INPUT{value:2}]->(t:Transaction) RETURN n");
+        assertEquals(1, result.list().size());
 
         // Validate 2 output relationships with values 3 and 4
-        result = session.run("MATCH (t:Transaction)-[n:OUTPUT]->(o:Output) RETURN n.value");
+        result = session.run("MATCH (t:Transaction)-[n:OUTPUT]->(o:Output) RETURN n");
         List<Record> outputValueList = result.list();
         assertEquals(2, outputValueList.size());
-        assertEquals((float)4.0, outputValueList.get(0).values().get(0).asFloat());
-        assertEquals((float)3.0, outputValueList.get(1).values().get(0).asFloat());
+        result = session.run("MATCH (t:Transaction)-[n:OUTPUT{value:3}]->(o:Output) RETURN n");
+        assertEquals(1, result.list().size());
+        result = session.run("MATCH (t:Transaction)-[n:OUTPUT{value:4}]->(o:Output) RETURN n");
+        assertEquals(1, result.list().size());
     }
 }
