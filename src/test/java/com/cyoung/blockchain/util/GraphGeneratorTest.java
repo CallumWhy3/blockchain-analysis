@@ -44,7 +44,69 @@ public class GraphGeneratorTest {
     }
 
     @Test
-    public void shouldCreateValidNeo4jGraphWith1Transaction() {
+    public void shouldCreateNeo4jGraphOfCoinbaseTransaction() {
+        // Coinbase transactions have no inputs
+        List<Input> inputs = new ArrayList<>();
+
+        // Create output for coinbase transaction
+        Output output = new Output(1, 100000000, "address1", 1, "output1", true);
+        List<Output> outputs = new ArrayList<>();
+        outputs.addAll(Collections.singletonList(output));
+
+        // Create coinbase transaction
+        Transaction coinbaseTransaction = new Transaction(false, 10, 1, 1, "", "hash", 1, 1, 5173, inputs, outputs);
+
+
+        graphGenerator.graphCoinbaseTransaction(coinbaseTransaction);
+        StatementResult result;
+
+        // Validate 1 transaction node, 1 input node and 1 output node has been created
+        result = session.run("MATCH (t:Transaction) RETURN t");
+        assertEquals(1, result.list().size());
+        result = session.run("MATCH (i:Input) RETURN i");
+        assertEquals(1, result.list().size());
+        result = session.run("MATCH (o:Output) RETURN o");
+        assertEquals(1, result.list().size());
+
+        // Validate coinbase transaction node hash is equal to 'hash'
+        result = session.run("MATCH (t:Transaction) RETURN t.hash");
+        assertEquals("hash", result.next().values().get(0).asString());
+
+        // Validate coinbase transaction node time is equal to '1'
+        result = session.run("MATCH (t:Transaction) RETURN t.time");
+        assertEquals("1", result.next().values().get(0).asString());
+
+        // Validate coinbase transaction node index is equal to '1'
+        result = session.run("MATCH (t:Transaction) RETURN t.index");
+        assertEquals("1", result.next().values().get(0).asString());
+
+        // Validate 1 input node with address equal to 'COINBASE' concatenated with block height
+        result = session.run("MATCH (i:Input) RETURN i.address");
+        List<Record> inputNameList = result.list();
+        assertEquals(1, inputNameList.size());
+        assertEquals("COINBASE10", inputNameList.get(0).values().get(0).asString());
+
+        // Validate 1 output node with address 'address1'
+        result = session.run("MATCH (o:Output) RETURN o.address");
+        List<Record> outputNameList = result.list();
+        assertEquals(1, outputNameList.size());
+        assertEquals("address1", outputNameList.get(0).values().get(0).asString());
+
+        // Validate 1 input relationship with values 1
+        result = session.run("MATCH (i:Input)-[n:INPUT]->(t:Transaction) RETURN n.value");
+        List<Record> inputValueList = result.list();
+        assertEquals(1, inputValueList.size());
+        assertEquals((float)1.0, inputValueList.get(0).values().get(0).asFloat());
+
+        // Validate 1 output relationship with value 1
+        result = session.run("MATCH (t:Transaction)-[n:OUTPUT]->(o:Output) RETURN n.value");
+        List<Record> outputValueList = result.list();
+        assertEquals(1, outputValueList.size());
+        assertEquals((float)1.0, outputValueList.get(0).values().get(0).asFloat());
+    }
+
+    @Test
+    public void shouldCreateNeo4jGraphOfNormalTransaction() {
         graphGenerator.graphTransaction(validTransaction);
         StatementResult result;
 

@@ -29,8 +29,8 @@ public class GraphGenerator {
         String inputAddress = "COINBASE" + trans.getBlockHeight();
         // 1 Satoshi = 0.00000001 Bitcoin
         double inputValue = coinbaseInput.getValue() * 0.00000001;
-        session.run("CREATE(i:Input {name:'" + inputAddress + "'})");
-        session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+        session.run("CREATE(i:Input {address:'" + inputAddress + "', name:'" + inputAddress + "'})");
+        session.run("MATCH(i:Input {address:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
 
         graphOutputs(trans);
         logger.info("Coinbase transaction " + transHash + " graphed successfully");
@@ -57,9 +57,9 @@ public class GraphGenerator {
             String inputAddress = i.getPreviousOutput().getAddress();
             // 1 Satoshi = 0.00000001 Bitcoin
             double inputValue = i.getPreviousOutput().getValue() * 0.00000001;
-            session.run("MERGE(i:Input {name:'" + inputAddress + "'})");
-            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
-            session.run("MATCH(i:Input {name:'" + inputAddress + "'}),(o:Output {name:'" + inputAddress + "'}) MERGE(i)-[:MATCH]->(o)");
+            session.run("MERGE(i:Input {address:'" + inputAddress + "', name:'" + inputAddress + "'})");
+            session.run("MATCH(i:Input {address:'" + inputAddress + "'}),(t:Transaction {hash:'" + trans.getHash() + "'}) CREATE(i)-[:INPUT{value: " + inputValue + "}]->(t)");
+            session.run("MATCH(i:Input {address:'" + inputAddress + "'}),(o:Output {address:'" + inputAddress + "'}) MERGE(i)-[:MATCH]->(o)");
         }
     }
 
@@ -72,9 +72,9 @@ public class GraphGenerator {
             String outputAddress = o.getAddress();
             // 1 Satoshi = 0.00000001 Bitcoin
             double outputValue = o.getValue() * 0.00000001;
-            session.run("MERGE(o:Output {name:'" + outputAddress + "'})");
-            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {name:'" + outputAddress + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
-            session.run("MATCH(o:Output {name:'" + outputAddress + "'}),(i:Input {name:'" + outputAddress + "'}) MERGE(o)-[:MATCH]->(i)");
+            session.run("MERGE(o:Output {address:'" + outputAddress + "', name:'" + outputAddress + "'})");
+            session.run("MATCH(t:Transaction {hash:'" + trans.getHash() + "'}),(o:Output {address:'" + outputAddress + "'}) CREATE(t)-[:OUTPUT{value: " + outputValue + "}]->(o)");
+            session.run("MATCH(o:Output {address:'" + outputAddress + "'}),(i:Input {address:'" + outputAddress + "'}) MERGE(o)-[:MATCH]->(i)");
         }
     }
 }
