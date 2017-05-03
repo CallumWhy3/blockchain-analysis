@@ -1,7 +1,7 @@
 package com.cyoung.blockchain.util;
 
 import com.cyoung.blockchain.controller.OptionsMenuController;
-import com.cyoung.blockchain.domain.BitcoinTransaction;
+import com.cyoung.blockchain.object.BitcoinTransaction;
 import info.blockchain.api.blockexplorer.Block;
 import info.blockchain.api.blockexplorer.Transaction;
 import org.slf4j.Logger;

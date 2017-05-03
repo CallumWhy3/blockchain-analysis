@@ -1,10 +1,8 @@
 package com.cyoung.blockchain.controller;
 
-import com.cyoung.blockchain.domain.BitcoinTransaction;
+import com.cyoung.blockchain.object.BitcoinTransaction;
 import com.cyoung.blockchain.util.BlockAnalyser;
-import com.cyoung.blockchain.util.BlockVisualiser;
 import info.blockchain.api.blockexplorer.Block;
-import info.blockchain.api.blockexplorer.BlockExplorer;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

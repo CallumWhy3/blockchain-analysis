@@ -1,8 +1,8 @@
 package com.cyoung.blockchain.controller;
 
-import com.cyoung.blockchain.domain.BitcoinTransaction;
-import com.cyoung.blockchain.domain.ReoccurringInputRow;
-import com.cyoung.blockchain.domain.ReoccurringOutputRow;
+import com.cyoung.blockchain.object.BitcoinTransaction;
+import com.cyoung.blockchain.object.ReoccurringInputRow;
+import com.cyoung.blockchain.object.ReoccurringOutputRow;
 import com.cyoung.blockchain.util.BlockAnalyser;
 import info.blockchain.api.blockexplorer.Block;
 import info.blockchain.api.blockexplorer.Input;

@@ -1,11 +1,11 @@
-package com.cyoung.blockchain.domain;
+package com.cyoung.blockchain.object;
 
-public class ReoccurringOutputRow {
+public class ReoccurringInputRow {
 
     private String address;
     private int occurrences;
 
-    public ReoccurringOutputRow(String address, int occurrences) {
+    public ReoccurringInputRow(String address, int occurrences) {
         this.address = address;
         this.occurrences = occurrences;
     }

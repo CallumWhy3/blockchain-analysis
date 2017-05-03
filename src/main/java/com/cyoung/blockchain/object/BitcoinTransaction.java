@@ -1,4 +1,4 @@
-package com.cyoung.blockchain.domain;
+package com.cyoung.blockchain.object;
 
 import info.blockchain.api.blockexplorer.Input;
 import info.blockchain.api.blockexplorer.Output;

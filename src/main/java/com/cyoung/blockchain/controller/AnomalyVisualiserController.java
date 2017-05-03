@@ -1,6 +1,6 @@
 package com.cyoung.blockchain.controller;
 
-import com.cyoung.blockchain.domain.BitcoinTransaction;
+import com.cyoung.blockchain.object.BitcoinTransaction;
 import com.cyoung.blockchain.util.BlockAnalyser;
 import com.cyoung.blockchain.util.GraphGenerator;
 import com.cyoung.blockchain.util.PropertyLoader;
