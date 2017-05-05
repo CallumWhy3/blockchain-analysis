@@ -117,6 +117,7 @@ public class BlockVisualiserController {
         fileSelectButton.setVisible(false);
         blockHashField.setVisible(true);
         validateBlockHashButton.setVisible(true);
+        addBlockButton.setDisable(true);
         inFileMode = false;
     }
 
@@ -127,6 +128,7 @@ public class BlockVisualiserController {
         validateBlockHashButton.setVisible(false);
         selectedFileField.setVisible(true);
         fileSelectButton.setVisible(true);
+        addBlockButton.setDisable(true);
         inFileMode = true;
     }
 
@@ -339,7 +341,6 @@ public class BlockVisualiserController {
         Thread findBlockThread = new Thread(task);
         findBlockThread.setDaemon(true);
         findBlockThread.start();
-
     }
 
     /**
