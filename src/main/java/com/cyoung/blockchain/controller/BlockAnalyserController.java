@@ -64,35 +64,35 @@ public class BlockAnalyserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
-            progressSpinner.setVisible(true);
-            currentTask.setLayoutX(51);
-            analyseButton.setDisable(true);
-            updateProgress(1, 5);
+                progressSpinner.setVisible(true);
+                currentTask.setLayoutX(51);
+                analyseButton.setDisable(true);
+                updateProgress(1, 5);
 
-            updateTitle("Preparing analyser");
-            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
-            updateProgress(2, 5);
+                updateTitle("Preparing analyser");
+                AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
+                updateProgress(2, 5);
 
-            updateTitle("Finding anomalous transactions");
-            BlockAnalyser blockAnalyser = new BlockAnalyser();
-            String message = "";
-            int counter = 1;
-            for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions(BlockVisualiserController.blocks)) {
-                message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
-                updateMessage(message);
-                logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
-                counter++;
-            }
-            updateProgress(4, 5);
+                updateTitle("Finding anomalous transactions");
+                BlockAnalyser blockAnalyser = new BlockAnalyser();
+                String message = "";
+                int counter = 1;
+                for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions(BlockVisualiserController.blocks)) {
+                    message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
+                    updateMessage(message);
+                    logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
+                    counter++;
+                }
+                updateProgress(4, 5);
 
-            updateTitle("Done");
-            jobDone.play();
-            progressSpinner.setVisible(false);
-            currentTask.setLayoutX(26);
-            visualiseButton.setDisable(false);
-            updateProgress(5, 5);
+                updateTitle("Done");
+                jobDone.play();
+                progressSpinner.setVisible(false);
+                currentTask.setLayoutX(26);
+                visualiseButton.setDisable(false);
+                updateProgress(5, 5);
 
-            return null;
+                return null;
             }
         };
 

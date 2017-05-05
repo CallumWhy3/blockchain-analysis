@@ -79,37 +79,37 @@ public class AnomalyVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
-            progressSpinner.setVisible(true);
-            currentTask.setLayoutX(51);
+                progressSpinner.setVisible(true);
+                currentTask.setLayoutX(51);
 
-            updateMessage("Creating Neo4j session");
-            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
-            produceGraphButton.setDisable(true);
-            String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
-            String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
-            Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
-            Session session = driver.session();
-            updateProgress(1, 4);
+                updateMessage("Creating Neo4j session");
+                AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
+                produceGraphButton.setDisable(true);
+                String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
+                String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
+                Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
+                Session session = driver.session();
+                updateProgress(1, 4);
 
-            updateMessage("Creating nodes and relationships");
-            GraphGenerator graphGenerator = new GraphGenerator(session);
-            for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
-                graphGenerator.graphTransaction(t.getTransaction());
-            }
-            updateProgress(3, 4);
+                updateMessage("Creating nodes and relationships");
+                GraphGenerator graphGenerator = new GraphGenerator(session);
+                for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
+                    graphGenerator.graphTransaction(t.getTransaction());
+                }
+                updateProgress(3, 4);
 
-            updateMessage("Closing Neo4j session");
-            session.close();
-            driver.close();
-            updateProgress(4, 4);
+                updateMessage("Closing Neo4j session");
+                session.close();
+                driver.close();
+                updateProgress(4, 4);
 
-            updateMessage("Done");
-            jobDone.play();
-            progressSpinner.setVisible(false);
-            currentTask.setLayoutX(26);
-            analyseButton.setDisable(false);
+                updateMessage("Done");
+                jobDone.play();
+                progressSpinner.setVisible(false);
+                currentTask.setLayoutX(26);
+                analyseButton.setDisable(false);
 
-            return null;
+                return null;
             }
         };
 

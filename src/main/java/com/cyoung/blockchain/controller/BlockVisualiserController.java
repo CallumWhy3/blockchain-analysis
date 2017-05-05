@@ -68,10 +68,10 @@ public class BlockVisualiserController {
     private Label currentTask;
 
     @FXML
-    private TableView addedBlocksTable;
+    private TableView selectedBlockTable;
 
     @FXML
-    private TableColumn<Block, String> addedBlockHash;
+    private TableColumn<Block, String> blockHashColumn;
 
     /**
      * Initialise file chooser and input mode toggle button
@@ -79,6 +79,8 @@ public class BlockVisualiserController {
     @FXML
     private void initialize() {
         blocks = new ArrayList<>();
+
+        // Initialise file chooser and add extension filter so only .dat files can be selected
         fc = new FileChooser();
         FileChooser.ExtensionFilter extFilter =
                 new FileChooser.ExtensionFilter("Block files (*.dat)", "*.dat");
@@ -90,6 +92,9 @@ public class BlockVisualiserController {
         initializeToggleButton();
     }
 
+    /**
+     * Set behaviour of toggle button in its different states
+     */
     private void initializeToggleButton() {
         ToggleGroup group = new ToggleGroup();
         group.selectedToggleProperty().addListener(new ChangeListener<Toggle>(){
@@ -164,52 +169,55 @@ public class BlockVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
-            currentTask.setLayoutX(51);
-            progressSpinner.setVisible(true);
-            int numberOfBlocks = blocks.size();
-            int maxProgress = numberOfBlocks + 5;
-            updateProgress(1, maxProgress);
+                currentTask.setLayoutX(51);
+                progressSpinner.setVisible(true);
+                // Scale progress bar with number of blocks being visualised
+                int numberOfBlocks = blocks.size();
+                int maxProgress = numberOfBlocks + 5;
+                updateProgress(1, maxProgress);
 
-            updateMessage("Preparing API");
-            AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
-            inputModeToggleButton.setDisable(true);
-            fileSelectButton.setDisable(true);
-            validateBlockHashButton.setDisable(true);
-            produceGraphButton.setDisable(true);
-            Context.propagate(context);
-            updateProgress(2, maxProgress);
+                updateMessage("Preparing API");
+                AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
+                inputModeToggleButton.setDisable(true);
+                fileSelectButton.setDisable(true);
+                validateBlockHashButton.setDisable(true);
+                produceGraphButton.setDisable(true);
+                Context.propagate(context);
+                updateProgress(2, maxProgress);
 
-            updateMessage("Creating Neo4j session");
-            String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
-            String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
-            Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
-            Session session = driver.session();
-            updateProgress(3, maxProgress);
+                updateMessage("Creating Neo4j session");
+                String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
+                String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
+                Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
+                Session session = driver.session();
+                updateProgress(3, maxProgress);
 
-            updateMessage("Creating nodes and relationships");
-            List<String> hashes = new ArrayList<>();
-            for (Block block : blocks) {
-                hashes.add(block.getHash());
-            }
-            BlockVisualiser blockVisualiser = new BlockVisualiser();
-            blockVisualiser.produceGraphFromBlockHashes(session, hashes);
-            updateProgress(maxProgress - 1, maxProgress);
+                updateMessage("Creating nodes and relationships");
+                // Create list of block hashes for use in bock visualiser
+                List<String> hashes = new ArrayList<>();
+                for (Block block : blocks) {
+                    hashes.add(block.getHash());
+                }
+                BlockVisualiser blockVisualiser = new BlockVisualiser();
+                blockVisualiser.produceGraphFromBlockHashes(session, hashes);
+                updateProgress(maxProgress - 1, maxProgress);
 
-            updateMessage("Closing Neo4j session");
-            session.close();
-            driver.close();
-            updateProgress(maxProgress, maxProgress);
+                updateMessage("Closing Neo4j session");
+                session.close();
+                driver.close();
+                updateProgress(maxProgress, maxProgress);
 
-            updateMessage("Done");
-            jobDone.play();
-            progressSpinner.setVisible(false);
-            currentTask.setLayoutX(26);
-            analyseButton.setDisable(false);
+                updateMessage("Done");
+                jobDone.play();
+                progressSpinner.setVisible(false);
+                currentTask.setLayoutX(26);
+                analyseButton.setDisable(false);
 
-            return null;
+                return null;
             }
         };
 
+        // If blocks have been selected then start the above task
         if (blocks.size() > 0) {
             progressBar.progressProperty().bind(task.progressProperty());
             currentTask.textProperty().bind(task.messageProperty());
@@ -219,7 +227,6 @@ public class BlockVisualiserController {
         } else {
             currentTask.setText("No blocks selected");
         }
-
     }
 
     /**
@@ -237,13 +244,18 @@ public class BlockVisualiserController {
                 updateMessage("Finding block");
                 updateProgress(1, 4);
                 Context.propagate(context);
+
+                // Check if user hash provided a block file or hash
                 if (inFileMode) {
-                    List<File> blockFiles = new ArrayList<File>();
                     updateMessage("Adding block");
                     updateProgress(2, 4);
+
+                    // Load block
+                    List<File> blockFiles = new ArrayList<File>();
                     blockFiles.add(blockFile);
                     BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
 
+                    // Add block if deemed valid by BlockFileLoader
                     if (blockFileLoader.hasNext()) {
                         String hash = blockFileLoader.next().getHash().toString();
                         blocks.add(blockExplorer.getBlock(hash));
@@ -262,7 +274,7 @@ public class BlockVisualiserController {
                 produceGraphButton.setDisable(false);
                 updateMessage("Block added");
                 updateProgress(4, 4);
-                updateAddedBlocksTable();
+                updateBlockTable();
 
             return null;
             }
@@ -275,26 +287,11 @@ public class BlockVisualiserController {
     }
 
     /**
-     * Update table of added blocks
+     * Update table of blocks
      */
-    private void updateAddedBlocksTable() {
-        addedBlockHash.setCellValueFactory(new PropertyValueFactory<>("hash"));
-        addedBlocksTable.getItems().setAll(blocks);
-    }
-
-    /**
-     * Get block hash based on selected input mode
-     * @return  Hash of block you want to visualise
-     */
-    private String getInputHash() {
-        if (inFileMode) {
-            List<File> blockFiles = new ArrayList<File>();
-            blockFiles.add(blockFile);
-            BlockFileLoader blockFileLoader = new BlockFileLoader(params, blockFiles);
-            return blockFileLoader.next().getHash().toString();
-        } else {
-            return blockHashField.getText();
-        }
+    private void updateBlockTable() {
+        blockHashColumn.setCellValueFactory(new PropertyValueFactory<>("hash"));
+        selectedBlockTable.getItems().setAll(blocks);
     }
 
     /**
@@ -305,12 +302,15 @@ public class BlockVisualiserController {
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() throws Exception {
+
+                // Hash must be 64 characters exactly
                 if (blockHashField.getText().length() == 64) {
                     currentTask.setLayoutX(51);
                     progressSpinner.setVisible(true);
                     updateProgress(1,2);
                     updateMessage("Finding block");
                     try {
+                        // Use block explorer to search for block with provided hash
                         BlockExplorer blockExplorer = new BlockExplorer();
                         blockExplorer.getBlock(blockHashField.getText());
                         addBlockButton.setDisable(false);
@@ -318,11 +318,13 @@ public class BlockVisualiserController {
                         updateMessage("Block found");
 
                     } catch (APIException | IOException e) {
+                        // Exception will be thrown if block with specified hash does not exist
                         addBlockButton.setDisable(true);
                         updateProgress(2,2);
                         updateMessage("Invalid block hash");
                     }
                 } else {
+                    // Safe to assume hash is invalid if not exactly 64 characters long
                     addBlockButton.setDisable(true);
                     updateProgress(2,2);
                     updateMessage("Invalid block hash");

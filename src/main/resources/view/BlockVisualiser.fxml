@@ -47,9 +47,9 @@
             </cursor>
         </ProgressIndicator>
         <Button fx:id="addBlockButton" disable="true" layoutX="561.0" layoutY="129.0" mnemonicParsing="false" onAction="#addBlock" prefHeight="106.0" prefWidth="58.0" text="Add block" textAlignment="CENTER" wrapText="true" />
-        <TableView fx:id="addedBlocksTable" layoutX="20.0" layoutY="129.0" prefHeight="106.0" prefWidth="539.0">
+        <TableView fx:id="selectedBlockTable" layoutX="20.0" layoutY="129.0" prefHeight="106.0" prefWidth="539.0">
             <columns>
-                <TableColumn fx:id="addedBlockHash" prefWidth="523.0" resizable="false" text="Added blocks" />
+                <TableColumn fx:id="blockHashColumn" prefWidth="523.0" resizable="false" text="Added blocks" />
             </columns>
         </TableView>
     </children>
