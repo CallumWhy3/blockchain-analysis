@@ -7,11 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public class Main extends Application {
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
 
     public static void main(String args[]) throws Exception {
         Application.launch(Main.class, (java.lang.String[])null);
@@ -27,8 +23,9 @@ public class Main extends Application {
             Parent root = FXMLLoader.load(getClass().getResource("/view/MainMenu.fxml"));
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/css/style.css");
-            primaryStage.setResizable(false);
+
             primaryStage.setScene(scene);
+            primaryStage.setResizable(false);
             primaryStage.setTitle("Blockchain analysis");
             primaryStage.show();
         } catch (Exception e) {

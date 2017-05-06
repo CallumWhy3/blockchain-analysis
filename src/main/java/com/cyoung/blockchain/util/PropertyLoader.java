@@ -12,25 +12,16 @@ public class PropertyLoader {
      * @return  Value of property
      */
     public static String LoadProperty(String propertyName) {
-        Properties properties = new Properties();
-        InputStream input = null;
-        String propertyValue = "";
-
         try {
-            input = PropertyLoader.class.getClassLoader().getResourceAsStream("config.properties");
+            // Read contents of config file
+            InputStream input = PropertyLoader.class.getClassLoader().getResourceAsStream("config.properties");
+            // Return property with provided name
+            Properties properties = new Properties();
             properties.load(input);
-            propertyValue = properties.getProperty(propertyName);
+            return properties.getProperty(propertyName);
         } catch (IOException e) {
             e.printStackTrace();
-        } finally {
-            if (input != null) {
-                try {
-                    input.close();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-            }
+            return "";
         }
-        return propertyValue;
     }
 }

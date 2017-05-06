@@ -21,7 +21,7 @@ public class BlockAnalyser {
      */
     public ArrayList<BitcoinTransaction> calculateAnomalousTransactions(List<Block> blocks) {
         ArrayList<BitcoinTransaction> allTransactions = new ArrayList<>();
-        // Remove coinbase transaction
+        // Remove coinbase transaction as it has no inputs and therefore cannot be analysed
         for (Block block : blocks) {
             int numberOfTransactions = block.getTransactions().size();
             for (Transaction t : block.getTransactions().subList(1, numberOfTransactions)) {
@@ -29,14 +29,17 @@ public class BlockAnalyser {
             }
         }
 
-        logger.info("Transactions analysed: " + allTransactions.size());
+        // Calculate weight value for each transaction
         calculateTransactionWeights(allTransactions);
+
+        // Create list of all transactions found with weight higher than anomaly threshold value
         anomalousTransactions.clear();
         for (BitcoinTransaction t : allTransactions) {
             if (t.getWeight() >= OptionsMenuController.anomalyWeightValue) {
                 anomalousTransactions.add(t);
             }
         }
+        logger.info("Transactions analysed: " + allTransactions.size());
         return anomalousTransactions;
     }
 
@@ -57,12 +60,14 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalBitcoinsInput(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total Bitcoins input
         long totalBitcoinsInput = 0;
         for (BitcoinTransaction t : transactions) {
             totalBitcoinsInput += t.getTotalBitcoinsInput();
         }
 
         long averageBitcoinsInput = totalBitcoinsInput / transactions.size();
+        // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
             totalBitcoinsInput = t.getTotalBitcoinsInput();
@@ -72,6 +77,8 @@ public class BlockAnalyser {
             }
         }
 
+        // Assign weight to each transaction with the max value of 0.8 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
         double weightMultiplier = 0.8 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             totalBitcoinsInput = t.getTotalBitcoinsInput();
@@ -85,12 +92,14 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalNumberOfInputs(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total number of inputs
         long totalInputs = 0;
         for (BitcoinTransaction t : transactions) {
             totalInputs += t.getTotalNumberOfInputs();
         }
 
         long averageTotalInputs = totalInputs / transactions.size();
+        // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
             totalInputs = t.getTotalNumberOfInputs();
@@ -100,6 +109,8 @@ public class BlockAnalyser {
             }
         }
 
+        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
         double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             totalInputs = t.getTotalNumberOfInputs();
@@ -113,12 +124,14 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalNumberOfOutputs(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total number of outputs
         long totalOutputs = 0;
         for (BitcoinTransaction t : transactions) {
             totalOutputs += t.getTotalNumberOfOutputs();
         }
 
         long averageTotalOutputs = totalOutputs / transactions.size();
+        // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
             totalOutputs = t.getTotalNumberOfOutputs();
@@ -128,6 +141,8 @@ public class BlockAnalyser {
             }
         }
 
+        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
         double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             totalOutputs = t.getTotalNumberOfOutputs();
@@ -141,12 +156,14 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalNumberOfUniqueInputs(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total number of unique inputs
         long totalUniqueInputs = 0;
         for (BitcoinTransaction t : transactions) {
             totalUniqueInputs += t.getTotalNumberOfUniqueInputs();
         }
 
         long averageTotalUniqueInputs = totalUniqueInputs / transactions.size();
+        // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
             totalUniqueInputs = t.getTotalNumberOfUniqueInputs();
@@ -156,6 +173,8 @@ public class BlockAnalyser {
             }
         }
 
+        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
         double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             totalUniqueInputs = t.getTotalNumberOfUniqueInputs();
@@ -169,12 +188,14 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalNumberOfUniqueOutputs(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total number of unique outputs
         long totalUniqueOutputs = 0;
         for (BitcoinTransaction t : transactions) {
             totalUniqueOutputs += t.getTotalNumberOfUniqueOutputs();
         }
 
         long averageTotalUniqueOutputs = totalUniqueOutputs / transactions.size();
+        // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
             totalUniqueOutputs = t.getTotalNumberOfUniqueOutputs();
@@ -184,15 +205,13 @@ public class BlockAnalyser {
             }
         }
 
+        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
         double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             totalUniqueOutputs = t.getTotalNumberOfUniqueOutputs();
             double difference = Math.abs(averageTotalUniqueOutputs - totalUniqueOutputs);
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
-    }
-
-    public ArrayList<BitcoinTransaction> getAnomalousTransactions() {
-        return anomalousTransactions;
     }
 }

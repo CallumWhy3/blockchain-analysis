@@ -18,6 +18,7 @@ public class OptionsMenuController {
     private Parent parent;
     private Scene scene;
     private Stage stage;
+    // Static value means the menu can retain this value after being opened and closed
     public static double anomalyWeightValue = 0.05;
 
     @FXML
