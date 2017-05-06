@@ -21,11 +21,8 @@ public class OptionsMenuController {
     // Static value means the menu can retain this value after being opened and closed
     public static double anomalyWeightValue = 0.05;
 
-    @FXML
-    private Slider anomalyWeightThresholdSlider;
-
-    @FXML
-    private Label weightValueLabel;
+    @FXML private Slider anomalyWeightThresholdSlider;
+    @FXML private Label weightValueLabel;
 
     /**
      * Initialise anomaly weight threshold slider

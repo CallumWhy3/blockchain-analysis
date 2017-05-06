@@ -35,26 +35,13 @@ public class LiveBlockAnalyserController {
     private String latestBlockAnalysedHash = "";
     private List<BitcoinTransaction> anomalousTransactions;
 
-    @FXML
-    private ProgressBar nextBlockProgressBar, visualiseProgressBar;
-
-    @FXML
-    private TextField latestBlockTextField;
-
-    @FXML
-    private Label nextBlockEstimateLabel, visualiseCurrentTaskLabel;
-
-    @FXML
-    private ProgressIndicator nextBlockSpinner, visualiseSpinner;
-
-    @FXML
-    private TableView<BitcoinTransaction> anomalousTransactionsTable;
-
-    @FXML
-    private TableColumn<BitcoinTransaction, String> anomalousTransactionHash, anomalousTransactionWeight;
-
-    @FXML
-    private Button visualiseButton;
+    @FXML private ProgressBar nextBlockProgressBar, visualiseProgressBar;
+    @FXML private TextField latestBlockTextField;
+    @FXML private Label nextBlockEstimateLabel, visualiseCurrentTaskLabel;
+    @FXML private ProgressIndicator nextBlockSpinner, visualiseSpinner;
+    @FXML private TableView<BitcoinTransaction> anomalousTransactionsTable;
+    @FXML private TableColumn<BitcoinTransaction, String> anomalousTransactionHash, anomalousTransactionWeight;
+    @FXML private Button visualiseButton;
 
     /**
      * Initialise live anomaly detction by checking for the latest block
@@ -86,19 +73,21 @@ public class LiveBlockAnalyserController {
                 // Get latest block in Block format
                 Block latestBlock = blockExplorer.getBlock(blockExplorer.getLatestBlock().getHash());
 
+                // Calculate time difference between current time and when the latest block was created
                 Date latestBlockTime = new Date(latestBlock.getTime() * 1000);
                 Date currentTime = new Date();
-
                 int timeDiffInMinutes = (int)((currentTime.getTime() - latestBlockTime.getTime()) / (1000 * 60));
+
                 updateMessage("Latest block was solved " + String.valueOf(timeDiffInMinutes) + " minutes ago");
                 updateTitle(latestBlock.getHash());
-
+                // Progress bar total is 10 as a block is added to the Bitcoin blockchain roughly every 10 minutes
                 if (timeDiffInMinutes < 10) {
                     updateProgress(timeDiffInMinutes, 10);
                 } else {
                     updateProgress(10, 10);
                 }
 
+                // Finish task and perform analysis on latest block
                 try {
                     return null;
                 } finally {
@@ -117,13 +106,14 @@ public class LiveBlockAnalyserController {
 
     /**
      * Analyse latest block for anomalous transactions and then sleep for 15 seconds
-     * @param latestBlock
+     * @param latestBlock   Latest block to be created on the Bitcoin blockchain
      */
     private void analyseLatestBlock(Block latestBlock) {
         Task<Void> task = new Task<Void>() {
             @Override public Void call() throws Exception {
 
                 String latestBlockHash = latestBlock.getHash();
+                // If a new block has been added since the last analysis then perform analysis on new block
                 if (!latestBlockAnalysedHash.equals(latestBlockHash)) {
                     BlockAnalyser blockAnalyser = new BlockAnalyser();
 
@@ -138,6 +128,7 @@ public class LiveBlockAnalyserController {
                     latestBlockAnalysedHash = latestBlockHash;
                 }
 
+                // Wait 15 seconds and finish task before checking the blockchain again
                 try {
                     visualiseButton.setDisable(false);
                     // The blockchain api requests that values should be updated at max every 10 seconds so I chose 15 to be safe
@@ -178,9 +169,10 @@ public class LiveBlockAnalyserController {
 
                 visualiseSpinner.setVisible(true);
                 visualiseCurrentTaskLabel.setLayoutX(51);
+                visualiseButton.setDisable(true);
 
                 updateMessage("Creating Neo4j session");
-                visualiseButton.setDisable(true);
+                // Load Neo4j credentials from config file to create a Neo4j session
                 String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
                 String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
                 Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
@@ -188,6 +180,7 @@ public class LiveBlockAnalyserController {
                 updateProgress(1, 4);
 
                 updateMessage("Creating nodes and relationships");
+                // Loop through and graph each of the anomalous transactions
                 GraphGenerator graphGenerator = new GraphGenerator(session);
                 for (BitcoinTransaction t : anomalousTransactions) {
                     graphGenerator.graphTransaction(t.getTransaction());

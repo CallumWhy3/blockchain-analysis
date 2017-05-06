@@ -25,29 +25,19 @@ public class BlockAnalyserController {
     private Stage stage;
     private static final Logger logger = LoggerFactory.getLogger(BlockAnalyserController.class);
 
-    @FXML
-    private TextField selectedBlock;
-
-    @FXML
-    private Button analyseButton, visualiseButton;
-
-    @FXML
-    private TextArea outputTextArea;
-
-    @FXML
-    private ProgressBar progressBar;
-
-    @FXML
-    private ProgressIndicator progressSpinner;
-
-    @FXML
-    private Label currentTask;
+    @FXML private TextField selectedBlock;
+    @FXML private Button analyseButton, visualiseButton;
+    @FXML private TextArea outputTextArea;
+    @FXML private ProgressBar progressBar;
+    @FXML private ProgressIndicator progressSpinner;
+    @FXML private Label currentTask;
 
     /**
      * Initialise selected block hash field
      */
     @FXML
     private void initialize() {
+        // Show hash of selected block, unless multiple blocks have been selected
         List<Block> blocks = BlockVisualiserController.blocks;
         if (blocks.size() > 1) {
             selectedBlock.setText("Multiple blocks selected");
@@ -75,8 +65,10 @@ public class BlockAnalyserController {
 
                 updateTitle("Finding anomalous transactions");
                 BlockAnalyser blockAnalyser = new BlockAnalyser();
+                // Create message for the text area to show the anomalous transactions that were identified
                 String message = "";
                 int counter = 1;
+                // Anomalous transactions are identified and stored in a static list within BlockAnalyser class
                 for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions(BlockVisualiserController.blocks)) {
                     message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
                     updateMessage(message);

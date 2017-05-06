@@ -28,29 +28,14 @@ public class AnomalyAnalyserController {
     private Scene scene;
     private Stage stage;
 
-    @FXML
-    private Label totalTransactionsLabel, totalBitcoinsTransferredLabel, anomalyWeightThresholdLabel;
-
-    @FXML
-    private Label totalAnomalousTransactionsLabel, totalAnomalousBitcoinsTransferredLabel, percentageAnomalousTransactionsLabel;
-
-    @FXML
-    private TableView<BitcoinTransaction> anomalousTransactionTable;
-
-    @FXML
-    private TableColumn<BitcoinTransaction, String> weightColumn, hashColumn;
-
-    @FXML
-    private TableView<ReoccurringInputRow> reoccurringInputsTable;
-
-    @FXML
-    private TableColumn<ReoccurringInputRow, String> inputAddress, inputOccurrences;
-
-    @FXML
-    private TableView<ReoccurringOutputRow> reoccurringOutputsTable;
-
-    @FXML
-    private TableColumn<ReoccurringOutputRow, String> outputAddress, outputOccurrences;
+    @FXML private Label totalTransactionsLabel, totalBitcoinsTransferredLabel, anomalyWeightThresholdLabel;
+    @FXML private Label totalAnomalousTransactionsLabel, totalAnomalousBitcoinsTransferredLabel, percentageAnomalousTransactionsLabel;
+    @FXML private TableView<BitcoinTransaction> anomalousTransactionTable;
+    @FXML private TableColumn<BitcoinTransaction, String> weightColumn, hashColumn;
+    @FXML private TableView<ReoccurringInputRow> reoccurringInputsTable;
+    @FXML private TableColumn<ReoccurringInputRow, String> inputAddress, inputOccurrences;
+    @FXML private TableView<ReoccurringOutputRow> reoccurringOutputsTable;
+    @FXML private TableColumn<ReoccurringOutputRow, String> outputAddress, outputOccurrences;
 
     /**
      * Calculate and set values for stats section and tables
@@ -58,28 +43,34 @@ public class AnomalyAnalyserController {
     @FXML
     private void initialize() {
 
+        // Set total transactions statistic
         int totalTransactions = 0;
         for (Block block : BlockVisualiserController.blocks) {
             totalTransactions += block.getTransactions().size();
         }
         totalTransactionsLabel.setText(String.valueOf(totalTransactions));
 
+        // Set anomaly weight threshold statistic
         double anomalyWeightThreshold = OptionsMenuController.anomalyWeightValue;
         String formattedWeightThreshold = String.format("%.2f", anomalyWeightThreshold);
         anomalyWeightThresholdLabel.setText(formattedWeightThreshold);
 
+        // Set total anomalous transactions statistic
         ArrayList<BitcoinTransaction> anomalousTransactions = BlockAnalyser.anomalousTransactions;
         int totalAnomalousTransactions = anomalousTransactions.size();
         totalAnomalousTransactionsLabel.setText(String.valueOf(totalAnomalousTransactions));
 
+        // Set percentage anomalous transactions statistic
         double percentageAnomalousTransactions = ((double) totalAnomalousTransactions / (double) totalTransactions) * 100;
         String formattedPercentage = String.format("%.2f", percentageAnomalousTransactions) + "%";
         percentageAnomalousTransactionsLabel.setText(formattedPercentage);
 
+        // Populate table of anomalous transactions
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         hashColumn.setCellValueFactory(new PropertyValueFactory<>("hash"));
         anomalousTransactionTable.getItems().setAll(anomalousTransactions);
 
+        // Populate table of reoccurring inputs
         List<Transaction> transactions = new ArrayList<>();
         for (BitcoinTransaction t : anomalousTransactions) {
             transactions.add(t.getTransaction());
@@ -88,6 +79,7 @@ public class AnomalyAnalyserController {
         inputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
         reoccurringInputsTable.getItems().setAll(listReoccurringInputs(transactions));
 
+        // Populate table of reoccurring outputs
         outputAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         outputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
         reoccurringOutputsTable.getItems().setAll(listReoccurringOutputs(transactions));
@@ -99,15 +91,16 @@ public class AnomalyAnalyserController {
      * @return  List of inputs that occur more than once
      */
     private List<ReoccurringInputRow> listReoccurringInputs(List<Transaction> transactions) {
+        // Create list of all inputs
         List<String> inputs = new ArrayList<>();
-        List<ReoccurringInputRow> reoccurringInputs = new ArrayList<>();
-
         for (Transaction t : transactions) {
             for (Input i : t.getInputs()) {
                 inputs.add(i.getPreviousOutput().getAddress());
             }
         }
 
+        // Create list of all inputs that occur more than once
+        List<ReoccurringInputRow> reoccurringInputs = new ArrayList<>();
         for (String s : inputs) {
             int occurrences = Collections.frequency(inputs, s);
             boolean contains = false;
@@ -132,15 +125,16 @@ public class AnomalyAnalyserController {
      * @return  List of outputs that occur more than once
      */
     private List<ReoccurringOutputRow> listReoccurringOutputs(List<Transaction> transactions) {
+        // Create list of all outputs
         List<String> outputs = new ArrayList<>();
-        List<ReoccurringOutputRow> reoccurringOutputs = new ArrayList<>();
-
         for (Transaction t : transactions) {
             for (Output o : t.getOutputs()) {
                 outputs.add(o.getAddress());
             }
         }
 
+        // Create list of all outputs that occur more than once
+        List<ReoccurringOutputRow> reoccurringOutputs = new ArrayList<>();
         for (String s : outputs) {
             int occurrences = Collections.frequency(outputs, s);
             boolean contains = false;
