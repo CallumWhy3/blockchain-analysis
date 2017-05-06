@@ -42,6 +42,6 @@
                 <Cursor fx:constant="DEFAULT" />
             </cursor>
         </ProgressIndicator>
-      <Button fx:id="analyseButton" layoutX="509.0" layoutY="126.0" mnemonicParsing="false" onAction="#openAnomalyAnalyser" prefHeight="27.0" prefWidth="110.0" text="Analyse" disable="true"/>
+      <Button fx:id="analyseButton" layoutX="509.0" layoutY="126.0" mnemonicParsing="false" onAction="#openAnomalyAnalyser" prefHeight="27.0" prefWidth="110.0" text="Analyse"/>
     </children>
 </Pane>

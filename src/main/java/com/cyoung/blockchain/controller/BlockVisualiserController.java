@@ -43,35 +43,20 @@ public class BlockVisualiserController {
     private Context context;
     private NetworkParameters params;
     private boolean inFileMode = true;
-    public static List<Block> blocks;
     private BlockExplorer blockExplorer = new BlockExplorer();
 
-    @FXML
-    private ToggleButton inputModeToggleButton;
+    // List of blocks made static so they can be accessed by different controller classes
+    public static List<Block> blocks;
 
-    @FXML
-    private Text inputModeText;
-
-    @FXML
-    private TextField selectedFileField, blockHashField;
-
-    @FXML
-    private Button fileSelectButton, validateBlockHashButton, addBlockButton, produceGraphButton, analyseButton;
-
-    @FXML
-    private ProgressBar progressBar;
-
-    @FXML
-    private ProgressIndicator progressSpinner;
-
-    @FXML
-    private Label currentTask;
-
-    @FXML
-    private TableView selectedBlockTable;
-
-    @FXML
-    private TableColumn<Block, String> blockHashColumn;
+    @FXML private ToggleButton inputModeToggleButton;
+    @FXML private Text inputModeText;
+    @FXML private TextField selectedFileField, blockHashField;
+    @FXML private Button fileSelectButton, validateBlockHashButton, addBlockButton, produceGraphButton, analyseButton;
+    @FXML private ProgressBar progressBar;
+    @FXML private ProgressIndicator progressSpinner;
+    @FXML private Label currentTask;
+    @FXML private TableView selectedBlockTable;
+    @FXML private TableColumn<Block, String> blockHashColumn;
 
     /**
      * Initialise file chooser and input mode toggle button
@@ -111,25 +96,33 @@ public class BlockVisualiserController {
     }
 
     private void useBlockHashMode() {
+        inFileMode = false;
         inputModeText.setText("Enter block hash");
+
+        // Reset and hide file select ui
         selectedFileField.setText("");
         selectedFileField.setVisible(false);
         fileSelectButton.setVisible(false);
+
+        // Show hash input ui
         blockHashField.setVisible(true);
         validateBlockHashButton.setVisible(true);
         addBlockButton.setDisable(true);
-        inFileMode = false;
     }
 
     private void useBlockFileMode() {
+        inFileMode = true;
         inputModeText.setText("Select .dat file");
+
+        // Rest and hide hash input ui
         blockHashField.setText("");
         blockHashField.setVisible(false);
         validateBlockHashButton.setVisible(false);
+
+        // Show file select ui
         selectedFileField.setVisible(true);
         fileSelectButton.setVisible(true);
         addBlockButton.setDisable(true);
-        inFileMode = true;
     }
 
     /**
@@ -140,10 +133,8 @@ public class BlockVisualiserController {
         blockFile = fc.showOpenDialog(stage);
         if (blockFile != null) {
             addBlockButton.setDisable(false);
-            analyseButton.setDisable(true);
             selectedFileField.setText(blockFile.toString());
         } else {
-            produceGraphButton.setDisable(true);
             selectedFileField.setText("");
         }
     }
@@ -180,14 +171,17 @@ public class BlockVisualiserController {
 
                 updateMessage("Preparing API");
                 AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
+                // Disable buttons while graph is being produced
                 inputModeToggleButton.setDisable(true);
                 fileSelectButton.setDisable(true);
                 validateBlockHashButton.setDisable(true);
                 produceGraphButton.setDisable(true);
+                analyseButton.setDisable(true);
                 Context.propagate(context);
                 updateProgress(2, maxProgress);
 
                 updateMessage("Creating Neo4j session");
+                // Load Neo4j credentials from config file to create a Neo4j session
                 String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
                 String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
                 Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
@@ -242,7 +236,12 @@ public class BlockVisualiserController {
 
                 currentTask.setLayoutX(51);
                 progressSpinner.setVisible(true);
+                // Disable buttons while searching for block
+                inputModeToggleButton.setDisable(true);
+                fileSelectButton.setDisable(true);
+                validateBlockHashButton.setDisable(true);
                 addBlockButton.setDisable(true);
+
                 updateMessage("Finding block");
                 updateProgress(1, 4);
                 Context.propagate(context);
@@ -264,6 +263,10 @@ public class BlockVisualiserController {
                     } else {
                         progressSpinner.setVisible(false);
                         currentTask.setLayoutX(26);
+                        // Re-enable buttons so user can try another input
+                        inputModeToggleButton.setDisable(false);
+                        fileSelectButton.setDisable(false);
+                        validateBlockHashButton.setDisable(false);
                         updateMessage("Invalid file, no block added");
                         updateProgress(4, 4);
                         return null;
@@ -273,7 +276,13 @@ public class BlockVisualiserController {
                 }
                 progressSpinner.setVisible(false);
                 currentTask.setLayoutX(26);
+                // Re-enable buttons once block has been added successfully
+                inputModeToggleButton.setDisable(false);
+                fileSelectButton.setDisable(false);
+                validateBlockHashButton.setDisable(false);
+                // Once there is at least one valid block selected the user can produce a graph or analyse the data
                 produceGraphButton.setDisable(false);
+                analyseButton.setDisable(false);
                 updateMessage("Block added");
                 updateProgress(4, 4);
                 updateBlockTable();

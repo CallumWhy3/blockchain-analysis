@@ -28,26 +28,18 @@ public class AnomalyVisualiserController {
     private Scene scene;
     private Stage stage;
 
-    @FXML
-    private TextField selectedBlock;
-
-    @FXML
-    private Button produceGraphButton, analyseButton;
-
-    @FXML
-    private ProgressBar progressBar;
-
-    @FXML
-    private ProgressIndicator progressSpinner;
-
-    @FXML
-    private Label currentTask;
+    @FXML private TextField selectedBlock;
+    @FXML private Button produceGraphButton, analyseButton;
+    @FXML private ProgressBar progressBar;
+    @FXML private ProgressIndicator progressSpinner;
+    @FXML private Label currentTask;
 
     /**
      * Initialise selected block hash field
      */
     @FXML
     private void initialize() {
+        // Show hash of selected block, unless multiple blocks have been selected
         List<Block> blocks = BlockVisualiserController.blocks;
         if (blocks.size() > 1) {
             selectedBlock.setText("Multiple blocks selected");
@@ -84,7 +76,10 @@ public class AnomalyVisualiserController {
 
                 updateMessage("Creating Neo4j session");
                 AudioClip jobDone = new AudioClip(getClass().getResource("/audio/job-done.mp3").toString());
+                // Disable buttons while creating graph
                 produceGraphButton.setDisable(true);
+                analyseButton.setDisable(true);
+                // Load Neo4j credentials from config file to create a Neo4j session
                 String neo4jUsername = PropertyLoader.LoadProperty("neo4jUsername");
                 String neo4jPassword = PropertyLoader.LoadProperty("neo4jPassword");
                 Driver driver = GraphDatabase.driver("bolt://localhost", AuthTokens.basic(neo4jUsername, neo4jPassword));
@@ -92,6 +87,7 @@ public class AnomalyVisualiserController {
                 updateProgress(1, 4);
 
                 updateMessage("Creating nodes and relationships");
+                // Loop through and graph static list of anomalous transactions
                 GraphGenerator graphGenerator = new GraphGenerator(session);
                 for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
                     graphGenerator.graphTransaction(t.getTransaction());
