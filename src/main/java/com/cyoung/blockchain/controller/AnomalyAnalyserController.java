@@ -56,8 +56,7 @@ public class AnomalyAnalyserController {
         anomalyWeightThresholdLabel.setText(formattedWeightThreshold);
 
         // Set total anomalous transactions statistic
-        ArrayList<BitcoinTransaction> anomalousTransactions = BlockAnalyser.anomalousTransactions;
-        int totalAnomalousTransactions = anomalousTransactions.size();
+        int totalAnomalousTransactions = BlockAnalyser.anomalousTransactions.size();
         totalAnomalousTransactionsLabel.setText(String.valueOf(totalAnomalousTransactions));
 
         // Set percentage anomalous transactions statistic
@@ -65,24 +64,37 @@ public class AnomalyAnalyserController {
         String formattedPercentage = String.format("%.2f", percentageAnomalousTransactions) + "%";
         percentageAnomalousTransactionsLabel.setText(formattedPercentage);
 
+        // Set total Bitcoins transferred in all transactions
+        double totalBitcoinsTransferred = 0;
+        for (Block block : BlockVisualiserController.blocks) {
+            totalBitcoinsTransferred += calculateTotalBitcoinsTransferred(block.getTransactions());
+        }
+        totalBitcoinsTransferredLabel.setText(totalBitcoinsTransferred + "BTC");
+
+        // Set total Bitcoins transferred in anomalous transactions
+        totalBitcoinsTransferred = 0;
+        List<Transaction> anomalousTransactions = new ArrayList<>();
+        for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
+            anomalousTransactions.add(t.getTransaction());
+        }
+        System.out.println(anomalousTransactions.size() + "###################\n##########\n#######\n#######\n########");
+        totalBitcoinsTransferred += calculateTotalBitcoinsTransferred(anomalousTransactions);
+        totalAnomalousBitcoinsTransferredLabel.setText(totalBitcoinsTransferred + "BTC");
+
         // Populate table of anomalous transactions
         weightColumn.setCellValueFactory(new PropertyValueFactory<>("weight"));
         hashColumn.setCellValueFactory(new PropertyValueFactory<>("hash"));
-        anomalousTransactionTable.getItems().setAll(anomalousTransactions);
+        anomalousTransactionTable.getItems().setAll(BlockAnalyser.anomalousTransactions);
 
         // Populate table of reoccurring inputs
-        List<Transaction> transactions = new ArrayList<>();
-        for (BitcoinTransaction t : anomalousTransactions) {
-            transactions.add(t.getTransaction());
-        }
         inputAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         inputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
-        reoccurringInputsTable.getItems().setAll(listReoccurringInputs(transactions));
+        reoccurringInputsTable.getItems().setAll(listReoccurringInputs(anomalousTransactions));
 
         // Populate table of reoccurring outputs
         outputAddress.setCellValueFactory(new PropertyValueFactory<>("address"));
         outputOccurrences.setCellValueFactory(new PropertyValueFactory<>("occurrences"));
-        reoccurringOutputsTable.getItems().setAll(listReoccurringOutputs(transactions));
+        reoccurringOutputsTable.getItems().setAll(listReoccurringOutputs(anomalousTransactions));
     }
 
     /**
@@ -151,6 +163,25 @@ public class AnomalyAnalyserController {
         }
 
         return reoccurringOutputs;
+    }
+
+    /**
+     * Calculate total number of Bitcoins transferred in a lift of transactions
+     * @param transactions  List of transactions you that transfer Bitcoins
+     * @return  Total Bitcoins transferred
+     */
+    private double calculateTotalBitcoinsTransferred(List<Transaction> transactions) {
+        double totalBitcoinsTransferred = 0;
+
+        // Loop through the output of each transaction and add the value transferred to the total
+        for (Transaction t : transactions ) {
+            for (Output o : t.getOutputs()) {
+                totalBitcoinsTransferred += o.getValue();
+            }
+        }
+
+        // Format value from Satoshi to Bitcoin
+        return totalBitcoinsTransferred * 0.00000001;
     }
 
     /**
