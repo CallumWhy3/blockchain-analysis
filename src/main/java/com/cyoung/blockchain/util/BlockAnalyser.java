@@ -29,6 +29,12 @@ public class BlockAnalyser {
             }
         }
 
+        // If block contains only 1 coinbase transaction then no anomalous transactions can be found
+        if (allTransactions.size() == 0) {
+            logger.info("Not enough transactions to analyse");
+            return anomalousTransactions;
+        }
+
         // Calculate weight value for each transaction
         calculateTransactionWeights(allTransactions);
 
