@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.neo4j.driver.v1.*;
 
+import javax.swing.plaf.nimbus.State;
 import java.util.*;
 
 import static junit.framework.TestCase.assertEquals;
@@ -40,7 +41,7 @@ public class GraphGeneratorTest {
         outputs.addAll(Arrays.asList(output3, output4));
 
         // Create transaction
-        validTransaction = new Transaction(false, 10, 1, 1, "", "hash", 1, 1, 5173, inputs, outputs);
+        validTransaction = new Transaction(false, 10, 1, 1, "", "validTransaction", 1, 1, 5173, inputs, outputs);
     }
 
     @Test
@@ -160,6 +161,49 @@ public class GraphGeneratorTest {
         result = session.run("MATCH (t:Transaction)-[n:OUTPUT{value:3}]->(o:Output) RETURN n");
         assertEquals(1, result.list().size());
         result = session.run("MATCH (t:Transaction)-[n:OUTPUT{value:4}]->(o:Output) RETURN n");
+        assertEquals(1, result.list().size());
+    }
+
+    @Test
+    public void shouldCreateMatchRelationshipBetweenExistingOutputNodeWithSameAddress() {
+        // Create 1 input with same address as 1 output from validTransaction
+        List<Input> inputs = new ArrayList<>();
+        Output output1 = new Output(1, 100000000, "address3", 1, "output1", true);
+        Input input1 = new Input(output1, 1, "scriptSignature");
+        inputs.add(input1);
+
+        // Outputs not needed for this test
+        List<Output> outputs = new ArrayList<>();
+
+        // Create transaction that will cause MATCH relationship to be created
+        Transaction matchTransaction = new Transaction(false, 10, 1, 1, "", "matchTransaction", 1, 1, 5173, inputs, outputs);
+
+        // Graph transactions
+        graphGenerator.graphTransaction(validTransaction);
+        graphGenerator.graphTransaction(matchTransaction);
+
+        StatementResult result = session.run("MATCH (i:Input)-[n:MATCH]->(o:Output) RETURN n");
+        assertEquals(1, result.list().size());
+    }
+
+    @Test
+    public void shouldCreateMatchRelationshipBetweenExistingInputNodeWithSameAddress() {
+        // Inputs not needed for this test
+        List<Input> inputs = new ArrayList<>();
+
+        // Create 1 output with same address as 1 input from validTransaction
+        List<Output> outputs = new ArrayList<>();
+        Output output1 = new Output(1, 100000000, "address1", 1, "output1", true);
+        outputs.add(output1);
+
+        // Create transaction that will cause MATCH relationship to be created
+        Transaction matchTransaction = new Transaction(false, 10, 1, 1, "", "matchTransaction", 1, 1, 5173, inputs, outputs);
+
+        // Graph transactions
+        graphGenerator.graphTransaction(validTransaction);
+        graphGenerator.graphTransaction(matchTransaction);
+
+        StatementResult result = session.run("MATCH (o:Output)-[n:MATCH]->(i:Input) RETURN n");
         assertEquals(1, result.list().size());
     }
 }
