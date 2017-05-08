@@ -77,7 +77,6 @@ public class AnomalyAnalyserController {
         for (BitcoinTransaction t : BlockAnalyser.anomalousTransactions) {
             anomalousTransactions.add(t.getTransaction());
         }
-        System.out.println(anomalousTransactions.size() + "###################\n##########\n#######\n#######\n########");
         totalBitcoinsTransferred += calculateTotalBitcoinsTransferred(anomalousTransactions);
         totalAnomalousBitcoinsTransferredLabel.setText(totalBitcoinsTransferred + "BTC");
 
