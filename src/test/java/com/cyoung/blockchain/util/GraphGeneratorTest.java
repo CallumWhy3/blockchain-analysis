@@ -119,9 +119,9 @@ public class GraphGeneratorTest {
         result = session.run("MATCH (o:Output) RETURN o");
         assertEquals(2, result.list().size());
 
-        // Validate transaction node hash is equal to 'hash'
+        // Validate transaction node hash is equal to 'validTransaction'
         result = session.run("MATCH (t:Transaction) RETURN t.hash");
-        assertEquals("hash", result.next().values().get(0).asString());
+        assertEquals("validTransaction", result.next().values().get(0).asString());
 
         // Validate transaction node time is equal to '1'
         result = session.run("MATCH (t:Transaction) RETURN t.time");
