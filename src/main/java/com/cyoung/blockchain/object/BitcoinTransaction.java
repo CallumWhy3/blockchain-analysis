@@ -54,7 +54,7 @@ public class BitcoinTransaction {
         return inputs.size();
     }
 
-    public long getTotalBitcoinsInput() {
+    public long getTotalSatoshiInput() {
         long totalBitcoinsInput = 0;
         for (Input i : inputs) {
             totalBitcoinsInput += i.getPreviousOutput().getValue();
@@ -86,7 +86,7 @@ public class BitcoinTransaction {
         return Collections.min(values);
     }
 
-    public double getAverageInput() {
+    public double getAverageSatoshiInput() {
         double values = 0;
         for (Input i : inputs) {
             values += i.getPreviousOutput().getValue();
@@ -102,7 +102,7 @@ public class BitcoinTransaction {
         return outputs.size();
     }
 
-    public long getTotalBitcoinsOutput() {
+    public long getTotalSatoshiOutput() {
         long totalBitcoinsOutput = 0;
         for (Output o : outputs) {
             totalBitcoinsOutput += o.getValue();
@@ -134,7 +134,7 @@ public class BitcoinTransaction {
         return Collections.min(values);
     }
 
-    public double getAverageOutput() {
+    public double getAverageSatoshiOutput() {
         double values = 0;
         for (Output o : outputs) {
             values += o.getValue();
@@ -143,7 +143,7 @@ public class BitcoinTransaction {
     }
 
     public long getTransactionFee() {
-        return getTotalBitcoinsInput() - getTotalBitcoinsOutput();
+        return getTotalSatoshiInput() - getTotalSatoshiOutput();
     }
 
     public long getSize() {

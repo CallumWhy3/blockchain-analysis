@@ -44,7 +44,7 @@ public class BitcoinTransactionTest {
 
     @Test
     public void shouldGetTotalBitcoinsInput() {
-        long totalBitcoinsInput = bitcoinTransaction.getTotalBitcoinsInput();
+        long totalBitcoinsInput = bitcoinTransaction.getTotalSatoshiInput();
         assertEquals(6, totalBitcoinsInput);
     }
 
@@ -68,7 +68,7 @@ public class BitcoinTransactionTest {
 
     @Test
     public void shouldGetAverageInput() {
-        double averageInput = bitcoinTransaction.getAverageInput();
+        double averageInput = bitcoinTransaction.getAverageSatoshiInput();
         assertEquals(2.0, averageInput);
     }
 
@@ -80,7 +80,7 @@ public class BitcoinTransactionTest {
 
     @Test
     public void shouldGetTotalBitcoinsOutput() {
-        long totalBitcoinsOutput = bitcoinTransaction.getTotalBitcoinsOutput();
+        long totalBitcoinsOutput = bitcoinTransaction.getTotalSatoshiOutput();
         assertEquals(15, totalBitcoinsOutput);
     }
 
@@ -104,7 +104,7 @@ public class BitcoinTransactionTest {
 
     @Test
     public void shouldGetAverageOutput() {
-        double averageOutput = bitcoinTransaction.getAverageOutput();
+        double averageOutput = bitcoinTransaction.getAverageSatoshiOutput();
         assertEquals(3.0, averageOutput);
     }
 }

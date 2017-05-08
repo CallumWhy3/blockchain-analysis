@@ -70,9 +70,9 @@ public class BlockAnalyserController {
                 int counter = 1;
                 // Anomalous transactions are identified and stored in a static list within BlockAnalyser class
                 for (BitcoinTransaction t : blockAnalyser.calculateAnomalousTransactions(BlockVisualiserController.blocks)) {
-                    message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n\n";
+                    message += "Anomalous transaction " + counter + "\nHash: " + t.getHash() + " \nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalSatoshiInput() * 0.00000001 + "BTC\n\n";
                     updateMessage(message);
-                    logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalBitcoinsInput() * 0.00000001 + "BTC\n");
+                    logger.info("\n" + t.getHash() + " identified as anomalous\nWeight: " + t.getWeight() + "\nBitcoins transferred: " + t.getTotalSatoshiInput() * 0.00000001 + "BTC\n");
                     counter++;
                 }
                 updateProgress(4, 5);

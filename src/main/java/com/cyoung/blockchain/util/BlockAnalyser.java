@@ -59,6 +59,8 @@ public class BlockAnalyser {
         compareTotalNumberOfOutputs(transactions);
         compareTotalNumberOfUniqueInputs(transactions);
         compareTotalNumberOfUniqueOutputs(transactions);
+        compareAverageBitcoinsTransferredPerInput(transactions);
+        compareAverageBitcoinsTransferredPerOutput(transactions);
     }
 
     /**
@@ -66,29 +68,27 @@ public class BlockAnalyser {
      * @param transactions  List of transactions you want to compare
      */
     private void compareTotalBitcoinsInput(ArrayList<BitcoinTransaction> transactions) {
-        // Calculate total Bitcoins input
-        long totalBitcoinsInput = 0;
+        // Calculate total Satoshi input
+        long totalSatoshiInput = 0;
         for (BitcoinTransaction t : transactions) {
-            totalBitcoinsInput += t.getTotalBitcoinsInput();
+            totalSatoshiInput += t.getTotalSatoshiInput();
         }
 
-        long averageBitcoinsInput = totalBitcoinsInput / transactions.size();
+        double averageSatoshiInput = totalSatoshiInput / transactions.size();
         // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
-            totalBitcoinsInput = t.getTotalBitcoinsInput();
-            double difference = Math.abs(averageBitcoinsInput - totalBitcoinsInput) * 0.00000001;
+            double difference = Math.abs(averageSatoshiInput - t.getTotalSatoshiInput());
             if (difference > largestDifference) {
                 largestDifference = difference;
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.8 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.7 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.8 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.7 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
-            totalBitcoinsInput = t.getTotalBitcoinsInput();
-            double difference = Math.abs(averageBitcoinsInput - totalBitcoinsInput) * 0.00000001;
+            double difference = Math.abs(averageSatoshiInput - t.getTotalSatoshiInput());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
@@ -104,23 +104,21 @@ public class BlockAnalyser {
             totalInputs += t.getTotalNumberOfInputs();
         }
 
-        long averageTotalInputs = totalInputs / transactions.size();
+        double averageTotalInputs = totalInputs / transactions.size();
         // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
-            totalInputs = t.getTotalNumberOfInputs();
-            double difference = Math.abs(averageTotalInputs - totalInputs);
+            double difference = Math.abs(averageTotalInputs - t.getTotalNumberOfInputs());
             if (difference > largestDifference) {
                 largestDifference = difference;
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
-            totalInputs = t.getTotalNumberOfInputs();
-            double difference = Math.abs(averageTotalInputs - totalInputs);
+            double difference = Math.abs(averageTotalInputs - t.getTotalNumberOfInputs());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
@@ -136,23 +134,21 @@ public class BlockAnalyser {
             totalOutputs += t.getTotalNumberOfOutputs();
         }
 
-        long averageTotalOutputs = totalOutputs / transactions.size();
+        double averageTotalOutputs = totalOutputs / transactions.size();
         // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
-            totalOutputs = t.getTotalNumberOfOutputs();
-            double difference = Math.abs(averageTotalOutputs - totalOutputs);
+            double difference = Math.abs(averageTotalOutputs - t.getTotalNumberOfOutputs());
             if (difference > largestDifference) {
                 largestDifference = difference;
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
-            totalOutputs = t.getTotalNumberOfOutputs();
-            double difference = Math.abs(averageTotalOutputs - totalOutputs);
+            double difference = Math.abs(averageTotalOutputs - t.getTotalNumberOfOutputs());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
@@ -168,23 +164,21 @@ public class BlockAnalyser {
             totalUniqueInputs += t.getTotalNumberOfUniqueInputs();
         }
 
-        long averageTotalUniqueInputs = totalUniqueInputs / transactions.size();
+        double averageTotalUniqueInputs = totalUniqueInputs / transactions.size();
         // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
-            totalUniqueInputs = t.getTotalNumberOfUniqueInputs();
-            double difference = Math.abs(averageTotalUniqueInputs - totalUniqueInputs);
+            double difference = Math.abs(averageTotalUniqueInputs - t.getTotalNumberOfUniqueInputs());
             if (difference > largestDifference) {
                 largestDifference = difference;
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
-            totalUniqueInputs = t.getTotalNumberOfUniqueInputs();
-            double difference = Math.abs(averageTotalUniqueInputs - totalUniqueInputs);
+            double difference = Math.abs(averageTotalUniqueInputs - t.getTotalNumberOfUniqueInputs());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
@@ -200,23 +194,85 @@ public class BlockAnalyser {
             totalUniqueOutputs += t.getTotalNumberOfUniqueOutputs();
         }
 
-        long averageTotalUniqueOutputs = totalUniqueOutputs / transactions.size();
+        double averageTotalUniqueOutputs = totalUniqueOutputs / transactions.size();
         // Calculate largest difference from the average value
         double largestDifference = 0;
         for (BitcoinTransaction t : transactions) {
-            totalUniqueOutputs = t.getTotalNumberOfUniqueOutputs();
-            double difference = Math.abs(averageTotalUniqueOutputs - totalUniqueOutputs);
+            double difference = Math.abs(averageTotalUniqueOutputs - t.getTotalNumberOfUniqueOutputs());
             if (difference > largestDifference) {
                 largestDifference = difference;
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.05 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.05 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
-            totalUniqueOutputs = t.getTotalNumberOfUniqueOutputs();
-            double difference = Math.abs(averageTotalUniqueOutputs - totalUniqueOutputs);
+            double difference = Math.abs(averageTotalUniqueOutputs - t.getTotalNumberOfUniqueOutputs());
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
+        }
+    }
+
+    private void compareAverageBitcoinsTransferredPerInput(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total Satoshi input
+        long totalSatoshiInput = 0;
+        for (BitcoinTransaction t : transactions) {
+            totalSatoshiInput += t.getTotalSatoshiInput();
+        }
+
+        // Calculate total number of inputs
+        long totalInputs = 0;
+        for (BitcoinTransaction t : transactions) {
+            totalInputs += t.getTotalNumberOfInputs();
+        }
+
+        double averageSatoshiPerInput = totalSatoshiInput / totalInputs;
+        // Calculate largest difference from the average value
+        double largestDifference = 0;
+        for (BitcoinTransaction t : transactions) {
+            double difference = Math.abs(averageSatoshiPerInput - t.getAverageSatoshiInput());
+            if (difference > largestDifference) {
+                largestDifference = difference;
+            }
+        }
+
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
+        for (BitcoinTransaction t : transactions) {
+            double difference = Math.abs(averageSatoshiPerInput - t.getAverageSatoshiInput());
+            t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
+        }
+    }
+
+    private void compareAverageBitcoinsTransferredPerOutput(ArrayList<BitcoinTransaction> transactions) {
+        // Calculate total Satoshi output
+        long totalSatoshiOutput = 0;
+        for (BitcoinTransaction t : transactions) {
+            totalSatoshiOutput += t.getTotalSatoshiOutput();
+        }
+
+        // Calculate total number of outputs
+        long totalOutputs = 0;
+        for (BitcoinTransaction t : transactions) {
+            totalOutputs += t.getTotalNumberOfOutputs();
+        }
+
+        double averageSatoshiPerOutput = totalSatoshiOutput / totalOutputs;
+        // Calculate largest difference from the average value
+        double largestDifference = 0;
+        for (BitcoinTransaction t : transactions) {
+            double difference = Math.abs(averageSatoshiPerOutput - t.getAverageSatoshiOutput());
+            if (difference > largestDifference) {
+                largestDifference = difference;
+            }
+        }
+
+        // Assign weight to each transaction with the max value of 0.06 being assigned to the one with the
+        // largest difference from the average. Using a squared value allows weights to scale exponentially
+        double weightMultiplier = 0.06 / Math.pow(largestDifference, 2);
+        for (BitcoinTransaction t : transactions) {
+            double difference = Math.abs(averageSatoshiPerOutput - t.getAverageSatoshiOutput());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
         }
     }
