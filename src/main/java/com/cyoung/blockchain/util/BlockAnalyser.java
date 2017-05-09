@@ -84,9 +84,9 @@ public class BlockAnalyser {
             }
         }
 
-        // Assign weight to each transaction with the max value of 0.7 being assigned to the one with the
+        // Assign weight to each transaction with the max value of 0.64 being assigned to the one with the
         // largest difference from the average. Using a squared value allows weights to scale exponentially
-        double weightMultiplier = 0.7 / Math.pow(largestDifference, 2);
+        double weightMultiplier = 0.64 / Math.pow(largestDifference, 2);
         for (BitcoinTransaction t : transactions) {
             double difference = Math.abs(averageSatoshiInput - t.getTotalSatoshiInput());
             t.addToWeight(Math.pow(difference, 2) * weightMultiplier);
