@@ -20,6 +20,10 @@ public class BitcoinTransaction {
     private int version;
     private double weight = 0;
 
+    /**
+     * Used for finding additional characteristics of Transaction objects
+     * @param transaction   Transaction object you want to get characteristics of
+     */
     public BitcoinTransaction(Transaction transaction) {
         this.transaction = transaction;
         hash = transaction.getHash();
